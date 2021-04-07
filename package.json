@@ -4,10 +4,11 @@
   "description": "Cloning Youtube with Vanilla and NodeJS",
   "author": "limit-a",
   "dependencies": {
-    "express": "^4.17.1"
+    "express": "^4.17.1",
+    "morgan": "^1.10.0"
   },
   "scripts": {
-    "start": "nodemon --exec babel-node index.js"
+    "start": "nodemon --exec babel-node index.js --delay 2"
   },
   "devDependencies": {
     "@babel/cli": "^7.13.14",
