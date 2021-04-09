@@ -3,12 +3,12 @@ import cookieParser from 'cookie-parser';
 // import bodyParser from 'body-parser';
 import helmet from 'helmet';
 import morgan from 'morgan';
-import { userRouter } from './user-router';
+import routes from './routes';
+import globalRouter from './routers/global-router';
+import usersRouter from './routers/users-router';
+import videosRouter from './routers/videos-router';
 
 const app = express();
-
-const handleHome = (req, res) => res.send('Hello from home\n');
-const handleProfile = (req, res) => res.send('You are on my profile');
 
 app.use(cookieParser());
 app.use(express.json());
@@ -18,9 +18,8 @@ app.use(express.urlencoded({ extended: true }));
 app.use(helmet());
 app.use(morgan('dev'));
 
-app.get('/', handleHome);
-app.get('/profile', handleProfile);
-
-app.use('/user', userRouter);
+app.use(routes.home, globalRouter);
+app.use(routes.users, usersRouter);
+app.use(routes.videos, videosRouter);
 
 export default app;
