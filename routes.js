@@ -1,22 +1,22 @@
 // Global
-const HOME = '/',
-  SEARCH = '/search',
-  JOIN = '/join',
-  LOGIN = '/login',
-  LOGOUT = '/logout';
+const HOME = '/';
+const SEARCH = '/search';
+const JOIN = '/join';
+const LOGIN = '/login';
+const LOGOUT = '/logout';
 
 // Users
-const USERS = '/users',
-  USER_DETAIL = '/:id',
-  EDIT_PROFILE = '/edit-profile',
-  CHANGE_PASSWORD = '/change-password';
+const USERS = '/users';
+const USER_DETAIL = '/:id';
+const EDIT_PROFILE = '/edit-profile';
+const CHANGE_PASSWORD = '/change-password';
 
 // Videos
-const VIDEOS = '/videos',
-  UPLOAD = '/upload',
-  VIDEO_DETAIL = '/:id',
-  EDIT_VIDEO = '/:id/edit',
-  DELETE_VIDEO = '/:id/delete';
+const VIDEOS = '/videos';
+const UPLOAD = '/upload';
+const VIDEO_DETAIL = '/:id';
+const EDIT_VIDEO = '/:id/edit';
+const DELETE_VIDEO = '/:id/delete';
 
 // Export Routes
 const routes = {
