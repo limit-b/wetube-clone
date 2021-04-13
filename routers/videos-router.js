@@ -1,7 +1,7 @@
 import express from 'express';
 import routes from '../routes';
 import {
-  videosController,
+  // videosController,
   uploadController,
   videoDetailController,
   editVideoController,
@@ -10,7 +10,7 @@ import {
 
 const videosRouter = express.Router();
 
-videosRouter.get(routes.videos, videosController);
+// videosRouter.get(routes.videos, videosController);
 videosRouter.get(routes.upload, uploadController);
 videosRouter.get(routes.videoDetail, videoDetailController);
 videosRouter.get(routes.editVideo, editVideoController);
