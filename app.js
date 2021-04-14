@@ -22,5 +22,6 @@ app.use(morgan('dev'));
 app.use(routes.home, globalRouter);
 app.use(routes.users, usersRouter);
 app.use(routes.videos, videosRouter);
+// app.get('/test', (req, res) => res.render('test/test'));
 
 export default app;

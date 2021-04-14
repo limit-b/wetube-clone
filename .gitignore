@@ -1,4 +1,6 @@
+# this project
 node_modules
+views/test/test.pug
 
 # Logs
 logs
