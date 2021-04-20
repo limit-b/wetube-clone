@@ -1,5 +1,7 @@
+import { videos } from '../db';
+
 export const homeController = (req, res) =>
-  res.render('home', { pageTitle: 'Home', potato: 1245 });
+  res.render('home', { pageTitle: 'Home', videos });
 
 export const searchController = (req, res) => {
   // 비구조화 할당(구조분해 할당)

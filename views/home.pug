@@ -2,4 +2,7 @@ extends layouts/main
 
 block content
     .videos-container
-        h1 video
+        each video in videos
+            h1=video.title
+            p=video.description
+            
