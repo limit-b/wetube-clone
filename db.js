@@ -4,7 +4,8 @@ export const videos = [
     title: 'Video cool',
     description: 'This is something',
     views: 10,
-    videoFile: 'https://archive.org/details/BigBuckBunny_124',
+    videoFile:
+      'https://archive.org/download/BigBuckBunny_124/Content/big_buck_bunny_720p_surround.mp4',
     creator: { id: 654321, name: 'limit', email: 'limit@limit@com' },
   },
   {
@@ -12,7 +13,8 @@ export const videos = [
     title: 'Video awesome',
     description: 'This is something',
     views: 10,
-    videoFile: 'https://archive.org/details/BigBuckBunny_124',
+    videoFile:
+      'https://archive.org/download/BigBuckBunny_124/Content/big_buck_bunny_720p_surround.mp4',
     creator: { id: 654321, name: 'limit', email: 'limit@limit@com' },
   },
   {
@@ -20,7 +22,8 @@ export const videos = [
     title: 'Video funny',
     description: 'This is something',
     views: 10,
-    videoFile: 'https://archive.org/details/BigBuckBunny_124',
+    videoFile:
+      'https://archive.org/download/BigBuckBunny_124/Content/big_buck_bunny_720p_surround.mp4',
     creator: { id: 654321, name: 'limit', email: 'limit@limit@com' },
   },
 ];
