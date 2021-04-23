@@ -5,7 +5,8 @@ import {
   searchController,
 } from '../controllers/videoController';
 import {
-  joinController,
+  getJoinController,
+  postJoinController,
   loginController,
   logoutController,
 } from '../controllers/userController';
@@ -14,7 +15,8 @@ const globalRouter = express.Router();
 
 globalRouter.get(routes.home, homeController);
 globalRouter.get(routes.search, searchController);
-globalRouter.get(routes.join, joinController);
+globalRouter.get(routes.join, getJoinController);
+globalRouter.post(routes.join, postJoinController);
 globalRouter.get(routes.login, loginController);
 globalRouter.get(routes.logout, logoutController);
 

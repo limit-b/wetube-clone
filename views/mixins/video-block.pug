@@ -1,5 +1,5 @@
-mixin videoBlock(video={})
+mixin videoBlock(videoObject={})
     .video-block
-        video.video-block__thumbnail(src=video.videoFile, controls=true)
-        span.video-block__title=video.title
-        span.video-block__views=video.views
+        video.video-block__thumbnail(src=videoObject.videoFileMold, controls=true)
+        span.video-block__title=videoObject.titleMold
+        span.video-block__views=videoObject.viewsMold

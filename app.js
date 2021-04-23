@@ -1,7 +1,6 @@
 import express from 'express';
 import helmet from 'helmet';
 import cookieParser from 'cookie-parser';
-// import bodyParser from 'body-parser';
 import morgan from 'morgan';
 import routes from './routes';
 import globalRouter from './routers/global-router';
@@ -16,8 +15,6 @@ app.set('view engine', 'pug');
 app.use(cookieParser());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-// app.use(bodyParser.json());
-// app.use(bodyParser.urlencoded({ extended: true }));
 app.use(morgan('dev'));
 
 app.use(localsMiddleware);

@@ -9,7 +9,7 @@ export const searchController = (req, res) => {
     query: { term: searchingFor },
   } = req;
   // const searchingFor = req.query.term;
-  res.render('search', { pageTitle: 'Search', searchingFor });
+  res.render('search', { pageTitle: 'Search', searchingFor, videos });
 };
 
 // export const videosController = (req, res) => res.render('videos');

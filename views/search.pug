@@ -1,5 +1,13 @@
 extends layouts/main
+include mixins/video-block
 
 block content
     .search-header
         h1 Searching for: #{searchingFor}
+    .search-videos
+        each videoItem in videos
+            +videoBlock({
+                videoFileMold: videoItem.videoFile,
+                titleMold: videoItem.title,
+                viewsMold: videoItem.views
+            })
