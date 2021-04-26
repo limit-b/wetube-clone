@@ -13,6 +13,6 @@ const usersRouter = express.Router();
 usersRouter.get(routes.editProfile, editProfileController);
 usersRouter.get(routes.changePassword, changePasswordController);
 // NOTE -> :id
-usersRouter.get(routes.userDetail, userDetailController);
+usersRouter.get(routes.userDetail(), userDetailController);
 
 export default usersRouter;
