@@ -8,7 +8,6 @@ export const postJoinController = (req, res) => {
   const {
     body: { name, email, password, password2 },
   } = req;
-  console.log(name, email, password, password2);
   if (password !== password2) {
     res.status(400);
     res.render('join', { pageTitle: 'Join' });
@@ -25,12 +24,13 @@ export const postLoginController = (req, res) => {
   const {
     body: { email, password },
   } = req;
-  console.log(email, password);
   res.redirect(routes.home);
 };
 
-export const logoutController = (req, res) =>
-  res.render('logout', { pageTitle: 'Log Out' });
+export const logoutController = (req, res) => {
+  // TODO: Process Log Out(로그아웃 처리)
+  res.redirect(routes.home);
+};
 
 // export const usersController = (req, res) => res.render('users');
 

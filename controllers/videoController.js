@@ -1,4 +1,5 @@
 import { videos } from '../db';
+import routes from '../routes';
 
 export const homeController = (req, res) =>
   res.render('home', { pageTitle: 'Home', videos });
@@ -14,8 +15,16 @@ export const searchController = (req, res) => {
 
 // export const videosController = (req, res) => res.render('videos');
 
-export const uploadController = (req, res) =>
+export const getUploadController = (req, res) =>
   res.render('upload', { pageTitle: 'Upload' });
+
+export const postUploadController = (req, res) => {
+  const {
+    body: { videoFile, videoTitle, videoDescription },
+  } = req;
+  // TODO: Upload Video(비디오 업로드), Save Video(비디오 저장)
+  res.redirect(routes.videoDetail(123456));
+};
 
 export const videoDetailController = (req, res) =>
   res.render('video-detail', { pageTitle: 'Video Detail' });

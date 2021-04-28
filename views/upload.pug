@@ -4,7 +4,7 @@ block content
     .form-container
         form(action=routes.videos+routes.upload, method="post")
             label(for="video-file") Video File
-            input(type="file", name="video-file", id="video-file")
-            input(type="text", name="video-title", placeholder="Title")
-            textarea(name="video-description", placeholder="Description")
+            input(type="file", name="videoFile", required="true", id="video-file")
+            input(type="text", name="videoTitle", placeholder="Title", required="true")
+            textarea(name="videoDescription", placeholder="Description", required="true")
             input(type="submit", value="Upload Video")

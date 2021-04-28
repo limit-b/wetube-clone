@@ -5,6 +5,7 @@ block content
     .videos-container
         each videoItem in videos
             +videoBlock({
+                videoIdMold: videoItem.videoId,
                 videoFileMold: videoItem.videoFile,
                 titleMold: videoItem.title,
                 viewsMold: videoItem.views
