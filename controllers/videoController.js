@@ -21,12 +21,19 @@ export const searchController = (req, res) => {
 export const getUploadController = (req, res) =>
   res.render('upload', { pageTitle: 'Upload' });
 
-export const postUploadController = (req, res) => {
+export const postUploadController = async (req, res) => {
   const {
-    body: { videoFile, videoTitle, videoDescription },
+    body: { videoTitle, videoDescription },
+    file: { path },
   } = req;
   // TODO: Upload Video(비디오 업로드), Save Video(비디오 저장)
-  res.redirect(routes.videoDetail(123456));
+  const newVideo = await Video.create({
+    fileUrl: path,
+    title: videoTitle,
+    description: videoDescription,
+  });
+  console.log(newVideo, newVideo.id);
+  res.redirect(routes.videoDetail(newVideo.id));
 };
 
 export const videoDetailController = (req, res) =>
