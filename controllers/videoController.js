@@ -1,18 +1,22 @@
+import Video from '../models/Video';
 import routes from '../routes';
 
-export const homeController = (req, res) =>
-  res.render('home', { pageTitle: 'Home', videos });
+export const homeController = async (req, res) => {
+  try {
+    const videos = await Video.find({});
+    res.render('home', { pageTitle: 'Home', videos });
+  } catch (error) {
+    console.log(error);
+    res.render('home', { pageTitle: 'Home', videos: [] });
+  }
+};
 
 export const searchController = (req, res) => {
-  // 비구조화 할당(구조분해 할당)
   const {
     query: { term: searchingFor },
   } = req;
-  // const searchingFor = req.query.term;
   res.render('search', { pageTitle: 'Search', searchingFor, videos });
 };
-
-// export const videosController = (req, res) => res.render('videos');
 
 export const getUploadController = (req, res) =>
   res.render('upload', { pageTitle: 'Upload' });
