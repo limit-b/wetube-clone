@@ -1,4 +1,10 @@
 extends layouts/main
 
 block content
-    p video-detail page
+    .video-player
+        video(src='/'+video.fileUrl)
+    .video-info
+        a(href=routes.editVideo(video.id)) Edit video
+        h1.video-info__title=video.title
+        span.video-info__views=video.views
+        p.video-info__description=video.description
