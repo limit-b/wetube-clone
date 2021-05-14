@@ -7,10 +7,11 @@ const ENTRY_FILE = path.resolve(__dirname, 'assets', 'js', 'main.js');
 const OUTPUT_DIR = path.join(__dirname, 'static');
 
 const config = {
-  entry: ENTRY_FILE,
+  entry: ['@babel/polyfill', ENTRY_FILE],
   mode: MODE,
   module: {
     rules: [
+      { test: /\.(js)$/, use: [{ loader: 'babel-loader' }] },
       {
         test: /\.(scss)$/,
         use: [
@@ -32,7 +33,7 @@ const config = {
     ],
   },
   output: { path: OUTPUT_DIR, filename: '[name].js' },
-  plugins: [new MiniCssExtractPlugin({ filename: '[name].css' })],
+  plugins: [new MiniCssExtractPlugin({ filename: 'styles.css' })],
 };
 
 module.exports = config;
