@@ -1,21 +1,22 @@
 header
-    .header__column
-        a(href=routes.home)
-            <i class="fab fa-youtube"></i>
-    .header__column
-        form(action=routes.search, method="get")
-            input(type="text", name="term", placeholder="Search by term...")
-    .header__column
-        ul
-            if !user.isAuthenticated
-                li
-                    a(href=routes.join) Join
-                li
-                    a(href=routes.login) Log In
-            else
-                li
-                    a(href=routes.videos+routes.upload) Upload
-                li
-                    a(href=routes.userDetail(user.id)) Profile
-                li
-                    a(href=routes.logout) Log Out
+    .header-wrapper
+        .header-column
+            a(href=routes.home)
+                <i class="fab fa-youtube"></i>
+        .header-column
+            form(action=routes.search, method="get")
+                input(type="text", name="term", placeholder="Search by term...")
+        .header-column
+            ul
+                if !user.isAuthenticated
+                    li
+                        a(href=routes.join) Join
+                    li
+                        a(href=routes.login) Log In
+                else
+                    li
+                        a(href=routes.videos+routes.upload) Upload
+                    li
+                        a(href=routes.userDetail(user.id)) Profile
+                    li
+                        a(href=routes.logout) Log Out

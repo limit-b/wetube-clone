@@ -1,0 +1,51 @@
+header {
+  margin-bottom: 50px;
+  background-color: $red;
+  .header-wrapper {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    align-items: center;
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 5px 0px;
+    place-content: center center;
+    .header-column {
+      i {
+        color: white;
+        font-size: 40px;
+      }
+      &:nth-child(2) {
+        justify-self: center;
+        width: 100%;
+      }
+      &:last-child {
+        justify-self: end;
+      }
+      ul {
+        display: flex;
+        color: white;
+        font-weight: 600;
+        text-transform: uppercase;
+        li:not(:last-child) {
+          margin-right: 15px;
+        }
+      }
+      form {
+        width: 100%;
+        input {
+          width: 100%;
+          padding: 7px 10px;
+          color: $black;
+          font-weight: 600;
+          font-size: 14px;
+          border-radius: 5px;
+          &::placeholder {
+            color: rgba(0, 0, 0, 0.7);
+            font-weight: 300;
+          }
+        }
+      }
+    }
+  }
+}
