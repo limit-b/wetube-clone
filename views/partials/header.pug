@@ -1,12 +1,12 @@
 header
     .header-wrapper
-        .header-column
+        .header-wrapper__column
             a(href=routes.home)
                 <i class="fab fa-youtube"></i>
-        .header-column
+        .header-wrapper__column
             form(action=routes.search, method="get")
                 input(type="text", name="term", placeholder="Search by term...")
-        .header-column
+        .header-wrapper__column
             ul
                 if !user.isAuthenticated
                     li
