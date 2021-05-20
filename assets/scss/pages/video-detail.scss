@@ -1,0 +1,36 @@
+.video-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  .video-info {
+    width: 100%;
+    max-width: 850px;
+    margin-top: 24px;
+    button {
+      width: 100px;
+      margin-bottom: 24px;
+    }
+    .video-info__title,
+    .video-info__views,
+    .video-info__description {
+      display: block;
+      margin-bottom: 14px;
+    }
+    .video-info__title {
+      font-weight: 300;
+      font-size: 22px;
+    }
+    .video-info__description {
+      font-size: 16px;
+    }
+    .video-info__views {
+      font-size: 14px;
+    }
+  }
+  .video-comments {
+    margin-top: 24px;
+    .video-comments__comment-number {
+      font-size: 18px;
+    }
+  }
+}

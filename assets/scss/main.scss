@@ -12,21 +12,38 @@ body {
 
 main {
   width: 100%;
-  max-width: 1400px;
+  max-width: 1200px;
   min-height: 70vh;
   margin: 0 auto;
 }
 
-input,
-button {
+input:not([type="file"]),
+textarea,
+button,
+.form-container__file-upload {
   width: 100%;
+  max-width: 350px;
   padding: 6px 10px;
   color: $black;
   font-weight: 600;
   font-size: 14px;
+  background-color: white;
+  border: none;
   border-radius: 5px;
+  resize: none;
   &::placeholder {
     color: rgba(0, 0, 0, 0.7);
     font-weight: 300;
   }
+}
+
+button {
+  color: white;
+  background-color: #3498db;
+}
+
+a,
+button,
+input[type="submit"] {
+  cursor: pointer;
 }
