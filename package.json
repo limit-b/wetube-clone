@@ -2,7 +2,21 @@
   "name": "wetube-clone",
   "version": "1.0.0",
   "description": "Cloning Youtube with Vanilla and NodeJS",
+  "scripts": {
+    "dev:server": "nodemon --exec babel-node init.js --delay 2",
+    "dev:assets": "cross-env WEBPACK_ENV=development webpack -w",
+    "build:assets": "cross-env WEBPACK_ENV=production webpack"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/limit-b/wetube-clone"
+  },
   "author": "limit-a",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/limit-b/wetube-clone/issues"
+  },
+  "homepage": "https://github.com/limit-b/wetube-clone#readme",
   "dependencies": {
     "@babel/polyfill": "^7.12.1",
     "babel-loader": "^8.2.2",
@@ -22,11 +36,6 @@
     "sass-loader": "^10.0.2",
     "webpack": "^5.36.2",
     "webpack-cli": "^4.7.0"
-  },
-  "scripts": {
-    "dev:server": "nodemon --exec babel-node init.js --delay 2",
-    "dev:assets": "cross-env WEBPACK_ENV=development webpack -w",
-    "build:assets": "cross-env WEBPACK_ENV=production webpack"
   },
   "devDependencies": {
     "@babel/cli": "^7.13.14",
