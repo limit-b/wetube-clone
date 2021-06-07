@@ -9,14 +9,17 @@ Cloning Youtube with Vanilla and NodeJS
 - [ ] /login => Login
 - [ ] /search => Search
 
-- [ ] /users/edit => Edit User
-- [ ] /users/remove => Remove User
+- [ ] /users/logout => Logout
+- [ ] /users/edit => Edit User Profile
+- [ ] /users/remove => Remove User Profile
+- [ ] /users/:id => See User
 
-- [ ] /videos/watch => Watch Video
-- [ ] /videos/edit => Edit Video
-- [ ] /videos/delete => Delete Video
-- [ ] /videos/comments => Comment on a Video
-- [ ] /videos/comments/delete => Delete a Comment of a Video
+- [ ] /videos/upload => Upload Video
+- [ ] /videos/:id => See Video
+- [ ] /videos/:id/edit => Edit Video
+- [ ] /videos/:id/delete => Delete Video
+<!-- - [ ] /videos/comments => Comment on a Video
+- [ ] /videos/comments/delete => Delete a Comment of a Video -->
 
 ## Pages (Old list, To be deleted)
 
