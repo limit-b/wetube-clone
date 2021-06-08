@@ -6,16 +6,13 @@ export const uploadVideoController = (req, res) =>
   res.send('upload video page');
 
 export const seeVideoController = (req, res) => {
-  console.log(req.params);
-  res.send('see video page');
+  return res.send(`see video page, #id : ${req.params.id}`);
 };
 
 export const editVideoController = (req, res) => {
-  console.log(req.params);
-  res.send('edit video page');
+  return res.send(`edit video page, #id : ${req.params.id}`);
 };
 
 export const deleteVideoController = (req, res) => {
-  console.log(req.params);
-  res.send('delete video page');
+  return res.send(`delete video page, #id : ${req.params.id}`);
 };
