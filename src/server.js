@@ -9,8 +9,10 @@ const logger = morgan('dev');
 
 const PORT = 4000;
 
+app.set('view engine', 'pug');
+// cwd ---> current working directory
+app.set('views', `${process.cwd()}/src/views`);
 app.use(logger);
-// Router == 전역 middleware ---> use() 사용
 app.use('/', globalRouter);
 app.use('/users', usersRouter);
 app.use('/videos', videosRouter);

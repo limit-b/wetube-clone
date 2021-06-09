@@ -15,7 +15,7 @@ Cloning Youtube with Vanilla and NodeJS
 - [ ] /users/:id => See User
 
 - [ ] /videos/upload => Upload Video
-- [ ] /videos/:id => See Video
+- [ ] /videos/:id => Watch Video
 - [ ] /videos/:id/edit => Edit Video
 - [ ] /videos/:id/delete => Delete Video
 <!-- - [ ] /videos/comments => Comment on a Video
