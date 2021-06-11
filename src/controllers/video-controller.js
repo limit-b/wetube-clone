@@ -1,5 +1,11 @@
+const fakeUser = { username: 'limit', loggedIn: false };
+
 export const homeController = (req, res) =>
-  res.render('home', { pageTitle: 'Home', potato: 'tomato' });
+  res.render('home', {
+    pageTitle: 'Home',
+    potato: 'tomato',
+    fakeUser,
+  });
 
 export const searchController = (req, res) => res.send('search page');
 

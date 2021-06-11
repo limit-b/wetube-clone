@@ -5,9 +5,26 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>#{pageTitle} | WeTube</title>
+        <link rel="stylesheet" href="https://unpkg.com/mvp.css">
     </head>
     <body>
-        block content
+        <header>
+            if fakeUser.loggedIn
+                <small>Hello #{fakeUser.username}</small>
+            nav
+                ul
+                    if fakeUser.loggedIn
+                        li
+                            a(href="/users/logout") Logout
+                    else
+                        li
+                            a(href="/join") Join&nbsp;
+                            a(href="/login") Login
+            h1=pageTitle
+        </header>
+        <main>
+            block content
+        </main>
         include ./partials/footer.pug
     </body>
 </html>
