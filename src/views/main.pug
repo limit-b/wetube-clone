@@ -9,17 +9,6 @@
     </head>
     <body>
         <header>
-            if fakeUser.loggedIn
-                <small>Hello #{fakeUser.username}</small>
-            nav
-                ul
-                    if fakeUser.loggedIn
-                        li
-                            a(href="/users/logout") Logout
-                    else
-                        li
-                            a(href="/join") Join&nbsp;
-                            a(href="/login") Login
             h1=pageTitle
         </header>
         <main>
