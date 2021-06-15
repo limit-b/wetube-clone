@@ -1,8 +1,12 @@
 mixin videoMixin(info)
     div
-        h3=info.title
+        h3
+            a(href=`/videos/${info.id}`)=info.title
         ul
             li #{info.rating}/5
             li #{info.comments} comments
             li Posted #{info.createdAt}
             li #{info.views} views
+
+//- text ===> #{}
+//- attribute (ex. href, class, id) ===> `${}`
