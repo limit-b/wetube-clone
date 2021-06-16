@@ -1,5 +1,5 @@
 const fakeUser = { username: 'limit', loggedIn: false };
-const videosDB = [
+let videosDB = [
   {
     title: 'first video',
     rating: 3,
@@ -44,12 +44,30 @@ export const watchVideoController = (req, res) => {
   const { id } = req.params;
   const video = videosDB[id];
   return res.render('watch-video', {
-    pageTitle: `Watching ${video.title}`,
+    pageTitle: `Watching: ${video.title}`,
     video,
   });
 };
 
-export const editVideoController = (req, res) => res.render('edit-video');
+export const getEditVideoController = (req, res) => {
+  const { id } = req.params;
+  const video = videosDB[id];
+  return res.render('edit-video', {
+    pageTitle: `Editing: ${video.title}`,
+    video,
+  });
+};
+
+export const postEditVideoController = (req, res) => {
+  const {
+    params: { id },
+    body: { title },
+  } = req;
+  // temp code
+  videosDB[id].title = title;
+  //
+  return res.redirect(`/videos/${id}`);
+};
 
 export const deleteVideoController = (req, res) => {
   return res.send(`delete video page, #id : ${req.params.id}`);
