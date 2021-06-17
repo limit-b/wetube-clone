@@ -12,6 +12,7 @@ const PORT = 4000;
 app.set('view engine', 'pug');
 // cwd ---> current working directory
 app.set('views', `${process.cwd()}/src/views`);
+// "body-parser" deplicated
 app.use(express.urlencoded({ extended: true }));
 app.use(logger);
 app.use('/', globalRouter);
