@@ -37,8 +37,23 @@ export const homeController = (req, res) => {
 
 export const searchController = (req, res) => res.send('search page');
 
-export const uploadVideoController = (req, res) =>
-  res.send('upload video page');
+export const getUploadVideoController = (req, res) => {
+  return res.render('upload-video', { pageTitle: 'Upload Video' });
+};
+
+export const postUploadVideoController = (req, res) => {
+  const { title } = req.body;
+  const newVideo = {
+    title,
+    rating: 0,
+    comments: 0,
+    createdAt: '0 minutes ago',
+    views: 0,
+    id: videosDB.length,
+  };
+  videosDB.push(newVideo);
+  return res.redirect('/');
+};
 
 export const watchVideoController = (req, res) => {
   const { id } = req.params;
