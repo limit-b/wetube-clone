@@ -2,13 +2,14 @@ import VideoModel from '../models/Video';
 
 const fakeUser = { username: 'limit', loggedIn: false };
 
-export const homeController = (req, res) => {
-  console.log('start');
-  VideoModel.find({}, (error, videosDB) => {
-    console.log(error, videosDB);
+export const homeController = async (req, res) => {
+  // VideoModel.find({}, (error, videosDB) => {});
+  try {
+    const videosDB = await VideoModel.find({});
     return res.render('home', { pageTitle: 'Home', videosDB, fakeUser });
-  });
-  console.log('finish');
+  } catch (error) {
+    return res.render('server-error', { error });
+  }
 };
 
 export const searchController = (req, res) => res.send('search page');
