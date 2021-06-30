@@ -2,10 +2,6 @@ extends ./main.pug
 include ./mixins/video-mixin.pug
 
 block content
-    h2 home page
-    h3 Welcome here you will see the trending videos
-    input(placeholder="What's your name?")
-    button send
     each item in videosDB
         +videoMixin(item)
     else
