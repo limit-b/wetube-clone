@@ -5,10 +5,7 @@ const videoSchema = new mongoose.Schema({
   description: String,
   createdAt: Date,
   hashtags: [{ type: String }],
-  meta: {
-    views: Number,
-    rating: Number,
-  },
+  meta: { views: Number, rating: Number },
 });
 
 const VideoModel = mongoose.model('Video', videoSchema);
