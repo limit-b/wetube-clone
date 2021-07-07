@@ -3,7 +3,6 @@ import VideoModel from '../models/Video';
 const fakeUser = { username: 'limit', loggedIn: false };
 
 export const homeController = async (req, res) => {
-  // VideoModel.find({}, (error, videosDB) => {});
   try {
     const videosDB = await VideoModel.find({});
     console.log(videosDB);
@@ -21,22 +20,21 @@ export const getUploadVideoController = (req, res) => {
 
 export const postUploadVideoController = async (req, res) => {
   const { title, description, hashtags } = req.body;
-  // const newVideo = new VideoModel({
-  //   title,
-  //   description,
-  //   createdAt: Date.now(),
-  //   hashtags: hashtags.split(',').map((word) => `#${word}`),
-  //   meta: { views: 0, rating: 0 },
-  // });
-  // await newVideo.save();
-  await VideoModel.create({
-    title,
-    description,
-    createdAt: Date.now(),
-    hashtags: hashtags.split(',').map((word) => `#${word}`),
-    meta: { views: 0, rating: 0 },
-  });
-  return res.redirect('/');
+  try {
+    await VideoModel.create({
+      title,
+      description,
+      // createdAt: Date.now(),
+      hashtags: hashtags.split(',').map((word) => `#${word}`),
+      // meta: { views: 0, rating: 0 },
+    });
+    return res.redirect('/');
+  } catch (error) {
+    return res.render('upload-video', {
+      pageTitle: 'Upload Video',
+      errorMessage: error._message,
+    });
+  }
 };
 
 export const watchVideoController = (req, res) => {
