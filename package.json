@@ -43,6 +43,7 @@
     "@babel/core": "^7.13.14",
     "@babel/node": "^7.13.13",
     "@babel/preset-env": "^7.13.12",
+    "@prettier/plugin-pug": "^1.16.0",
     "autoprefixer": "^10.0.0",
     "cross-env": "^7.0.3",
     "eslint": "^7.25.0",

@@ -1,10 +1,15 @@
 extends ./main.pug
 
 block content
-    h2 Change Title of video
-    form(method="post")
-        input(value=video.title, placeholder="New Video Title", name="title", required)
-        input(value="Save", type="submit")
+  h2 Change Title of video
+  form(method='post')
+    input(
+      value=video.title,
+      placeholder='New Video Title',
+      name='title',
+      required
+    )
+    input(value='Save', type='submit')
 
 //-     /editVideoController\             main.pug
 //-     --------------------------            ^
