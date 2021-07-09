@@ -1,8 +1,10 @@
 extends ./main.pug
 
 block content
-  h2 #{ video.views } #{ video.views === 1 ? "view" : "views" }
-  a(href=`${video.id}/edit`) Edit Video &rarr;
+    div
+        p= video.description
+        small= video.createdAt
+    a(href=`${video.id}/edit`) Edit Video &rarr;
 
 //-     /watchVideoController\             main.pug
 //-     ---------------------------            ^
