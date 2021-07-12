@@ -24,9 +24,9 @@ export const postUploadVideoController = async (req, res) => {
         await VideoModel.create({
             title,
             description,
-            // createdAt: Date.now(),
-            hashtags: hashtags.split(',').map((word) => `#${word}`),
-            // meta: { views: 0, rating: 0 },
+            hashtags: hashtags
+                .split(',')
+                .map((word) => (word.startsWith('#') ? word : `#${word}`)),
         });
         return res.redirect('/');
     } catch (error) {
@@ -39,26 +39,65 @@ export const postUploadVideoController = async (req, res) => {
 
 export const watchVideoController = async (req, res) => {
     const { id } = req.params;
-    try {
-        const video = await VideoModel.findById(id);
+    const video = await VideoModel.findById(id);
+    if (!video) {
+        return res.render('404', { pageTitle: 'Video not found.' });
+    } else {
         return res.render('watch-video', { pageTitle: video.title, video });
-    } catch (error) {
-        console.log(error);
-        return res.redirect('/');
     }
+    // try {
+    //     const video = await VideoModel.findById(id);
+    //     return res.render('watch-video', { pageTitle: video.title, video });
+    // } catch (error) {
+    //     console.log(error);
+    //     return res.render('404', { pageTitle: 'Video not found.' });
+    // }
 };
 
-export const getEditVideoController = (req, res) => {
+export const getEditVideoController = async (req, res) => {
     const { id } = req.params;
-    return res.render('edit-video', { pageTitle: `Editing: ` });
+    const video = await VideoModel.findById(id);
+    if (!video) {
+        return res.render('404', { pageTitle: 'Video not found.' });
+    } else {
+        return res.render('edit-video', {
+            pageTitle: `Edit ${video.title}`,
+            video,
+        });
+    }
+    // try {
+    //     const video = await VideoModel.findById(id);
+    //     return res.render('edit-video', { pageTitle: `Editing: `, video });
+    // } catch (error) {
+    //     console.log(error);
+    //     return res.render('404', { pageTitle: 'Video not found.' });
+    // }
 };
 
-export const postEditVideoController = (req, res) => {
+export const postEditVideoController = async (req, res) => {
     const {
         params: { id },
-        body: { title },
+        body: { title, description, hashtags },
     } = req;
-    return res.redirect(`/videos/${id}`);
+    const video = await VideoModel.exists({ _id: id });
+    if (!video) {
+        return res.render('404', { pageTitle: 'Video not found.' });
+    } else {
+        await VideoModel.findByIdAndUpdate(id, {
+            title,
+            description,
+            hashtags: hashtags
+                .split(',')
+                .map((word) => (word.startsWith('#') ? word : `#${word}`)),
+        });
+        // video.title = title;
+        // video.description = description;
+        // video.hashtags = hashtags
+        //     .split(',')
+        //     .map((word) => (word.startsWith('#') ? word : `#${word}`));
+        // await video.save();
+        return res.redirect(`/videos/${id}`);
+    }
 };
 
 export const deleteVideoController = (req, res) => {

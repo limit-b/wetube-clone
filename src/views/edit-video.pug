@@ -1,15 +1,33 @@
 extends ./main.pug
 
 block content
-  h2 Change Title of video
-  form(method='post')
-    input(
-      value=video.title,
-      placeholder='New Video Title',
-      name='title',
-      required
-    )
-    input(value='Save', type='submit')
+    h2 Update Video
+    form(method='post')
+        input(
+            value=video.title,
+            type='text',
+            placeholder='New Title',
+            name='title',
+            maxlength='80',
+            required
+        )
+        input(
+            value=video.description,
+            type='text',
+            placeholder='New Description',
+            name='description',
+            minlength='20',
+            maxlength='140',
+            required
+        )
+        input(
+            value=video.hashtags.join(),
+            type='text',
+            placeholder='New Hashtags, separated by comma.',
+            name='hashtags',
+            required
+        )
+        input(value='Save', type='submit')
 
 //-     /editVideoController\             main.pug
 //-     --------------------------            ^
