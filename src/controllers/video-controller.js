@@ -21,13 +21,7 @@ export const getUploadVideoController = (req, res) => {
 export const postUploadVideoController = async (req, res) => {
     const { title, description, hashtags } = req.body;
     try {
-        await VideoModel.create({
-            title,
-            description,
-            hashtags: hashtags
-                .split(',')
-                .map((word) => (word.startsWith('#') ? word : `#${word}`)),
-        });
+        await VideoModel.create({ title, description, hashtags });
         return res.redirect('/');
     } catch (error) {
         return res.render('upload-video', {
