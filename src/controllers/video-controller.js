@@ -1,4 +1,5 @@
 import VideoModel from '../models/Video';
+// import { formatHashtags } from '../models/Video';
 
 const fakeUser = { username: 'limit', loggedIn: false };
 
@@ -21,7 +22,12 @@ export const getUploadVideoController = (req, res) => {
 export const postUploadVideoController = async (req, res) => {
     const { title, description, hashtags } = req.body;
     try {
-        await VideoModel.create({ title, description, hashtags });
+        await VideoModel.create({
+            title,
+            description,
+            // hashtags: formatHashtags(hashtags),
+            hashtags: VideoModel.formatHashtags(hashtags),
+        });
         return res.redirect('/');
     } catch (error) {
         return res.render('upload-video', {
@@ -80,9 +86,8 @@ export const postEditVideoController = async (req, res) => {
         await VideoModel.findByIdAndUpdate(id, {
             title,
             description,
-            hashtags: hashtags
-                .split(',')
-                .map((word) => (word.startsWith('#') ? word : `#${word}`)),
+            // hashtags: formatHashtags(hashtags),
+            hashtags: VideoModel.formatHashtags(hashtags),
         });
         // video.title = title;
         // video.description = description;

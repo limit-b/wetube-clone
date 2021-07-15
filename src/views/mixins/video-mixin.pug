@@ -1,10 +1,12 @@
 mixin videoMixin(info)
-  div
-    h3
-      a(href=`/videos/${info.id}`)= info.title
-    p= info.description
-    small= info.createdAt
-    hr
+    div
+        h3
+            a(href=`/videos/${info.id}`)= info.title
+        each hashtag in info.hashtags
+            span= hashtag
+        p= info.description
+        small= info.createdAt
+        hr
 
 //- text ===> #{}
 //- attribute (ex. href, class, id) ===> `${}`

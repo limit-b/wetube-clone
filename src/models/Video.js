@@ -1,5 +1,10 @@
 import mongoose from 'mongoose';
 
+// export const formatHashtags = (hashtags) =>
+//     hashtags
+//         .split(',')
+//         .map((word) => (word.startsWith('#') ? word : `#${word}`));
+
 const videoSchema = new mongoose.Schema({
     title: { type: String, maxLength: 80, required: true, trim: true },
     description: {
@@ -17,11 +22,18 @@ const videoSchema = new mongoose.Schema({
     },
 });
 
+// /* eslint-disable */
+// videoSchema.pre('save', async function () {
+//     /* eslint-enable */
+//     this.hashtags = this.hashtags[0]
+//         .split(',')
+//         .map((word) => (word.startsWith('#') ? word : `#${word}`));
+// });
+
 /* eslint-disable */
-videoSchema.pre('save', async function () {
+videoSchema.static('formatHashtags', function (hashtags) {
     /* eslint-enable */
-    // console.log('save this :', this);
-    this.hashtags = this.hashtags[0]
+    return hashtags
         .split(',')
         .map((word) => (word.startsWith('#') ? word : `#${word}`));
 });
