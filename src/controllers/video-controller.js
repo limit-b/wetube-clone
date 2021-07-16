@@ -1,5 +1,4 @@
 import VideoModel from '../models/Video';
-// import { formatHashtags } from '../models/Video';
 
 const fakeUser = { username: 'limit', loggedIn: false };
 
@@ -25,8 +24,7 @@ export const postUploadVideoController = async (req, res) => {
         await VideoModel.create({
             title,
             description,
-            // hashtags: formatHashtags(hashtags),
-            hashtags: VideoModel.formatHashtags(hashtags),
+            hashtags: await VideoModel.formatHashtags(hashtags),
         });
         return res.redirect('/');
     } catch (error) {
@@ -86,19 +84,14 @@ export const postEditVideoController = async (req, res) => {
         await VideoModel.findByIdAndUpdate(id, {
             title,
             description,
-            // hashtags: formatHashtags(hashtags),
-            hashtags: VideoModel.formatHashtags(hashtags),
+            hashtags: await VideoModel.formatHashtags(hashtags),
         });
-        // video.title = title;
-        // video.description = description;
-        // video.hashtags = hashtags
-        //     .split(',')
-        //     .map((word) => (word.startsWith('#') ? word : `#${word}`));
-        // await video.save();
         return res.redirect(`/videos/${id}`);
     }
 };
 
-export const deleteVideoController = (req, res) => {
-    return res.send(`delete video page, #id : ${req.params.id}`);
+export const deleteVideoController = async (req, res) => {
+    const { id } = req.params;
+    await VideoModel.findByIdAndDelete(id);
+    return res.redirect('/');
 };

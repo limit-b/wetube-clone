@@ -22,17 +22,13 @@ const videoSchema = new mongoose.Schema({
     },
 });
 
-// /* eslint-disable */
 // videoSchema.pre('save', async function () {
-//     /* eslint-enable */
 //     this.hashtags = this.hashtags[0]
 //         .split(',')
 //         .map((word) => (word.startsWith('#') ? word : `#${word}`));
 // });
 
-/* eslint-disable */
-videoSchema.static('formatHashtags', function (hashtags) {
-    /* eslint-enable */
+videoSchema.static('formatHashtags', async function (hashtags) {
     return hashtags
         .split(',')
         .map((word) => (word.startsWith('#') ? word : `#${word}`));
