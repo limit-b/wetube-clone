@@ -4,7 +4,7 @@ const fakeUser = { username: 'limit', loggedIn: false };
 
 export const homeController = async (req, res) => {
     try {
-        const videosDB = await VideoModel.find({});
+        const videosDB = await VideoModel.find({}).sort({ createdAt: 'desc' });
         console.log(videosDB);
         return res.render('home', { pageTitle: 'Home', videosDB, fakeUser });
     } catch (error) {
@@ -12,7 +12,16 @@ export const homeController = async (req, res) => {
     }
 };
 
-export const searchController = (req, res) => res.send('search page');
+export const searchController = async (req, res) => {
+    const { keyword } = req.query;
+    let searchVideos = [];
+    if (keyword) {
+        searchVideos = await VideoModel.find({
+            title: { $regex: new RegExp(keyword, 'i') },
+        }).sort({ createdAt: 'desc' });
+    }
+    return res.render('search', { pageTitle: 'Search', searchVideos });
+};
 
 export const getUploadVideoController = (req, res) => {
     return res.render('upload-video', { pageTitle: 'Upload Video' });

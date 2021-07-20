@@ -1,0 +1,10 @@
+extends ./main.pug
+include ./mixins/video-mixin.pug
+
+block content
+    form(method='get')
+        input(type='text', placeholder='Search by title', name='keyword')
+        input(value='Search now', type='submit')
+    div
+        each item in searchVideos
+            +videoMixin(item)
