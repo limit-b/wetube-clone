@@ -1,0 +1,15 @@
+extends ./main.pug
+
+block content
+    form(method='post')
+        input(type='text', placeholder='Name', name='userName', required)
+        input(type='email', placeholder='Email', name='email', required)
+        input(type='text', placeholder='ID', name='userID', required)
+        input(
+            type='password',
+            placeholder='Password',
+            name='password',
+            required
+        )
+        input(type='text', placeholder='Country', name='country', required)
+        input(value='Join', type='submit')

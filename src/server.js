@@ -1,6 +1,6 @@
 import express from 'express';
 import morgan from 'morgan';
-import globalRouter from './routers/global-router';
+import rootRouter from './routers/root-router';
 import usersRouter from './routers/user-router';
 import videosRouter from './routers/video-router';
 
@@ -12,7 +12,7 @@ app.set('views', `${process.cwd()}/src/views`);
 // "body-parser" deplicated
 app.use(express.urlencoded({ extended: true }));
 app.use(logger);
-app.use('/', globalRouter);
+app.use('/', rootRouter);
 app.use('/users', usersRouter);
 app.use('/videos', videosRouter);
 
