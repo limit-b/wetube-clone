@@ -5,7 +5,28 @@ export const getJoinController = (req, res) => {
 };
 
 export const postJoinController = async (req, res) => {
-    const { userName, email, userID, password, country } = req.body;
+    const {
+        userName,
+        email,
+        userID,
+        password,
+        confirmPassword,
+        country,
+    } = req.body;
+    const pageTitle = 'Join';
+    if (password !== confirmPassword) {
+        return res.render('join', {
+            pageTitle,
+            errorMessage: 'Password confirmation does not match.',
+        });
+    }
+    const exists = await UserModel.exists({ $or: [{ email }, { userID }] });
+    if (exists) {
+        return res.render('join', {
+            pageTitle,
+            errorMessage: 'This E-mail / ID is already taken.',
+        });
+    }
     try {
         await UserModel.create({ userName, email, userID, password, country });
         return res.redirect('/login');
