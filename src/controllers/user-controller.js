@@ -15,14 +15,14 @@ export const postJoinController = async (req, res) => {
     } = req.body;
     const pageTitle = 'Join';
     if (password !== confirmPassword) {
-        return res.render('join', {
+        return res.status(400).render('join', {
             pageTitle,
             errorMessage: 'Password confirmation does not match.',
         });
     }
     const exists = await UserModel.exists({ $or: [{ email }, { userID }] });
     if (exists) {
-        return res.render('join', {
+        return res.status(400).render('join', {
             pageTitle,
             errorMessage: 'This E-mail / ID is already taken.',
         });

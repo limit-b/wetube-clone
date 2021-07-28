@@ -35,7 +35,7 @@ export const postUploadVideoController = async (req, res) => {
         });
         return res.redirect('/');
     } catch (error) {
-        return res.render('upload-video', {
+        return res.status(400).render('upload-video', {
             pageTitle: 'Upload Video',
             errorMessage: error._message,
         });
@@ -46,37 +46,23 @@ export const watchVideoController = async (req, res) => {
     const { id } = req.params;
     const video = await VideoModel.findById(id);
     if (!video) {
-        return res.render('404', { pageTitle: 'Video not found.' });
+        return res.status(404).render('404', { pageTitle: 'Video not found.' });
     } else {
         return res.render('watch-video', { pageTitle: video.title, video });
     }
-    // try {
-    //     const video = await VideoModel.findById(id);
-    //     return res.render('watch-video', { pageTitle: video.title, video });
-    // } catch (error) {
-    //     console.log(error);
-    //     return res.render('404', { pageTitle: 'Video not found.' });
-    // }
 };
 
 export const getEditVideoController = async (req, res) => {
     const { id } = req.params;
     const video = await VideoModel.findById(id);
     if (!video) {
-        return res.render('404', { pageTitle: 'Video not found.' });
+        return res.status(404).render('404', { pageTitle: 'Video not found.' });
     } else {
         return res.render('edit-video', {
             pageTitle: `Edit ${video.title}`,
             video,
         });
     }
-    // try {
-    //     const video = await VideoModel.findById(id);
-    //     return res.render('edit-video', { pageTitle: `Editing: `, video });
-    // } catch (error) {
-    //     console.log(error);
-    //     return res.render('404', { pageTitle: 'Video not found.' });
-    // }
 };
 
 export const postEditVideoController = async (req, res) => {
@@ -86,7 +72,7 @@ export const postEditVideoController = async (req, res) => {
     } = req;
     const video = await VideoModel.exists({ _id: id });
     if (!video) {
-        return res.render('404', { pageTitle: 'Video not found.' });
+        return res.status(404).render('404', { pageTitle: 'Video not found.' });
     } else {
         await VideoModel.findByIdAndUpdate(id, {
             title,
