@@ -6,14 +6,15 @@ import {
 import {
     getJoinController,
     postJoinController,
-    loginController,
+    getLoginController,
+    postLoginController,
 } from '../controllers/user-controller';
 
 const rootRouter = express.Router();
 
 rootRouter.get('/', homeController);
 rootRouter.route('/join').get(getJoinController).post(postJoinController);
-rootRouter.get('/login', loginController);
+rootRouter.route('/login').get(getLoginController).post(postLoginController);
 rootRouter.get('/search', searchController);
 
 export default rootRouter;

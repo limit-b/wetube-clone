@@ -1,3 +1,4 @@
+import bcrypt from 'bcrypt';
 import UserModel from '../models/User';
 
 export const getJoinController = (req, res) => {
@@ -19,24 +20,60 @@ export const postJoinController = async (req, res) => {
             pageTitle,
             errorMessage: 'Password confirmation does not match.',
         });
-    }
-    const exists = await UserModel.exists({ $or: [{ email }, { userID }] });
-    if (exists) {
-        return res.status(400).render('join', {
-            pageTitle,
-            errorMessage: 'This E-mail / ID is already taken.',
-        });
-    }
-    try {
-        await UserModel.create({ userName, email, userID, password, country });
-        return res.redirect('/login');
-    } catch (error) {
-        console.log(error);
-        return res.end();
+    } else {
+        const exists = await UserModel.exists({ $or: [{ email }, { userID }] });
+        if (exists) {
+            return res.status(400).render('join', {
+                pageTitle,
+                errorMessage: 'This E-mail / ID is already taken.',
+            });
+        } else {
+            try {
+                await UserModel.create({
+                    userName,
+                    email,
+                    userID,
+                    password,
+                    country,
+                });
+                return res.redirect('/login');
+            } catch (error) {
+                console.log(error);
+                return res.status(400).render('join', {
+                    pageTitle,
+                    errorMessage: error._message,
+                });
+            }
+        }
     }
 };
 
-export const loginController = (req, res) => res.send('login page');
+export const getLoginController = (req, res) => {
+    return res.render('login', { pageTitle: 'Login' });
+};
+
+export const postLoginController = async (req, res) => {
+    const { userID, password } = req.body;
+    const user = await UserModel.findOne({ userID });
+    const pageTitle = 'Login';
+    if (!user) {
+        return res.status(400).render('login', {
+            pageTitle,
+            errorMessage: 'An account with this ID does not exists.',
+        });
+    } else {
+        const comparePassword = await bcrypt.compare(password, user.password);
+        if (!comparePassword) {
+            return res.status(400).render('login', {
+                pageTitle,
+                errorMessage: 'Wrong password.',
+            });
+        } else {
+            console.log('Log user in! Coming soon!');
+            return res.redirect('/');
+        }
+    }
+};
 
 export const logoutController = (req, res) => res.send('logout page');
 
