@@ -4,7 +4,7 @@ doctype html
         <meta charset="UTF-8" />
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>#{ pageTitle } | WeTube</title>
+        <title>#{ pageTitle } | #{ siteName }</title>
         <link rel="stylesheet" href="https://unpkg.com/mvp.css">
     </head>
     <body>
@@ -18,10 +18,16 @@ doctype html
                         a(href='/search') Search
                     li
                         a(href='/videos/upload') Upload Video
-                    li
-                        a(href='/join') Join
-                    li
-                        a(href='/login') Login
+                    if loggedIn
+                        li
+                            a(href='/logout') Logout
+                        li
+                            a(href='/my-profile') #{ loggedInUser.userName }의 Profile
+                    else
+                        li
+                            a(href='/join') Join
+                        li
+                            a(href='/login') Login
         </header>
         <main>
             block content
