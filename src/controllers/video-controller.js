@@ -3,7 +3,7 @@ import VideoModel from '../models/Video';
 export const homeController = async (req, res) => {
     try {
         const videosDB = await VideoModel.find({}).sort({ createdAt: 'desc' });
-        console.log(videosDB);
+        // console.log(videosDB);
         return res.render('home', { pageTitle: 'Home', videosDB });
     } catch (error) {
         return res.render('server-error', { error });

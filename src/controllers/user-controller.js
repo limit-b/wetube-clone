@@ -54,24 +54,24 @@ export const getLoginController = (req, res) => {
 
 export const postLoginController = async (req, res) => {
     const { userID, password } = req.body;
-    const user = await UserModel.findOne({ userID });
+    const userDB = await UserModel.findOne({ userID });
     const pageTitle = 'Login';
-    if (!user) {
+    if (!userDB) {
         return res.status(400).render('login', {
             pageTitle,
             errorMessage: 'An account with this ID does not exists.',
         });
     } else {
-        const comparePassword = await bcrypt.compare(password, user.password);
+        const comparePassword = await bcrypt.compare(password, userDB.password);
         if (!comparePassword) {
             return res.status(400).render('login', {
                 pageTitle,
                 errorMessage: 'Wrong password.',
             });
         } else {
-            console.log('Log user in!');
+            // console.log('Log user in!');
             req.session.loggedIn = true;
-            req.session.user = user;
+            req.session.user = userDB;
             return res.redirect('/');
         }
     }
