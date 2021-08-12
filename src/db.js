@@ -1,7 +1,5 @@
 import mongoose from 'mongoose';
 
-console.log('db is here :', process.env.MONGO_DB_URL);
-
 mongoose.connect(process.env.MONGO_DB_URL, {
     useNewUrlParser: true,
     useUnifiedTopology: true,

@@ -1,4 +1,5 @@
 import bcrypt from 'bcrypt';
+import fetch from 'node-fetch';
 import UserModel from '../models/User';
 
 export const getJoinController = (req, res) => {
@@ -69,7 +70,6 @@ export const postLoginController = async (req, res) => {
                 errorMessage: 'Wrong password.',
             });
         } else {
-            // console.log('Log user in!');
             req.session.loggedIn = true;
             req.session.user = userDB;
             return res.redirect('/');
@@ -80,7 +80,7 @@ export const postLoginController = async (req, res) => {
 export const startGithubLogin = (req, res) => {
     const baseUrl = 'https://github.com/login/oauth/authorize';
     const config = {
-        client_id: 'ec598b73204311df24d7',
+        client_id: process.env.GITHUB_CLIENT_ID,
         allow_signup: false,
         scope: 'read:user user:email',
     };
@@ -89,7 +89,82 @@ export const startGithubLogin = (req, res) => {
     return res.redirect(finalUrl);
 };
 
-export const finishGithubLogin = (req, res) => res.send('finish page');
+export const finishGithubLogin = async (req, res) => {
+    const baseUrl = 'https://github.com/login/oauth/access_token';
+    const config = {
+        client_id: process.env.GITHUB_CLIENT_ID,
+        client_secret: process.env.GITHUB_CLIENT_SECRET,
+        code: req.query.code,
+    };
+    const params = new URLSearchParams(config).toString();
+    const finalUrl = `${baseUrl}?${params}`;
+    const tokenRequest = await (
+        await fetch(finalUrl, {
+            method: 'POST',
+            headers: { Accept: 'application/json' },
+        })
+    ).json();
+    // const json = await tokenRequest.json();
+    if ('access_token' in tokenRequest) {
+        const apiUrl = 'https://api.github.com';
+        const githubUserData = await (
+            await fetch(`${apiUrl}/user`, {
+                headers: {
+                    Authorization: `token ${tokenRequest.access_token}`,
+                },
+            })
+        ).json();
+        const githubEmailData = await (
+            await fetch(`${apiUrl}/user/emails`, {
+                headers: {
+                    Authorization: `token ${tokenRequest.access_token}`,
+                },
+            })
+        ).json();
+        // console.log('---user data---');
+        // console.log(githubUserData);
+        // console.log('---email data---');
+        // console.log(githubEmailData);
+        const trueEmailObj = githubEmailData.find(
+            (email) => email.primary === true && email.verified === true
+        );
+        if (!trueEmailObj) {
+            return res.redirect('/login');
+        } else {
+            const userDB = await UserModel.findOne({
+                email: trueEmailObj.email,
+            });
+            if (userDB) {
+                req.session.loggedIn = true;
+                req.session.user = userDB;
+                return res.redirect('/');
+            } else {
+                try {
+                    const user = await UserModel.create({
+                        socialLoginOnly: true,
+                        userName: githubUserData.name
+                            ? githubUserData.name
+                            : githubUserData.login,
+                        email: trueEmailObj.email,
+                        userID: githubUserData.login,
+                        password: '',
+                        country: githubUserData.location
+                            ? githubUserData.location
+                            : 'Unknown',
+                    });
+                    req.session.loggedIn = true;
+                    req.session.user = user;
+                    return res.redirect('/');
+                } catch (error) {
+                    console.log(error);
+                    return res.redirect('/login');
+                }
+            }
+        }
+    } else {
+        return res.redirect('/login');
+    }
+};
 
 export const logoutController = (req, res) => res.send('logout page');
 

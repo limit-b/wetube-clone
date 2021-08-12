@@ -7,12 +7,6 @@ import rootRouter from './routers/root-router';
 import usersRouter from './routers/user-router';
 import videosRouter from './routers/video-router';
 
-console.log(
-    'server is here :',
-    process.env.COOKIE_SECRET,
-    process.env.MONGO_DB_URL
-);
-
 const app = express();
 const logger = morgan('dev');
 
