@@ -21,6 +21,11 @@ export const postJoinController = async (req, res) => {
             pageTitle,
             errorMessage: 'Password confirmation does not match.',
         });
+    } else if (password === undefined) {
+        return res.status(400).render('join', {
+            pageTitle,
+            errorMessage: 'Password cannot be empty.',
+        });
     } else {
         const exists = await UserModel.exists({ $or: [{ email }, { userID }] });
         if (exists) {
@@ -55,7 +60,7 @@ export const getLoginController = (req, res) => {
 
 export const postLoginController = async (req, res) => {
     const { userID, password } = req.body;
-    const userDB = await UserModel.findOne({ userID });
+    const userDB = await UserModel.findOne({ socialLoginOnly: false, userID });
     const pageTitle = 'Login';
     if (!userDB) {
         return res.status(400).render('login', {
@@ -104,7 +109,6 @@ export const finishGithubLogin = async (req, res) => {
             headers: { Accept: 'application/json' },
         })
     ).json();
-    // const json = await tokenRequest.json();
     if ('access_token' in tokenRequest) {
         const apiUrl = 'https://api.github.com';
         const githubUserData = await (
@@ -121,26 +125,19 @@ export const finishGithubLogin = async (req, res) => {
                 },
             })
         ).json();
-        // console.log('---user data---');
-        // console.log(githubUserData);
-        // console.log('---email data---');
-        // console.log(githubEmailData);
         const trueEmailObj = githubEmailData.find(
             (email) => email.primary === true && email.verified === true
         );
         if (!trueEmailObj) {
             return res.redirect('/login');
         } else {
-            const userDB = await UserModel.findOne({
+            // TODO: githubID
+            let githubUser = await UserModel.findOne({
                 email: trueEmailObj.email,
             });
-            if (userDB) {
-                req.session.loggedIn = true;
-                req.session.user = userDB;
-                return res.redirect('/');
-            } else {
+            if (!githubUser) {
                 try {
-                    const user = await UserModel.create({
+                    githubUser = await UserModel.create({
                         socialLoginOnly: true,
                         userName: githubUserData.name
                             ? githubUserData.name
@@ -151,14 +148,19 @@ export const finishGithubLogin = async (req, res) => {
                         country: githubUserData.location
                             ? githubUserData.location
                             : 'Unknown',
+                        avatarUrl: githubUserData.avatar_url,
                     });
                     req.session.loggedIn = true;
-                    req.session.user = user;
+                    req.session.user = githubUser;
                     return res.redirect('/');
                 } catch (error) {
                     console.log(error);
                     return res.redirect('/login');
                 }
+            } else {
+                req.session.loggedIn = true;
+                req.session.user = githubUser;
+                return res.redirect('/');
             }
         }
     } else {
@@ -166,7 +168,10 @@ export const finishGithubLogin = async (req, res) => {
     }
 };
 
-export const logoutController = (req, res) => res.send('logout page');
+export const logoutController = (req, res) => {
+    req.session.destroy();
+    return res.redirect('/');
+};
 
 export const editUserProfileController = (req, res) =>
     res.send('edit user profile page');
