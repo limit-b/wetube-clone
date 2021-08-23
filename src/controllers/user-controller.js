@@ -129,6 +129,7 @@ export const finishGithubLogin = async (req, res) => {
             (email) => email.primary === true && email.verified === true
         );
         if (!trueEmailObj) {
+            // TODO: set notification
             return res.redirect('/login');
         } else {
             // TODO: githubID
@@ -173,10 +174,19 @@ export const logoutController = (req, res) => {
     return res.redirect('/');
 };
 
-export const editUserProfileController = (req, res) =>
-    res.send('edit user profile page');
+export const getEditUserController = async (req, res) => {
+    // TODO: middleware
+    // const loggedIn = Boolean(req.session.loggedIn);
+    // if (!loggedIn) {
+    //     return res.redirect('/');
+    // } else {
+    return res.render('edit-user', { pageTitle: 'Edit User' });
+    // }
+};
 
-export const removeUserProfileController = (req, res) =>
-    res.send('remove user profile page');
+export const postEditUserController = (req, res) =>
+    res.send('post edit user page');
+
+export const removeUserController = (req, res) => res.send('remove user page');
 
 export const seeUserController = (req, res) => res.send('see user page');

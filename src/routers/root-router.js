@@ -3,6 +3,7 @@ import {
     homeController,
     searchController,
 } from '../controllers/video-controller';
+import { publicOnlyMiddleware } from '../middlewares';
 import {
     getJoinController,
     postJoinController,
@@ -13,8 +14,16 @@ import {
 const rootRouter = express.Router();
 
 rootRouter.get('/', homeController);
-rootRouter.route('/join').get(getJoinController).post(postJoinController);
-rootRouter.route('/login').get(getLoginController).post(postLoginController);
+rootRouter
+    .route('/join')
+    .all(publicOnlyMiddleware)
+    .get(getJoinController)
+    .post(postJoinController);
+rootRouter
+    .route('/login')
+    .all(publicOnlyMiddleware)
+    .get(getLoginController)
+    .post(postLoginController);
 rootRouter.get('/search', searchController);
 
 export default rootRouter;

@@ -3,25 +3,25 @@ extends ./main.pug
 block content
     if errorMessage
         span= errorMessage
-    form(method='post')
-        input(type='text', placeholder='Name', name='userName', required)
-        input(type='email', placeholder='Email', name='email', required)
-        input(type='text', placeholder='ID', name='userID', required)
+    form(method="post")
+        input(type="text", placeholder="Name", name="userName", required)
+        input(type="email", placeholder="Email", name="email", required)
+        input(type="text", placeholder="ID", name="userID", required)
         input(
-            type='password',
-            placeholder='Password',
-            name='password',
+            type="password",
+            placeholder="Password",
+            name="password",
             required
         )
         input(
-            type='password',
-            placeholder='Confirm Password',
-            name='confirmPassword',
+            type="password",
+            placeholder="Confirm Password",
+            name="confirmPassword",
             required
         )
-        input(type='text', placeholder='Country', name='country', required)
-        input(value='Join', type='submit')
+        input(type="text", placeholder="Country", name="country", required)
+        input(value="Join", type="submit")
     hr
     div
         span Already have an account? &nbsp;
-        a(href='/login') Login now &rarr;
+        a(href="/login") Login now &rarr;
