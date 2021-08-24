@@ -175,17 +175,49 @@ export const logoutController = (req, res) => {
 };
 
 export const getEditUserController = async (req, res) => {
-    // TODO: middleware
-    // const loggedIn = Boolean(req.session.loggedIn);
-    // if (!loggedIn) {
-    //     return res.redirect('/');
-    // } else {
     return res.render('edit-user', { pageTitle: 'Edit User' });
-    // }
 };
 
-export const postEditUserController = (req, res) =>
-    res.send('post edit user page');
+export const postEditUserController = async (req, res) => {
+    const {
+        session: {
+            user: { _id },
+        },
+        body: { userName, email, userID, country },
+    } = req;
+    // TODO: code challenge
+    const exists = await UserModel.exists({ $or: [{ email }, { userID }] });
+    const pageTitle = 'Edit User';
+    if (exists) {
+        return res.status(400).render('edit-user', {
+            pageTitle,
+            errorMessage: 'This E-mail / ID is already taken.',
+        });
+    } else {
+        try {
+            const updatedUser = await UserModel.findByIdAndUpdate(
+                _id,
+                { userName, email, userID, country },
+                { new: true }
+            );
+            // req.session.user = {
+            //     ...req.session.user,
+            //     userName,
+            //     email,
+            //     userID,
+            //     country,
+            // };
+            req.session.user = updatedUser;
+            return res.redirect('/');
+        } catch (error) {
+            console.log(error);
+            return res.status(400).render('edit-user', {
+                pageTitle,
+                errorMessage: error._message,
+            });
+        }
+    }
+};
 
 export const removeUserController = (req, res) => res.send('remove user page');
 

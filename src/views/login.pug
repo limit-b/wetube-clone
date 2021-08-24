@@ -3,18 +3,18 @@ extends ./main.pug
 block content
     if errorMessage
         span= errorMessage
-    form(method='post')
-        input(type='text', placeholder='ID', name='userID', required)
+    form(method="post")
+        input(type="text", placeholder="ID", name="userID", required)
         input(
-            type='password',
-            placeholder='Password',
-            name='password',
+            type="password",
+            placeholder="Password",
+            name="password",
             required
         )
-        input(value='Login', type='submit')
+        input(value="Login", type="submit")
         br
-        a(href='/users/github/start') Continue with Github &rarr;
+        a(href="/users/github/start") Continue with Github &rarr;
     hr
     div
         span Don't have an account? &nbsp;
-        a(href='/join') Create one now &rarr;
+        a(href="/join") Create one now &rarr;
