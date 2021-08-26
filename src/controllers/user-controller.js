@@ -156,7 +156,7 @@ export const finishGithubLogin = async (req, res) => {
                     return res.redirect('/');
                 } catch (error) {
                     console.log(error);
-                    return res.redirect('/login');
+                    return res.status(400).render('server-error', { error });
                 }
             } else {
                 req.session.loggedIn = true;
@@ -165,6 +165,7 @@ export const finishGithubLogin = async (req, res) => {
             }
         }
     } else {
+        //TODO: set notification
         return res.redirect('/login');
     }
 };
@@ -185,8 +186,10 @@ export const postEditUserController = async (req, res) => {
         },
         body: { userName, email, userID, country },
     } = req;
-    // TODO: code challenge
-    const exists = await UserModel.exists({ $or: [{ email }, { userID }] });
+    const exists = await UserModel.exists({
+        _id: { $ne: _id },
+        $or: [{ email }, { userID }],
+    });
     const pageTitle = 'Edit User';
     if (exists) {
         return res.status(400).render('edit-user', {

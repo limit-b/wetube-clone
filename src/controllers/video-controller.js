@@ -6,7 +6,8 @@ export const homeController = async (req, res) => {
         // console.log(videosDB);
         return res.render('home', { pageTitle: 'Home', videosDB });
     } catch (error) {
-        return res.render('server-error', { error });
+        console.log(error);
+        return res.status(400).render('server-error', { error });
     }
 };
 
@@ -70,21 +71,31 @@ export const postEditVideoController = async (req, res) => {
         params: { id },
         body: { title, description, hashtags },
     } = req;
-    const video = await VideoModel.exists({ _id: id });
+    const video = await VideoModel.findById(id);
     if (!video) {
         return res.status(404).render('404', { pageTitle: 'Video not found.' });
     } else {
-        await VideoModel.findByIdAndUpdate(id, {
-            title,
-            description,
-            hashtags: await VideoModel.formatHashtags(hashtags),
-        });
-        return res.redirect(`/videos/${id}`);
+        try {
+            await VideoModel.findByIdAndUpdate(id, {
+                title,
+                description,
+                hashtags: await VideoModel.formatHashtags(hashtags),
+            });
+            return res.redirect(`/videos/${id}`);
+        } catch (error) {
+            console.log(error);
+            return res.status(400).render('server-error', { error });
+        }
     }
 };
 
 export const deleteVideoController = async (req, res) => {
     const { id } = req.params;
-    await VideoModel.findByIdAndDelete(id);
-    return res.redirect('/');
+    try {
+        await VideoModel.findByIdAndDelete(id);
+        return res.redirect('/');
+    } catch (error) {
+        console.log(error);
+        return res.status(400).render('server-error', { error });
+    }
 };
