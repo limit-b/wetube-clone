@@ -6,6 +6,8 @@ import {
     logoutController,
     getEditUserController,
     postEditUserController,
+    getChangePasswordController,
+    postChangePasswordController,
     removeUserController,
     seeUserController,
 } from '../controllers/user-controller';
@@ -20,6 +22,11 @@ usersRouter
     .all(protectorMiddleware)
     .get(getEditUserController)
     .post(postEditUserController);
+usersRouter
+    .route('/change-password')
+    .all(protectorMiddleware)
+    .get(getChangePasswordController)
+    .post(postChangePasswordController);
 usersRouter.get('/remove', removeUserController);
 usersRouter.get('/:id', seeUserController);
 

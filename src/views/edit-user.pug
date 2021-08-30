@@ -33,3 +33,7 @@ block content
             required
         )
         input(value="Update", type="submit")
+        if !loggedInUser.socialLoginOnly
+            hr
+            div
+                a(href="change-password") Change Password &rarr;

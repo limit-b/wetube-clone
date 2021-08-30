@@ -21,7 +21,7 @@ export const postJoinController = async (req, res) => {
             pageTitle,
             errorMessage: 'Password confirmation does not match.',
         });
-    } else if (password === undefined) {
+    } else if (password === undefined || password === '') {
         return res.status(400).render('join', {
             pageTitle,
             errorMessage: 'Password cannot be empty.',
@@ -218,6 +218,71 @@ export const postEditUserController = async (req, res) => {
                 pageTitle,
                 errorMessage: error._message,
             });
+        }
+    }
+};
+
+export const getChangePasswordController = (req, res) => {
+    const { socialLoginOnly } = req.session.user;
+    if (socialLoginOnly === true) {
+        return res.redirect('/');
+    } else {
+        return res.render('users/change-password', {
+            pageTitle: 'Change Password',
+        });
+    }
+};
+
+export const postChangePasswordController = async (req, res) => {
+    const {
+        session: {
+            user: { _id },
+        },
+        body: { oldPassword, newPassword, confirmNewPassword },
+    } = req;
+    if (newPassword !== confirmNewPassword) {
+        return res.status(400).render('users/change-password', {
+            pageTitle: 'Change Password',
+            errorMessage: 'The password does not match the confirmation.',
+        });
+    } else if (newPassword === undefined || newPassword === '') {
+        return res.status(400).render('users/change-password', {
+            pageTitle: 'Change Password',
+            errorMessage: 'Password cannot be empty.',
+        });
+    } else {
+        const userDB = await UserModel.findOne({
+            socialLoginOnly: false,
+            _id,
+        });
+        if (!userDB) {
+            return res
+                .status(404)
+                .render('404', { pageTitle: 'User not found' });
+        } else {
+            const comparePassword = await bcrypt.compare(
+                oldPassword,
+                userDB.password
+            );
+            if (!comparePassword) {
+                return res.status(400).render('users/change-password', {
+                    pageTitle: 'Change Password',
+                    errorMessage: 'The current password is incorrect.',
+                });
+            } else {
+                try {
+                    userDB.password = newPassword;
+                    await userDB.save();
+                    //TODO: send notification
+                    return res.redirect('/users/logout');
+                } catch (error) {
+                    console.log(error);
+                    return res.status(400).render('users/change-password', {
+                        pageTitle: 'Change Password',
+                        errorMessage: error._message,
+                    });
+                }
+            }
         }
     }
 };
