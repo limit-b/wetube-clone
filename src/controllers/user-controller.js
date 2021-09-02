@@ -7,14 +7,8 @@ export const getJoinController = (req, res) => {
 };
 
 export const postJoinController = async (req, res) => {
-    const {
-        userName,
-        email,
-        userID,
-        password,
-        confirmPassword,
-        country,
-    } = req.body;
+    const { userName, email, userID, password, confirmPassword, country } =
+        req.body;
     const pageTitle = 'Join';
     if (password !== confirmPassword) {
         return res.status(400).render('join', {
@@ -140,6 +134,7 @@ export const finishGithubLogin = async (req, res) => {
                 try {
                     githubUser = await UserModel.create({
                         socialLoginOnly: true,
+                        avatarUrl: githubUserData.avatar_url,
                         userName: githubUserData.name
                             ? githubUserData.name
                             : githubUserData.login,
@@ -149,7 +144,6 @@ export const finishGithubLogin = async (req, res) => {
                         country: githubUserData.location
                             ? githubUserData.location
                             : 'Unknown',
-                        avatarUrl: githubUserData.avatar_url,
                     });
                     req.session.loggedIn = true;
                     req.session.user = githubUser;
@@ -182,8 +176,9 @@ export const getEditUserController = async (req, res) => {
 export const postEditUserController = async (req, res) => {
     const {
         session: {
-            user: { _id },
+            user: { _id, avatarUrl },
         },
+        file,
         body: { userName, email, userID, country },
     } = req;
     const exists = await UserModel.exists({
@@ -200,16 +195,15 @@ export const postEditUserController = async (req, res) => {
         try {
             const updatedUser = await UserModel.findByIdAndUpdate(
                 _id,
-                { userName, email, userID, country },
+                {
+                    avatarUrl: file ? file.path : avatarUrl,
+                    userName,
+                    email,
+                    userID,
+                    country,
+                },
                 { new: true }
             );
-            // req.session.user = {
-            //     ...req.session.user,
-            //     userName,
-            //     email,
-            //     userID,
-            //     country,
-            // };
             req.session.user = updatedUser;
             return res.redirect('/');
         } catch (error) {

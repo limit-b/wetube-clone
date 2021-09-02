@@ -1,5 +1,9 @@
 import express from 'express';
-import { publicOnlyMiddleware, protectorMiddleware } from '../middlewares';
+import {
+    publicOnlyMiddleware,
+    protectorMiddleware,
+    uploadMiddleware,
+} from '../middlewares';
 import {
     startGithubLogin,
     finishGithubLogin,
@@ -21,7 +25,7 @@ usersRouter
     .route('/edit')
     .all(protectorMiddleware)
     .get(getEditUserController)
-    .post(postEditUserController);
+    .post(uploadMiddleware.single('avatar'), postEditUserController);
 usersRouter
     .route('/change-password')
     .all(protectorMiddleware)
