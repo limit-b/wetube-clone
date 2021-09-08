@@ -1,11 +1,7 @@
 import mongoose from 'mongoose';
 
-// export const formatHashtags = (hashtags) =>
-//     hashtags
-//         .split(',')
-//         .map((word) => (word.startsWith('#') ? word : `#${word}`));
-
 const videoSchema = new mongoose.Schema({
+    videoUrl: { type: String, required: true },
     title: { type: String, maxLength: 80, required: true, trim: true },
     description: {
         type: String,
@@ -21,12 +17,6 @@ const videoSchema = new mongoose.Schema({
         rating: { type: Number, default: 0, required: true },
     },
 });
-
-// videoSchema.pre('save', async function () {
-//     this.hashtags = this.hashtags[0]
-//         .split(',')
-//         .map((word) => (word.startsWith('#') ? word : `#${word}`));
-// });
 
 videoSchema.static('formatHashtags', async function (hashtags) {
     return hashtags

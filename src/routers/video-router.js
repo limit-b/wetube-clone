@@ -1,5 +1,5 @@
 import express from 'express';
-import { protectorMiddleware } from '../middlewares';
+import { protectorMiddleware, uploadVideoMiddleware } from '../middlewares';
 import {
     getUploadVideoController,
     postUploadVideoController,
@@ -15,7 +15,7 @@ videosRouter
     .route('/upload')
     .all(protectorMiddleware)
     .get(getUploadVideoController)
-    .post(postUploadVideoController);
+    .post(uploadVideoMiddleware.single('videoFile'), postUploadVideoController);
 videosRouter.get('/:id([0-9a-f]{24})', watchVideoController);
 videosRouter
     .route('/:id([0-9a-f]{24})/edit')

@@ -27,9 +27,13 @@ export const getUploadVideoController = (req, res) => {
 };
 
 export const postUploadVideoController = async (req, res) => {
-    const { title, description, hashtags } = req.body;
+    const {
+        file: { path: videoUrl },
+        body: { title, description, hashtags },
+    } = req;
     try {
         await VideoModel.create({
+            videoUrl,
             title,
             description,
             hashtags: await VideoModel.formatHashtags(hashtags),
