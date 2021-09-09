@@ -20,11 +20,11 @@ doctype html
                         li
                             a(href="/videos/upload") Upload Video
                         li
-                            a(href="/users/logout") Logout
-                        li
-                            a(href="/my-profile") #{ loggedInUser.userName }의 Profile
+                            a(href=`/users/${loggedInUser._id}`) My Profile
                         li
                             a(href="/users/edit") Edit User
+                        li
+                            a(href="/users/logout") Logout
                     else
                         li
                             a(href="/join") Join

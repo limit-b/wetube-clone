@@ -283,4 +283,18 @@ export const postChangePasswordController = async (req, res) => {
 
 export const removeUserController = (req, res) => res.send('remove user page');
 
-export const seeUserController = (req, res) => res.send('see user page');
+export const seeUserController = async (req, res) => {
+    const {
+        params: { id },
+    } = req;
+    const userDB = await UserModel.findById(id);
+    console.log(userDB);
+    if (!userDB) {
+        return res.status(404).render('404', { pageTitle: 'User Not Found' });
+    } else {
+        return res.render('users/user-profile', {
+            pageTitle: userDB.userName,
+            userDB,
+        });
+    }
+};
