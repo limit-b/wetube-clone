@@ -3,11 +3,15 @@ extends ./main.pug
 block content
     video(src=`/${video.videoUrl}`, width="640", controls)
     div
-        p= video.description
         small= video.createdAt
-    a(href=`${video.id}/edit`) Edit Video &rarr;
-    br
-    a(href=`${video.id}/delete`) Delete Video &rarr;
+    div
+        small Uploaded by #{ videoOwner.userName }
+    div
+        p= video.description
+    if String(video.owner) === String(loggedInUser._id)
+        a(href=`${video.id}/edit`) Edit Video &rarr;
+        br
+        a(href=`${video.id}/delete`) Delete Video &rarr;
 
 //-     /watchVideoController\             main.pug
 //-     ---------------------------            ^

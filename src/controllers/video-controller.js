@@ -1,4 +1,5 @@
 import VideoModel from '../models/Video';
+import UserModel from '../models/User';
 
 export const homeController = async (req, res) => {
     try {
@@ -28,15 +29,19 @@ export const getUploadVideoController = (req, res) => {
 
 export const postUploadVideoController = async (req, res) => {
     const {
+        session: {
+            user: { _id },
+        },
         file: { path: videoUrl },
         body: { title, description, hashtags },
     } = req;
     try {
         await VideoModel.create({
             videoUrl,
-            title,
-            description,
             hashtags: await VideoModel.formatHashtags(hashtags),
+            title,
+            owner: _id,
+            description,
         });
         return res.redirect('/');
     } catch (error) {
@@ -53,7 +58,12 @@ export const watchVideoController = async (req, res) => {
     if (!video) {
         return res.status(404).render('404', { pageTitle: 'Video not found.' });
     } else {
-        return res.render('watch-video', { pageTitle: video.title, video });
+        const videoOwner = await UserModel.findById(video.owner);
+        return res.render('watch-video', {
+            pageTitle: video.title,
+            video,
+            videoOwner,
+        });
     }
 };
 
@@ -81,9 +91,9 @@ export const postEditVideoController = async (req, res) => {
     } else {
         try {
             await VideoModel.findByIdAndUpdate(id, {
+                hashtags: await VideoModel.formatHashtags(hashtags),
                 title,
                 description,
-                hashtags: await VideoModel.formatHashtags(hashtags),
             });
             return res.redirect(`/videos/${id}`);
         } catch (error) {
