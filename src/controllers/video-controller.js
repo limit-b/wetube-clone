@@ -1,5 +1,4 @@
 import VideoModel from '../models/Video';
-import UserModel from '../models/User';
 
 export const homeController = async (req, res) => {
     try {
@@ -54,15 +53,15 @@ export const postUploadVideoController = async (req, res) => {
 
 export const watchVideoController = async (req, res) => {
     const { id } = req.params;
-    const video = await VideoModel.findById(id);
+    const video = await VideoModel.findById(id).populate('owner');
     if (!video) {
         return res.status(404).render('404', { pageTitle: 'Video not found.' });
     } else {
-        const videoOwner = await UserModel.findById(video.owner);
+        // const videoOwner = await UserModel.findById(video.owner);
         return res.render('watch-video', {
             pageTitle: video.title,
             video,
-            videoOwner,
+            // videoOwner,
         });
     }
 };

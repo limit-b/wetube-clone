@@ -1,4 +1,8 @@
 extends ../main.pug
+include ../mixins/video-mixin.pug
 
 block content
-    p user profile page
+    each item in videosDB
+        +videoMixin(item)
+    else
+        div Nothing found
