@@ -1,7 +1,6 @@
 import bcrypt from 'bcrypt';
 import fetch from 'node-fetch';
 import UserModel from '../models/User';
-import VideoModel from '../models/Video';
 
 export const getJoinController = (req, res) => {
     return res.render('join', { pageTitle: 'Join' });
@@ -194,7 +193,7 @@ export const postEditUserController = async (req, res) => {
         });
     } else {
         try {
-            const updatedUser = await UserModel.findByIdAndUpdate(
+            const updatedUserDB = await UserModel.findByIdAndUpdate(
                 _id,
                 {
                     avatarUrl: file ? file.path : avatarUrl,
@@ -205,7 +204,7 @@ export const postEditUserController = async (req, res) => {
                 },
                 { new: true }
             );
-            req.session.user = updatedUser;
+            req.session.user = updatedUserDB;
             return res.redirect('/');
         } catch (error) {
             console.log(error);
@@ -288,15 +287,15 @@ export const seeUserController = async (req, res) => {
     const {
         params: { id },
     } = req;
-    const userDB = await UserModel.findById(id);
+    const userDB = await UserModel.findById(id).populate('videos');
     if (!userDB) {
         return res.status(404).render('404', { pageTitle: 'User Not Found' });
     } else {
-        const videosDB = await VideoModel.find({ owner: userDB._id });
+        // const videosDB = await VideoModel.find({ owner: userDB._id });
         return res.render('users/user-profile', {
             pageTitle: userDB.userName,
             userDB,
-            videosDB,
+            // videosDB,
         });
     }
 };

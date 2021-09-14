@@ -4,7 +4,7 @@ block content
     h2 Update Video
     form(method="post")
         input(
-            value=video.title,
+            value=videoDB.title,
             type="text",
             placeholder="New Title",
             name="title",
@@ -12,7 +12,7 @@ block content
             required
         )
         input(
-            value=video.description,
+            value=videoDB.description,
             type="text",
             placeholder="New Description",
             name="description",
@@ -21,7 +21,7 @@ block content
             required
         )
         input(
-            value=video.hashtags.join(),
+            value=videoDB.hashtags.join(),
             type="text",
             placeholder="New Hashtags, separated by comma.",
             name="hashtags",

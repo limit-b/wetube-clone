@@ -2,7 +2,7 @@ extends ../main.pug
 include ../mixins/video-mixin.pug
 
 block content
-    each item in videosDB
+    each item in userDB.videos
         +videoMixin(item)
     else
         div Nothing found

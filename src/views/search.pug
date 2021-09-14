@@ -6,5 +6,5 @@ block content
         input(type="text", placeholder="Search by title", name="keyword")
         input(value="Search now", type="submit")
     div
-        each item in searchVideos
+        each item in searchVideosDB
             +videoMixin(item)
