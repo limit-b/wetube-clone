@@ -7,8 +7,8 @@ export const homeController = async (req, res) => {
         // console.log(videosDB);
         return res.render('home', { pageTitle: 'Home', videosDB });
     } catch (error) {
-        console.log(error);
-        return res.status(400).render('server-error', { error });
+        return console.log(error);
+        // return res.redirect('/');
     }
 };
 
@@ -35,27 +35,23 @@ export const postUploadVideoController = async (req, res) => {
         file: { path: videoUrl },
         body: { title, description, hashtags },
     } = req;
-    const userDB = await UserModel.findById(_id);
-    if (!userDB) {
-        return res.status(404).render('404', { pageTitle: 'User not found.' });
-    } else {
-        try {
-            const newVideo = await VideoModel.create({
-                videoUrl,
-                hashtags: await VideoModel.formatHashtags(hashtags),
-                title,
-                owner: _id,
-                description,
-            });
-            userDB.videos.push(newVideo._id);
-            userDB.save();
-            return res.redirect('/');
-        } catch (error) {
-            return res.status(400).render('upload-video', {
-                pageTitle: 'Upload Video',
-                errorMessage: error._message,
-            });
-        }
+    try {
+        const userDB = await UserModel.findById(_id);
+        const newVideo = await VideoModel.create({
+            videoUrl,
+            hashtags: await VideoModel.formatHashtags(hashtags),
+            title,
+            owner: _id,
+            description,
+        });
+        userDB.videos.push(newVideo._id);
+        userDB.save();
+        return res.redirect('/');
+    } catch (error) {
+        return res.status(400).render('upload-video', {
+            pageTitle: 'Upload Video',
+            errorMessage: error._message,
+        });
     }
 };
 
@@ -75,10 +71,17 @@ export const watchVideoController = async (req, res) => {
 };
 
 export const getEditVideoController = async (req, res) => {
-    const { id } = req.params;
+    const {
+        params: { id },
+        session: {
+            user: { _id },
+        },
+    } = req;
     const videoDB = await VideoModel.findById(id);
     if (!videoDB) {
         return res.status(404).render('404', { pageTitle: 'Video not found.' });
+    } else if (String(videoDB.owner) !== String(_id)) {
+        return res.status(403).redirect('/');
     } else {
         return res.render('edit-video', {
             pageTitle: `Edit ${videoDB.title}`,
@@ -90,11 +93,16 @@ export const getEditVideoController = async (req, res) => {
 export const postEditVideoController = async (req, res) => {
     const {
         params: { id },
+        session: {
+            user: { _id },
+        },
         body: { title, description, hashtags },
     } = req;
     const videoDB = await VideoModel.findById(id);
     if (!videoDB) {
         return res.status(404).render('404', { pageTitle: 'Video not found.' });
+    } else if (String(videoDB.owner) !== String(_id)) {
+        return res.status(403).redirect('/');
     } else {
         try {
             await VideoModel.findByIdAndUpdate(id, {
@@ -111,12 +119,24 @@ export const postEditVideoController = async (req, res) => {
 };
 
 export const deleteVideoController = async (req, res) => {
-    const { id } = req.params;
-    try {
-        await VideoModel.findByIdAndDelete(id);
-        return res.redirect('/');
-    } catch (error) {
-        console.log(error);
-        return res.status(400).render('server-error', { error });
+    const {
+        params: { id },
+        session: {
+            user: { _id },
+        },
+    } = req;
+    const videoDB = await VideoModel.findById(id);
+    if (!videoDB) {
+        return res.status(404).render('404', { pageTitle: 'Video not found.' });
+    } else if (String(videoDB.owner) !== String(_id)) {
+        return res.status(403).redirect('/');
+    } else {
+        try {
+            await VideoModel.findByIdAndDelete(id);
+            return res.redirect('/');
+        } catch (error) {
+            console.log(error);
+            return res.status(400).render('server-error', { error });
+        }
     }
 };
