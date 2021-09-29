@@ -7,8 +7,8 @@ export const homeController = async (req, res) => {
         // console.log(videosDB);
         return res.render('home', { pageTitle: 'Home', videosDB });
     } catch (error) {
-        return console.log(error);
-        // return res.redirect('/');
+        console.log(error);
+        return res.redirect('/');
     }
 };
 
@@ -113,7 +113,7 @@ export const postEditVideoController = async (req, res) => {
             return res.redirect(`/videos/${id}`);
         } catch (error) {
             console.log(error);
-            return res.status(400).render('server-error', { error });
+            return res.redirect('/');
         }
     }
 };
@@ -132,11 +132,14 @@ export const deleteVideoController = async (req, res) => {
         return res.status(403).redirect('/');
     } else {
         try {
+            const ownerUserDB = await UserModel.findById(_id);
             await VideoModel.findByIdAndDelete(id);
+            ownerUserDB.videos.splice(ownerUserDB.videos.indexOf(id), 1);
+            ownerUserDB.save();
             return res.redirect('/');
         } catch (error) {
             console.log(error);
-            return res.status(400).render('server-error', { error });
+            return res.redirect('/');
         }
     }
 };
