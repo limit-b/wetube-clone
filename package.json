@@ -3,11 +3,11 @@
   "version": "1.0.0",
   "description": "Cloning Youtube with Vanilla and NodeJS",
   "scripts": {
-    "dev": "nodemon --exec babel-node src/init.js --delay 2",
-    "assets": "webpack --config webpack.config.js",
-    "dev:server": "nodemon --exec babel-node init.js --delay 2",
-    "dev:assets": "cross-env WEBPACK_ENV=development webpack -w",
-    "build:assets": "cross-env WEBPACK_ENV=production webpack"
+    "dev:server": "nodemon --config nodemon.json",
+    "dev:assets": "webpack --config webpack.config.js",
+    "dev:server-old": "nodemon --exec babel-node init.js --delay 2",
+    "dev:assets-old": "cross-env WEBPACK_ENV=development webpack -w",
+    "build:assets-old": "cross-env WEBPACK_ENV=production webpack"
   },
   "repository": {
     "type": "git",
@@ -46,7 +46,7 @@
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-import": "^2.24.2",
     "eslint-plugin-prettier": "^4.0.0",
-    "mini-css-extract-plugin": "^2.2.0",
+    "mini-css-extract-plugin": "^2.3.0",
     "nodemon": "^2.0.13",
     "postcss": "^7.0.38",
     "prettier": "^2.3.2",
