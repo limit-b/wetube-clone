@@ -3,8 +3,6 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 // const MODE = process.env.WEBPACK_ENV;
 
-console.log(path.resolve(__dirname, 'assets', 'js'));
-
 const config = {
     entry: './src/client/js/main.js',
     output: {
