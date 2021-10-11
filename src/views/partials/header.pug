@@ -1,10 +1,11 @@
 <header>
-    a(href="/")
+    a.header__logo(href="/")
         i.fab.fa-youtube
-    nav
+    nav.header__nav
         ul
             li
-                a(href="/search") Search
+                a(href="/search")
+                    i.fas.fa-search.header__search-font
             if loggedIn
                 li
                     a(href="/videos/upload") Upload Video
@@ -16,7 +17,7 @@
                     a(href="/users/logout") Logout
             else
                 li
-                    a(href="/join") Join
-                li
                     a(href="/login") Login
+                li
+                    a.header__button(href="/join") Join
 </header>

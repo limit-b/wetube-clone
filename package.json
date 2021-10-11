@@ -50,7 +50,6 @@
     "nodemon": "^2.0.13",
     "postcss": "^7.0.38",
     "prettier": "^2.4.1",
-    "prettier-plugin-style-order": "^0.2.2",
     "sass": "^1.42.1",
     "sass-loader": "^12.1.0",
     "style-loader": "^3.3.0",
