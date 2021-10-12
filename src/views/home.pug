@@ -2,11 +2,11 @@ extends ./main.pug
 include ./mixins/video-mixin.pug
 
 block content
-    .home__video-grid
+    .shared__video-grid
         each item in videosDB
             +videoMixin(item)
         else
-            div Nothing found
+            span.shared__empty-message No videos found.
 
 //-     /homeController\          main.pug
 //-     --------------------         ^

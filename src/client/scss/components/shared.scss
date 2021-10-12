@@ -1,0 +1,11 @@
+.shared__video-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(150px, 1fr));
+    gap: 50px;
+}
+
+.shared__empty-message {
+    margin-bottom: 50px;
+    font-size: 18px;
+    text-align: center;
+}

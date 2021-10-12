@@ -1,10 +1,4 @@
-.home__video-grid {
-    display: grid;
-    grid-template-columns: repeat(4, minmax(150px, 1fr));
-    gap: 50px;
-}
-
-/* .home-videos-container {
+.home-videos-container {
     display: grid;
     grid-template-columns: repeat(6, minmax(150px, 1fr));
     gap: 30px;
@@ -17,4 +11,4 @@
     .video-block:nth-child(5) {
         grid-column: span 2;
     }
-} */
+}

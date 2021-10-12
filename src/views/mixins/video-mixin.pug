@@ -1,10 +1,13 @@
 mixin videoMixin(info)
-    .video-block
+    a.video-block(href=`/videos/${info.id}`)
         .video-block__thumb
         //- each hashtag in info.hashtags
         //-     span= hashtag
         .video-block__info
-            a.video-block__title(href=`/videos/${info.id}`)= info.title
+            span.video-block__title= info.title
+            .video-block__meta
+                span #{ info.owner.userName }&nbsp;•&nbsp;
+                span #{ info.meta.views }회
         //- small= info.createdAt
         //- p= info.description
         //- hr

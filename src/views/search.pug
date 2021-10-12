@@ -2,9 +2,11 @@ extends ./main.pug
 include ./mixins/video-mixin.pug
 
 block content
-    form(method="get")
+    form.search__form(method="get")
         input(type="text", placeholder="Search by title", name="keyword")
         input(value="Search now", type="submit")
-    div
+    .shared__video-grid
         each item in searchVideosDB
             +videoMixin(item)
+        else
+            span.shared__empty-message No videos found.

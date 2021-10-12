@@ -3,7 +3,9 @@ import UserModel from '../models/User';
 
 export const homeController = async (req, res) => {
     try {
-        const videosDB = await VideoModel.find({}).sort({ createdAt: 'desc' });
+        const videosDB = await VideoModel.find({})
+            .sort({ createdAt: 'desc' })
+            .populate('owner');
         // console.log(videosDB);
         return res.render('home', { pageTitle: 'Home', videosDB });
     } catch (error) {
@@ -18,7 +20,9 @@ export const searchController = async (req, res) => {
     if (keyword) {
         searchVideosDB = await VideoModel.find({
             title: { $regex: new RegExp(keyword, 'i') },
-        }).sort({ createdAt: 'desc' });
+        })
+            .sort({ createdAt: 'desc' })
+            .populate('owner');
     }
     return res.render('search', { pageTitle: 'Search', searchVideosDB });
 };

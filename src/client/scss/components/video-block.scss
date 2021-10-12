@@ -11,12 +11,16 @@
         margin-bottom: 10px;
     }*/
     .video-block__info {
-        padding: 0px 10px;
+        padding: 0px 14px;
         .video-block__title {
             display: block;
             margin-top: 10px;
             /* font-weight: 300; */
-            font-size: 16px;
+            font-size: 18px;
+        }
+        .video-block__meta {
+            margin-top: 6px;
+            font-size: 12px;
         }
     }
 }
