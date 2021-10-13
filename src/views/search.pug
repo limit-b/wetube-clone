@@ -4,7 +4,9 @@ include ./mixins/video-mixin.pug
 block content
     form.search__form(method="get")
         input(type="text", placeholder="Search by title", name="keyword")
-        input(value="Search now", type="submit")
+        //- input(value="Search now", type="submit")
+        button
+            i.fas.fa-search
     .shared__video-grid
         each item in searchVideosDB
             +videoMixin(item)
