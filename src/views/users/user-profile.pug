@@ -2,7 +2,11 @@ extends ../main.pug
 include ../mixins/video-mixin.pug
 
 block content
-    each item in userDB.videos
-        +videoMixin(item)
-    else
-        div Nothing found
+    .user-profile__data
+        img.shared__avatar(src=`/${userDB.avatarUrl}`)
+        span= userDB.userName
+    .shared__video-grid
+        each item in userDB.videos
+            +videoMixin(item)
+        else
+            span.shared__empty-message No videos found.

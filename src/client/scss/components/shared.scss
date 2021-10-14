@@ -9,3 +9,17 @@
     font-size: 18px;
     text-align: center;
 }
+
+.shared__auth-switch {
+    margin-top: 40px;
+    text-align: center;
+    a {
+        text-decoration: underline;
+    }
+}
+
+.shared__avatar {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+}
