@@ -10,11 +10,17 @@
                 li
                     a(href="/videos/upload") Upload Video
                 li
-                    a(href=`/users/${loggedInUser._id}`) My Profile
-                li
                     a(href="/users/edit") Edit User
                 li
                     a(href="/users/logout") Logout
+                li
+                    a(href=`/users/${loggedInUser._id}`)
+                        if (!loggedInUser.avatarUrl || loggedInUser.avatarUrl === "")
+                            i.fas.fa-user.header__user-font
+                        else
+                            img.shared__avatar.shared__avatar--header(
+                                src=`/${loggedInUser.avatarUrl}`
+                            )
             else
                 li
                     a(href="/login") Login

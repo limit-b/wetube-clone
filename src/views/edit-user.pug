@@ -3,7 +3,7 @@ extends ./main.pug
 block content
     if errorMessage
         span= errorMessage
-    form.edit-user__form(method="post", enctype="multipart/form-data")
+    form(method="post", enctype="multipart/form-data")
         label(for="avatar") Avatar
         //- img(src=`/${loggedInUser.avatarUrl}`, width="100")
         input#avatar(type="file", name="avatar", accept="image/*")

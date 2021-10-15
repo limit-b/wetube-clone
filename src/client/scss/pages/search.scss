@@ -1,9 +1,10 @@
 .search__form {
+    all: unset;
     position: relative;
     display: flex;
     align-items: center;
-    /* max-width: 420px;
-    margin: 0 auto; */
+    max-width: 420px;
+    margin: 0 auto;
     margin-bottom: 60px;
     /* input {
         all: unset;
@@ -20,8 +21,8 @@
     button {
         all: unset;
         position: absolute;
-        top: 46px;
-        right: 50px;
+        top: 16px;
+        right: 20px;
         font-size: 18px;
         text-align: center;
         cursor: pointer;
