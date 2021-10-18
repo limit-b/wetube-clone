@@ -4,10 +4,13 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 // const MODE = process.env.WEBPACK_ENV;
 
 const config = {
-    entry: './src/client/js/main.js',
+    entry: {
+        main: './src/client/js/main.js',
+        videoPlayer: './src/client/js/video-player.js',
+    },
     output: {
         path: path.resolve(__dirname, 'assets'),
-        filename: 'js/main.js',
+        filename: 'js/[name].js',
         clean: true,
     },
     module: {

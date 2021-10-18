@@ -2,17 +2,20 @@ extends ./main.pug
 
 block content
     video(src=`/${videoDB.videoUrl}`, width="640", controls)
-    div
-        small= videoDB.createdAt
-    div
-        small Uploaded by&nbsp;
-            a(href=`/users/${videoDB.owner._id}`)= videoDB.owner.userName
-    div
-        p= videoDB.description
-    if String(videoDB.owner._id) === String(loggedInUser._id)
-        a(href=`${videoDB.id}/edit`) Edit Video &rarr;
-        br
-        a(href=`${videoDB.id}/delete`) Delete Video &rarr;
+    //- div
+    //-     small= videoDB.createdAt
+    //- div
+    //-     small Uploaded by&nbsp;
+    //-         a(href=`/users/${videoDB.owner._id}`)= videoDB.owner.userName
+    //- div
+    //-     p= videoDB.description
+    //- if String(videoDB.owner._id) === String(loggedInUser._id)
+    //-     a(href=`${videoDB.id}/edit`) Edit Video &rarr;
+    //-     br
+    //-     a(href=`${videoDB.id}/delete`) Delete Video &rarr;
+
+block scripts
+    script(src="/static/js/videoPlayer.js")
 
 //-     /watchVideoController\             main.pug
 //-     ---------------------------            ^
