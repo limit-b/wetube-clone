@@ -1,7 +1,19 @@
 extends ./main.pug
 
 block content
-    video(src=`/${videoDB.videoUrl}`, width="640", controls)
+    video(src=`/${videoDB.videoUrl}`, controls)
+    div
+        button#play Play
+        button#mute Mute
+        input#volume(
+            value=0.5,
+            type="range",
+            step="0.1",
+            min="0",
+            max="1",
+            autocomplete="off"
+        )
+        span#time 00:00/00:00
     //- div
     //-     small= videoDB.createdAt
     //- div

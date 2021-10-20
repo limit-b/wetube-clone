@@ -12,7 +12,7 @@ form {
     }
 }
 
-input {
+input:not([type="range"]) {
     all: unset;
     width: 90%;
     height: 20px;
