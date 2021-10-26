@@ -57,12 +57,44 @@ const handleInputVolume = (event) => {
     }
 };
 
+// const setVideoTime = (time) => {
+//     const videoSecond = Math.floor(time);
+//     const videoMin = Math.floor(videoSecond / 60);
+//     const videoRest = videoSecond % 60;
+//     const videoTime = `${videoMin}:${
+//         videoRest < 10 ? `0${videoRest}` : `${videoRest}`
+//     }`;
+//     return videoTime;
+// };
+
+const setFormatTime = (time) => {
+    const seconds = Math.floor(time);
+    let fromNumber;
+    let lengthNumber;
+    if (seconds < 600) {
+        fromNumber = 15;
+        lengthNumber = 4;
+    } else if (seconds >= 600 && seconds < 3600) {
+        fromNumber = 14;
+        lengthNumber = 5;
+    } else if (seconds >= 3600) {
+        fromNumber = 12;
+        lengthNumber = 7;
+    }
+    const formatTime = new Date(seconds * 1000)
+        .toISOString()
+        .substr(fromNumber, lengthNumber);
+    return formatTime;
+};
+
 const handleTotalTime = () => {
-    totalTime.textContent = Math.floor(video.duration);
+    // totalTime.textContent = setVideoTime(video.duration);
+    totalTime.textContent = setFormatTime(video.duration);
 };
 
 const handleCurrentTime = () => {
-    currentTime.textContent = Math.floor(video.currentTime);
+    // currentTime.textContent = setVideoTime(video.currentTime);
+    currentTime.textContent = setFormatTime(video.currentTime);
 };
 
 playBtn.addEventListener('click', handleClickPlay);
