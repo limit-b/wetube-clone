@@ -6,7 +6,7 @@ block content
         button#play Play
         button#mute Mute
         input#volume(
-            value=0.5,
+            value="0.5",
             type="range",
             step="0.1",
             min="0",
@@ -17,6 +17,14 @@ block content
             span#currentTime 0:00
             span &nbsp;/&nbsp;
             span#totalTime 0:00
+        div
+            input#timeline(
+                value="0",
+                type="range",
+                step="1",
+                min="0",
+                autocomplete="off"
+            )
     //- div
     //-     small= videoDB.createdAt
     //- div
