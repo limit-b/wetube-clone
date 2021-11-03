@@ -3,7 +3,7 @@ extends ./main.pug
 block content
     #video-container
         video(src=`/${videoDB.videoUrl}`)
-        div
+        #video-controls
             button#play Play
             button#mute Mute
             input#volume(
