@@ -3,31 +3,36 @@ extends ./main.pug
 block content
     #video-container
         video(src=`/${videoDB.videoUrl}`)
-        #video-controls
-            button#play Play
-            button#mute Mute
-            input#volume(
-                value="0.5",
-                type="range",
-                step="0.1",
-                min="0",
-                max="1",
-                autocomplete="off"
-            )
-            div
-                span#currentTime 0:00
-                span &nbsp;/&nbsp;
-                span#totalTime 0:00
-            div
-                input#timeline(
+        #video-controls.video-controls
+            .video-controls__top
+                input#timeline.video-controls__timeline(
                     value="0",
                     type="range",
                     step="1",
                     min="0",
                     autocomplete="off"
                 )
-            div
-                button#full-screen Enter Full Screen
+            .video-controls__bottom
+                //- .video-controls__play
+                span#play.video-controls__play-btn
+                    i.fas.fa-play
+                //- .video-controls__mute
+                span#mute.video-controls__mute-btn
+                    i.fas.fa-volume-up
+                input#volume(
+                    value="0.5",
+                    type="range",
+                    step="0.1",
+                    min="0",
+                    max="1",
+                    autocomplete="off"
+                )
+                .video-controls__time
+                    span#currentTime 0:00
+                    span &nbsp;/&nbsp;
+                    span#totalTime 0:00
+                span#full-screen
+                    i.fas.fa-expand
     //- div
     //-     small= videoDB.createdAt
     //- div
