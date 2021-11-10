@@ -13,26 +13,26 @@ block content
                     autocomplete="off"
                 )
             .video-controls__bottom
-                //- .video-controls__play
-                span#play.video-controls__play-btn
-                    i.fas.fa-play
-                //- .video-controls__mute
-                span#mute.video-controls__mute-btn
-                    i.fas.fa-volume-up
-                input#volume(
-                    value="0.5",
-                    type="range",
-                    step="0.1",
-                    min="0",
-                    max="1",
-                    autocomplete="off"
-                )
-                .video-controls__time
-                    span#currentTime 0:00
-                    span &nbsp;/&nbsp;
-                    span#totalTime 0:00
-                span#full-screen
-                    i.fas.fa-expand
+                .video-controls__bottom-left
+                    #play.video-controls__play-btn
+                        i.fas.fa-play
+                    #mute.video-controls__mute-btn
+                        i.fas.fa-volume-up
+                    input#volume.video-controls__volume(
+                        value="0.5",
+                        type="range",
+                        step="0.1",
+                        min="0",
+                        max="1",
+                        autocomplete="off"
+                    )
+                    .video-controls__time
+                        span#currentTime 0:00
+                        span &nbsp;/&nbsp;
+                        span#totalTime 0:00
+                .video-controls__bottom-right
+                    #full-screen.video-controls__full-screen
+                        i.fas.fa-expand
     //- div
     //-     small= videoDB.createdAt
     //- div
