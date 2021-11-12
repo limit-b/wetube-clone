@@ -54,7 +54,7 @@ const handleTimeline = (event) => {
     video.currentTime = value;
 };
 
-const hideVideoControls = () => videoControls.classList.remove('showing');
+const hideVideoControls = () => videoControls.classList.add('hidden');
 
 const handleMouseMove = () => {
     if (moveTimeoutID) {
@@ -65,12 +65,16 @@ const handleMouseMove = () => {
         clearTimeout(leaveTimeoutID);
         leaveTimeoutID = null;
     }
-    videoControls.classList.add('showing');
-    moveTimeoutID = setTimeout(hideVideoControls, 3000);
+    videoControls.classList.remove('hidden');
+    if (!video.paused) {
+        moveTimeoutID = setTimeout(hideVideoControls, 3000);
+    }
 };
 
 const handleMouseLeave = () => {
-    leaveTimeoutID = setTimeout(hideVideoControls, 3000);
+    if (!video.paused) {
+        leaveTimeoutID = setTimeout(hideVideoControls, 3000);
+    }
 };
 
 const handleClickPlay = () => {
