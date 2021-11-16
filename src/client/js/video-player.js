@@ -15,6 +15,7 @@ const fullScreenIcon = fullScreenBtn.querySelector('i');
 let moveTimeoutID = null;
 let leaveTimeoutID = null;
 let tempVolume = 0.5;
+
 video.volume = tempVolume;
 
 const setFormatTime = (time) => {
@@ -54,7 +55,8 @@ const handleTimeline = (event) => {
     video.currentTime = value;
 };
 
-const hideVideoControls = () => videoControls.classList.add('hidden');
+const showVideoControls = () => videoControls.classList.remove('hide');
+const hideVideoControls = () => videoControls.classList.add('hide');
 
 const handleMouseMove = () => {
     if (moveTimeoutID) {
@@ -65,7 +67,7 @@ const handleMouseMove = () => {
         clearTimeout(leaveTimeoutID);
         leaveTimeoutID = null;
     }
-    videoControls.classList.remove('hidden');
+    showVideoControls();
     if (!video.paused) {
         moveTimeoutID = setTimeout(hideVideoControls, 3000);
     }
@@ -80,8 +82,10 @@ const handleMouseLeave = () => {
 const handleClickPlay = () => {
     if (video.paused) {
         video.play();
+        moveTimeoutID = setTimeout(hideVideoControls, 3000);
     } else {
         video.pause();
+        showVideoControls();
     }
     playIcon.classList = video.paused ? 'fas fa-play' : 'fas fa-pause';
 };
@@ -143,6 +147,20 @@ const handleFullScreen = () => {
         : 'fas fa-compress';
 };
 
+const handleEndedVideo = () => {
+    const qwerty = setFormatTime(video.currentTime);
+    let flag = false;
+    if (!video.paused && qwerty === 30) {
+        flag = true;
+    }
+    if (flag) {
+        const { videoId } = videoContainer.dataset;
+        console.log('video api', videoId);
+        fetch(`/api/videos/${videoId}/view`, { method: 'post' });
+        flag = false;
+    }
+};
+
 video.addEventListener('canplay', handleVideoData);
 video.addEventListener('timeupdate', handleCurrentTime);
 timeline.addEventListener('input', handleTimeline);
@@ -150,6 +168,7 @@ timeline.addEventListener('input', handleTimeline);
 videoContainer.addEventListener('mousemove', handleMouseMove);
 videoContainer.addEventListener('mouseleave', handleMouseLeave);
 
+video.addEventListener('click', handleClickPlay);
 playBtn.addEventListener('click', handleClickPlay);
 // video.addEventListener('play', handlePlayText);
 // video.addEventListener('pause', handlePauseText);
@@ -159,3 +178,5 @@ volumeRange.addEventListener('change', handleChangeVolume);
 volumeRange.addEventListener('input', handleInputVolume);
 
 fullScreenBtn.addEventListener('click', handleFullScreen);
+
+video.addEventListener('timeupdate', handleEndedVideo);

@@ -122,6 +122,23 @@ export const postEditVideoController = async (req, res) => {
     }
 };
 
+export const registerViewController = async (req, res) => {
+    const { id } = req.params;
+    const videoDB = await VideoModel.findById(id);
+    if (!videoDB) {
+        return res.sendStatus(404);
+    } else {
+        try {
+            videoDB.meta.views += 1;
+            await videoDB.save();
+            return res.sendStatus(200);
+        } catch (error) {
+            console.log(error);
+            return res.redirect('/');
+        }
+    }
+};
+
 export const deleteVideoController = async (req, res) => {
     const {
         params: { id },
