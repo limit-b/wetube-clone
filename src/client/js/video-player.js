@@ -15,6 +15,7 @@ const fullScreenIcon = fullScreenBtn.querySelector('i');
 let moveTimeoutID = null;
 let leaveTimeoutID = null;
 let tempVolume = 0.5;
+let countTimeupdate = 0;
 
 video.volume = tempVolume;
 
@@ -147,21 +148,22 @@ const handleFullScreen = () => {
         : 'fas fa-compress';
 };
 
-const handleEndedVideo = () => {
-    const qwerty = setFormatTime(video.currentTime);
-    let flag = false;
-    if (!video.paused && qwerty === 30) {
-        flag = true;
-    }
-    if (flag) {
+const handleRegisterView = () => {
+    countTimeupdate += 1;
+    if (countTimeupdate === 100) {
         const { videoId } = videoContainer.dataset;
-        console.log('video api', videoId);
         fetch(`/api/videos/${videoId}/view`, { method: 'post' });
-        flag = false;
+        video.removeEventListener('timeupdate', handleRegisterView);
     }
+    // else if (countTimeupdate === 110) {
+    // }
 };
 
-video.addEventListener('canplay', handleVideoData);
+if (video.readyState) {
+    handleVideoData();
+}
+
+video.addEventListener('loadedmetadata', handleVideoData);
 video.addEventListener('timeupdate', handleCurrentTime);
 timeline.addEventListener('input', handleTimeline);
 
@@ -179,4 +181,4 @@ volumeRange.addEventListener('input', handleInputVolume);
 
 fullScreenBtn.addEventListener('click', handleFullScreen);
 
-video.addEventListener('timeupdate', handleEndedVideo);
+video.addEventListener('timeupdate', handleRegisterView);

@@ -7,6 +7,7 @@ const config = {
     entry: {
         main: './src/client/js/main.js',
         videoPlayer: './src/client/js/video-player.js',
+        recorder: './src/client/js/recorder.js',
     },
     output: {
         path: path.resolve(__dirname, 'assets'),
