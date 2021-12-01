@@ -28,7 +28,7 @@ export const searchController = async (req, res) => {
 };
 
 export const getUploadVideoController = (req, res) => {
-    return res.render('upload-video', { pageTitle: 'Upload Video' });
+    return res.render('videos/upload-video', { pageTitle: 'Upload Video' });
 };
 
 export const postUploadVideoController = async (req, res) => {
@@ -52,7 +52,7 @@ export const postUploadVideoController = async (req, res) => {
         userDB.save();
         return res.redirect('/');
     } catch (error) {
-        return res.status(400).render('upload-video', {
+        return res.status(400).render('videos/upload-video', {
             pageTitle: 'Upload Video',
             errorMessage: error._message,
         });
@@ -66,7 +66,7 @@ export const watchVideoController = async (req, res) => {
         return res.status(404).render('404', { pageTitle: 'Video not found.' });
     } else {
         // const videoOwner = await UserModel.findById(video.owner);
-        return res.render('watch-video', {
+        return res.render('videos/watch-video', {
             pageTitle: videoDB.title,
             videoDB,
             // videoOwner,
@@ -87,7 +87,7 @@ export const getEditVideoController = async (req, res) => {
     } else if (String(videoDB.owner) !== String(_id)) {
         return res.status(403).redirect('/');
     } else {
-        return res.render('edit-video', {
+        return res.render('videos/edit-video', {
             pageTitle: `Edit ${videoDB.title}`,
             videoDB,
         });

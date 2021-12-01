@@ -1,8 +1,9 @@
-extends ./main.pug
+extends ../main.pug
 
 block content
     div
-        button#startBtn Start Recording
+        video#preview-video
+        button#record-btn Start Recording
     if errorMessage
         span= errorMessage
     form(method="post", enctype="multipart/form-data")

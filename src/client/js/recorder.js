@@ -1,15 +1,21 @@
-const start = document.getElementById('startBtn');
+const previewVideo = document.getElementById('preview-video');
+const recordBtn = document.getElementById('record-btn');
 
-const handleStart = async () => {
+const handleStartRecord = async () => {
     try {
-        const stream = await navigator.mediaDevices.getUserMedia({
-            audio: true,
-            video: true,
+        // const stream = await navigator.mediaDevices.getUserMedia({
+        //     audio: false,
+        //     video: true,
+        // });
+        const desktopStream = await navigator.mediaDevices.getDisplayMedia({
+            audio: false,
+            video: { width: 1024, height: 576 },
         });
-        console.log(stream);
+        previewVideo.srcObject = desktopStream;
+        previewVideo.play();
     } catch (error) {
-        console.log(error);
+        console.log('stream error :', error);
     }
 };
 
-start.addEventListener('click', handleStart);
+recordBtn.addEventListener('click', handleStartRecord);

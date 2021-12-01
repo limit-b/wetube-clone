@@ -170,7 +170,7 @@ export const logoutController = (req, res) => {
 };
 
 export const getEditUserController = async (req, res) => {
-    return res.render('edit-user', { pageTitle: 'Edit User' });
+    return res.render('users/edit-user', { pageTitle: 'Edit User' });
 };
 
 export const postEditUserController = async (req, res) => {
@@ -187,7 +187,7 @@ export const postEditUserController = async (req, res) => {
     });
     const pageTitle = 'Edit User';
     if (exists) {
-        return res.status(400).render('edit-user', {
+        return res.status(400).render('users/edit-user', {
             pageTitle,
             errorMessage: 'This E-mail / ID is already taken.',
         });
@@ -208,7 +208,7 @@ export const postEditUserController = async (req, res) => {
             return res.redirect('/');
         } catch (error) {
             console.log(error);
-            return res.status(400).render('edit-user', {
+            return res.status(400).render('users/edit-user', {
                 pageTitle,
                 errorMessage: error._message,
             });

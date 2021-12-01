@@ -12,41 +12,44 @@ const currentTime = document.getElementById('currentTime');
 const fullScreenBtn = document.getElementById('full-screen');
 const fullScreenIcon = fullScreenBtn.querySelector('i');
 
+const videoDuration = Math.floor(video.duration);
+const videoCurrentTime = Math.floor(video.currentTime);
+const timeupdateDuration = Math.floor(videoDuration * 0.3);
+
 let moveTimeoutID = null;
 let leaveTimeoutID = null;
 let tempVolume = 0.5;
-let countTimeupdate = 0;
+let timeupdateCount = 0;
 
 video.volume = tempVolume;
 
 const setFormatTime = (time) => {
-    const seconds = Math.floor(time);
     let fromNumber;
     let lengthNumber;
-    if (seconds < 600) {
+    if (time < 600) {
         fromNumber = 15;
         lengthNumber = 4;
-    } else if (seconds >= 600 && seconds < 3600) {
+    } else if (time >= 600 && time < 3600) {
         fromNumber = 14;
         lengthNumber = 5;
-    } else if (seconds >= 3600) {
+    } else if (time >= 3600) {
         fromNumber = 12;
         lengthNumber = 7;
     }
-    const formatTime = new Date(seconds * 1000)
+    const formatTime = new Date(time * 1000)
         .toISOString()
         .substr(fromNumber, lengthNumber);
     return formatTime;
 };
 
 const handleVideoData = () => {
-    totalTime.textContent = setFormatTime(video.duration);
-    timeline.max = Math.floor(video.duration);
+    totalTime.textContent = setFormatTime(videoDuration);
+    timeline.max = videoDuration;
 };
 
 const handleCurrentTime = () => {
-    currentTime.textContent = setFormatTime(video.currentTime);
-    timeline.value = Math.floor(video.currentTime);
+    currentTime.textContent = setFormatTime(videoCurrentTime);
+    timeline.value = videoCurrentTime;
 };
 
 const handleTimeline = (event) => {
@@ -149,13 +152,16 @@ const handleFullScreen = () => {
 };
 
 const handleRegisterView = () => {
-    countTimeupdate += 1;
-    if (countTimeupdate === 100) {
-        const { videoId } = videoContainer.dataset;
+    timeupdateCount += 1;
+    const { videoId } = videoContainer.dataset;
+    if (videoDuration <= 300 && timeupdateCount >= timeupdateDuration) {
+        fetch(`/api/videos/${videoId}/view`, { method: 'post' });
+        video.removeEventListener('timeupdate', handleRegisterView);
+    } else if (timeupdateCount === 100) {
         fetch(`/api/videos/${videoId}/view`, { method: 'post' });
         video.removeEventListener('timeupdate', handleRegisterView);
     }
-    // else if (countTimeupdate === 110) {
+    // else if (timeupdateCount === 110) {
     // }
 };
 
