@@ -2,6 +2,7 @@ import express from 'express';
 import morgan from 'morgan';
 import session from 'express-session';
 import MongoStore from 'connect-mongo';
+import flash from 'express-flash';
 import { localsMiddleware } from './middlewares';
 import rootRouter from './routers/root-router';
 import usersRouter from './routers/user-router';
@@ -13,6 +14,7 @@ const logger = morgan('dev');
 
 app.set('view engine', 'pug');
 app.set('views', `${process.cwd()}/src/views`);
+
 // "body-parser" deplicated
 app.use(express.urlencoded({ extended: true }));
 app.use(logger);
@@ -27,6 +29,7 @@ app.use(
     })
 );
 
+app.use(flash());
 app.use(localsMiddleware);
 app.use('/uploads', express.static('uploads'));
 app.use('/static', express.static('assets'));

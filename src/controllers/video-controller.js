@@ -9,7 +9,7 @@ export const homeController = async (req, res) => {
         // console.log(videosDB);
         return res.render('home', { pageTitle: 'Home', videosDB });
     } catch (error) {
-        console.log(error);
+        console.error(error);
         return res.redirect('/');
     }
 };
@@ -43,19 +43,19 @@ export const postUploadVideoController = async (req, res) => {
         const userDB = await UserModel.findById(_id);
         const newVideo = await VideoModel.create({
             videoUrl,
-            hashtags: await VideoModel.formatHashtags(hashtags),
+            hashtags: VideoModel.formatHashtags(hashtags),
             title,
             owner: _id,
             description,
         });
-        userDB.videos.push(newVideo._id);
-        userDB.save();
+        await userDB.videos.push(newVideo._id);
+        await userDB.save();
+        req.flash('success', 'Video uploaded.');
         return res.redirect('/');
     } catch (error) {
-        return res.status(400).render('videos/upload-video', {
-            pageTitle: 'Upload Video',
-            errorMessage: error._message,
-        });
+        console.error(error);
+        req.flash('error', 'Video not uploaded.');
+        return res.render('videos/upload-video', { pageTitle: 'Upload Video' });
     }
 };
 
@@ -85,6 +85,7 @@ export const getEditVideoController = async (req, res) => {
     if (!videoDB) {
         return res.status(404).render('404', { pageTitle: 'Video not found.' });
     } else if (String(videoDB.owner) !== String(_id)) {
+        req.flash('error', 'You are not the owner of the video.');
         return res.status(403).redirect('/');
     } else {
         return res.render('videos/edit-video', {
@@ -106,18 +107,24 @@ export const postEditVideoController = async (req, res) => {
     if (!videoDB) {
         return res.status(404).render('404', { pageTitle: 'Video not found.' });
     } else if (String(videoDB.owner) !== String(_id)) {
+        req.flash('error', 'You are not the owner of the video.');
         return res.status(403).redirect('/');
     } else {
         try {
             await VideoModel.findByIdAndUpdate(id, {
-                hashtags: await VideoModel.formatHashtags(hashtags),
+                hashtags: VideoModel.formatHashtags(hashtags),
                 title,
                 description,
             });
+            req.flash('success', 'Video updated.');
             return res.redirect(`/videos/${id}`);
         } catch (error) {
-            console.log(error);
-            return res.redirect('/');
+            console.error(error);
+            req.flash('error', 'Video not updated.');
+            return res.render('videos/edit-video', {
+                pageTitle: `Edit ${videoDB.title}`,
+                videoDB,
+            });
         }
     }
 };
@@ -133,7 +140,6 @@ export const registerViewController = async (req, res) => {
             await videoDB.save();
             return res.sendStatus(200);
         } catch (error) {
-            console.log(error);
             return res.redirect('/');
         }
     }
@@ -146,21 +152,29 @@ export const deleteVideoController = async (req, res) => {
             user: { _id },
         },
     } = req;
-    const videoDB = await VideoModel.findById(id);
+    const videoDB = await VideoModel.findById(id).populate('owner');
     if (!videoDB) {
         return res.status(404).render('404', { pageTitle: 'Video not found.' });
     } else if (String(videoDB.owner) !== String(_id)) {
+        req.flash('error', 'You are not the owner of the video.');
         return res.status(403).redirect('/');
     } else {
         try {
             const ownerUserDB = await UserModel.findById(_id);
             await VideoModel.findByIdAndDelete(id);
-            ownerUserDB.videos.splice(ownerUserDB.videos.indexOf(id), 1);
-            ownerUserDB.save();
+            await ownerUserDB.videos.splice(ownerUserDB.videos.indexOf(id), 1);
+            await ownerUserDB.save();
+            req.flash('info', 'Video deleted.');
             return res.redirect('/');
         } catch (error) {
-            console.log(error);
-            return res.redirect('/');
+            console.warn(error);
+            // const videoOwner = await UserModel.findById(video.owner);
+            req.flash('warn', 'Video not deleted.');
+            return res.render('videos/watch-video', {
+                pageTitle: videoDB.title,
+                videoDB,
+                // videoOwner,
+            });
         }
     }
 };

@@ -9,15 +9,17 @@ export const localsMiddleware = (req, res, next) => {
 };
 
 export const publicOnlyMiddleware = (req, res, next) => {
-    if (!req.session.loggedIn) {
-        return next();
-    } else {
+    if (req.session.loggedIn) {
+        req.flash('error', 'Not authorized.');
         return res.redirect('/');
+    } else {
+        return next();
     }
 };
 
 export const protectorMiddleware = (req, res, next) => {
     if (!req.session.loggedIn) {
+        req.flash('error', 'Please log in first.');
         return res.redirect('/login');
     } else {
         return next();

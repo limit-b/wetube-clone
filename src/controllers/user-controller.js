@@ -11,22 +11,21 @@ export const postJoinController = async (req, res) => {
         req.body;
     const pageTitle = 'Join';
     if (password !== confirmPassword) {
-        return res.status(400).render('join', {
-            pageTitle,
-            errorMessage: 'Password confirmation does not match.',
-        });
-    } else if (password === undefined || password === '') {
-        return res.status(400).render('join', {
-            pageTitle,
-            errorMessage: 'Password cannot be empty.',
-        });
+        req.flash('info', 'Password confirmation does not match.');
+        return res.status(400).render('join', { pageTitle });
+    } else if (
+        password === undefined ||
+        password === '' ||
+        confirmPassword === undefined ||
+        confirmPassword === ''
+    ) {
+        req.flash('info', 'Password cannot be empty.');
+        return res.status(400).render('join', { pageTitle });
     } else {
         const exists = await UserModel.exists({ $or: [{ email }, { userID }] });
         if (exists) {
-            return res.status(400).render('join', {
-                pageTitle,
-                errorMessage: 'This E-mail / ID is already taken.',
-            });
+            req.flash('info', 'This E-mail / ID is already taken.');
+            return res.status(400).render('join', { pageTitle });
         } else {
             try {
                 await UserModel.create({
@@ -36,13 +35,12 @@ export const postJoinController = async (req, res) => {
                     password,
                     country,
                 });
+                req.flash('success', 'Join success.');
                 return res.redirect('/login');
             } catch (error) {
-                console.log(error);
-                return res.status(400).render('join', {
-                    pageTitle,
-                    errorMessage: error._message,
-                });
+                console.error(error);
+                req.flash('error', 'Join failed');
+                return res.render('join', { pageTitle });
             }
         }
     }
@@ -57,20 +55,17 @@ export const postLoginController = async (req, res) => {
     const userDB = await UserModel.findOne({ socialLoginOnly: false, userID });
     const pageTitle = 'Login';
     if (!userDB) {
-        return res.status(400).render('login', {
-            pageTitle,
-            errorMessage: 'An account with this ID does not exists.',
-        });
+        req.flash('info', 'An account with this ID does not exists.');
+        return res.status(400).render('login', { pageTitle });
     } else {
         const comparePassword = await bcrypt.compare(password, userDB.password);
         if (!comparePassword) {
-            return res.status(400).render('login', {
-                pageTitle,
-                errorMessage: 'Wrong password.',
-            });
+            req.flash('info', 'Wrong password.');
+            return res.status(400).render('login', { pageTitle });
         } else {
             req.session.loggedIn = true;
             req.session.user = userDB;
+            req.flash('success', 'Login success.');
             return res.redirect('/');
         }
     }
@@ -123,7 +118,7 @@ export const finishGithubLogin = async (req, res) => {
             (email) => email.primary === true && email.verified === true
         );
         if (!trueEmailObj) {
-            // TODO: set notification
+            req.flash('error', 'GitHub login failed.');
             return res.redirect('/login');
         } else {
             // TODO: githubID
@@ -147,25 +142,32 @@ export const finishGithubLogin = async (req, res) => {
                     });
                     req.session.loggedIn = true;
                     req.session.user = githubUser;
+                    req.flash('success', 'GitHub login success.');
                     return res.redirect('/');
                 } catch (error) {
-                    console.log(error);
-                    return res.status(400).render('server-error', { error });
+                    console.error(error);
+                    req.flash('error', 'GitHub login failed.');
+                    return res.redirect('/login');
                 }
             } else {
                 req.session.loggedIn = true;
                 req.session.user = githubUser;
+                req.flash('success', 'GitHub login success.');
                 return res.redirect('/');
             }
         }
     } else {
-        //TODO: set notification
+        req.flash('error', 'GitHub login failed.');
         return res.redirect('/login');
     }
 };
 
 export const logoutController = (req, res) => {
-    req.session.destroy();
+    // req.session.destroy();
+    req.session.loggedIn = false;
+    req.session.user = null;
+    res.locals.loggedInUser = req.session.user || {};
+    req.flash('info', 'Goodbye.');
     return res.redirect('/');
 };
 
@@ -187,10 +189,8 @@ export const postEditUserController = async (req, res) => {
     });
     const pageTitle = 'Edit User';
     if (exists) {
-        return res.status(400).render('users/edit-user', {
-            pageTitle,
-            errorMessage: 'This E-mail / ID is already taken.',
-        });
+        req.flash('info', 'This E-mail / ID is already taken.');
+        return res.status(400).render('users/edit-user', { pageTitle });
     } else {
         try {
             const updatedUserDB = await UserModel.findByIdAndUpdate(
@@ -205,13 +205,12 @@ export const postEditUserController = async (req, res) => {
                 { new: true }
             );
             req.session.user = updatedUserDB;
+            req.flash('info', 'User info updated.');
             return res.redirect('/');
         } catch (error) {
-            console.log(error);
-            return res.status(400).render('users/edit-user', {
-                pageTitle,
-                errorMessage: error._message,
-            });
+            console.error(error);
+            req.flash('error', 'User info not updated.');
+            return res.status(400).render('users/edit-user', { pageTitle });
         }
     }
 };
@@ -219,7 +218,8 @@ export const postEditUserController = async (req, res) => {
 export const getChangePasswordController = (req, res) => {
     const { socialLoginOnly } = req.session.user;
     if (socialLoginOnly === true) {
-        return res.redirect('/');
+        req.flash('info', 'You are logging in on social.');
+        return res.status(403).redirect('/');
     } else {
         return res.render('users/change-password', {
             pageTitle: 'Change Password',
@@ -234,16 +234,18 @@ export const postChangePasswordController = async (req, res) => {
         },
         body: { oldPassword, newPassword, confirmNewPassword },
     } = req;
+    const pageTitle = 'Change Password';
     if (newPassword !== confirmNewPassword) {
-        return res.status(400).render('users/change-password', {
-            pageTitle: 'Change Password',
-            errorMessage: 'The password does not match the confirmation.',
-        });
-    } else if (newPassword === undefined || newPassword === '') {
-        return res.status(400).render('users/change-password', {
-            pageTitle: 'Change Password',
-            errorMessage: 'Password cannot be empty.',
-        });
+        req.flash('info', 'The password does not match the confirmation.');
+        return res.status(400).render('users/change-password', { pageTitle });
+    } else if (
+        newPassword === undefined ||
+        newPassword === '' ||
+        confirmNewPassword === undefined ||
+        confirmNewPassword === ''
+    ) {
+        req.flash('info', 'Password cannot be empty.');
+        return res.status(400).render('users/change-password', { pageTitle });
     } else {
         const userDB = await UserModel.findOne({
             socialLoginOnly: false,
@@ -259,22 +261,20 @@ export const postChangePasswordController = async (req, res) => {
                 userDB.password
             );
             if (!comparePassword) {
-                return res.status(400).render('users/change-password', {
-                    pageTitle: 'Change Password',
-                    errorMessage: 'The current password is incorrect.',
-                });
+                req.flash('info', 'The current password is incorrect.');
+                return res
+                    .status(400)
+                    .render('users/change-password', { pageTitle });
             } else {
                 try {
-                    userDB.password = newPassword;
+                    userDB.password = await newPassword;
                     await userDB.save();
-                    //TODO: send notification
+                    req.flash('success', 'Password updated.');
                     return res.redirect('/users/logout');
                 } catch (error) {
-                    console.log(error);
-                    return res.status(400).render('users/change-password', {
-                        pageTitle: 'Change Password',
-                        errorMessage: error._message,
-                    });
+                    console.error(error);
+                    req.flash('error', 'Can not change password.');
+                    return res.render('users/change-password', { pageTitle });
                 }
             }
         }

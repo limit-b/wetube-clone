@@ -1,41 +1,40 @@
 extends ../main.pug
 
 block content
-    div
-        video#preview-video
-        button#record-btn Start Recording
-    if errorMessage
-        span= errorMessage
-    form(method="post", enctype="multipart/form-data")
-        label(for="videoFile") Video File
-        input#videoFile(
-            type="file",
-            name="videoFile",
-            accept="video/*",
-            required
-        )
-        input(
-            type="text",
-            placeholder="Title",
-            name="title",
-            maxlength="80",
-            required
-        )
-        input(
-            type="text",
-            placeholder="Description",
-            name="description",
-            minlength="20",
-            maxlength="140",
-            required
-        )
-        input(
-            type="text",
-            placeholder="Hashtags, separated by comma.",
-            name="hashtags",
-            required
-        )
-        input(value="Upload Video", type="submit")
+    .upload-video__container
+        .upload-video__preview
+            video#preview-video
+            button#record-btn.social-login__btn Start Recording
+        form(method="post", enctype="multipart/form-data")
+            label(for="videoFile") Video File
+            input#videoFile(
+                type="file",
+                name="videoFile",
+                accept="video/*",
+                required
+            )
+            input(
+                type="text",
+                placeholder="Title",
+                name="title",
+                maxlength="80",
+                required
+            )
+            input(
+                type="text",
+                placeholder="Description",
+                name="description",
+                minlength="20",
+                maxlength="140",
+                required
+            )
+            input(
+                type="text",
+                placeholder="Hashtags, separated by comma.",
+                name="hashtags",
+                required
+            )
+            input(value="Upload Video", type="submit")
 
 block scripts
     script(src="/static/js/recorder.js")

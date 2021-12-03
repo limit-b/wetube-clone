@@ -13,8 +13,7 @@ const fullScreenBtn = document.getElementById('full-screen');
 const fullScreenIcon = fullScreenBtn.querySelector('i');
 
 const videoDuration = Math.floor(video.duration);
-const videoCurrentTime = Math.floor(video.currentTime);
-const timeupdateDuration = Math.floor(videoDuration * 0.3);
+const timeupdateDuration = Math.floor(videoDuration * 3.5);
 
 let moveTimeoutID = null;
 let leaveTimeoutID = null;
@@ -48,6 +47,7 @@ const handleVideoData = () => {
 };
 
 const handleCurrentTime = () => {
+    const videoCurrentTime = Math.floor(video.currentTime);
     currentTime.textContent = setFormatTime(videoCurrentTime);
     timeline.value = videoCurrentTime;
 };
@@ -154,7 +154,7 @@ const handleFullScreen = () => {
 const handleRegisterView = () => {
     timeupdateCount += 1;
     const { videoId } = videoContainer.dataset;
-    if (videoDuration <= 300 && timeupdateCount >= timeupdateDuration) {
+    if (videoDuration <= 30 && timeupdateCount >= timeupdateDuration) {
         fetch(`/api/videos/${videoId}/view`, { method: 'post' });
         video.removeEventListener('timeupdate', handleRegisterView);
     } else if (timeupdateCount === 100) {
@@ -165,11 +165,17 @@ const handleRegisterView = () => {
     // }
 };
 
+const handleEnded = () => {
+    showVideoControls();
+};
+
 if (video.readyState) {
     handleVideoData();
 }
 
 video.addEventListener('loadedmetadata', handleVideoData);
+// video.addEventListener('canplay', handleVideoData);
+
 video.addEventListener('timeupdate', handleCurrentTime);
 timeline.addEventListener('input', handleTimeline);
 
@@ -188,3 +194,4 @@ volumeRange.addEventListener('input', handleInputVolume);
 fullScreenBtn.addEventListener('click', handleFullScreen);
 
 video.addEventListener('timeupdate', handleRegisterView);
+video.addEventListener('ended', handleEnded);
