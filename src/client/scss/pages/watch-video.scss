@@ -1,0 +1,27 @@
+.watch-video__data {
+    margin-top: 20px;
+    & > div {
+        border-bottom: 1px solid #303030;
+    }
+    .watch-video__data-top {
+        .watch-video__hashtags {
+            color: #3ea6ff;
+        }
+        .watch-video__title {
+            font-size: 26px;
+        }
+        .watch-video__etc {
+            display: flex;
+            align-items: center;
+            height: 40px;
+            font-size: 16px;
+            color: #aaaaaa;
+        }
+    }
+    .watch-video__bottom {
+        .watch-video__owner {
+            height: 67px;
+            padding-top: 16px;
+        }
+    }
+}

@@ -1,6 +1,6 @@
 .shared__video-grid {
     display: grid;
-    grid-template-columns: repeat(4, minmax(150px, 1fr));
+    grid-template-columns: repeat(4, minmax(260px, 360px));
     gap: 50px;
 }
 

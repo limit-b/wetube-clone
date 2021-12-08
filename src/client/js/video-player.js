@@ -83,7 +83,7 @@ const handleMouseLeave = () => {
     }
 };
 
-const handleClickPlay = () => {
+const handlePlay = () => {
     if (video.paused) {
         video.play();
         moveTimeoutID = setTimeout(hideVideoControls, 3000);
@@ -100,7 +100,7 @@ const handleClickPlay = () => {
 //     playBtn.textContent = 'Play';
 // };
 
-const handleClickMute = () => {
+const handleMute = () => {
     if (video.muted) {
         video.muted = false;
     } else {
@@ -151,6 +151,23 @@ const handleFullScreen = () => {
         : 'fas fa-compress';
 };
 
+const preventScroll = (event) => {
+    if (event.key === ' ' && event.target === document.body) {
+        event.preventDefault();
+    }
+};
+
+const handleKeydown = (event) => {
+    const { key } = event;
+    if (key === ' ') {
+        handlePlay();
+    } else if (key === 'm' || key === 'M') {
+        handleMute();
+    } else if (key === 'f' || key === 'F') {
+        handleFullScreen();
+    }
+};
+
 const handleRegisterView = () => {
     timeupdateCount += 1;
     const { videoId } = videoContainer.dataset;
@@ -182,16 +199,19 @@ timeline.addEventListener('input', handleTimeline);
 videoContainer.addEventListener('mousemove', handleMouseMove);
 videoContainer.addEventListener('mouseleave', handleMouseLeave);
 
-video.addEventListener('click', handleClickPlay);
-playBtn.addEventListener('click', handleClickPlay);
+video.addEventListener('click', handlePlay);
+playBtn.addEventListener('click', handlePlay);
 // video.addEventListener('play', handlePlayText);
 // video.addEventListener('pause', handlePauseText);
 
-muteBtn.addEventListener('click', handleClickMute);
+muteBtn.addEventListener('click', handleMute);
 volumeRange.addEventListener('change', handleChangeVolume);
 volumeRange.addEventListener('input', handleInputVolume);
 
 fullScreenBtn.addEventListener('click', handleFullScreen);
+
+window.addEventListener('keydown', preventScroll);
+document.addEventListener('keydown', handleKeydown);
 
 video.addEventListener('timeupdate', handleRegisterView);
 video.addEventListener('ended', handleEnded);

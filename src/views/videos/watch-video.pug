@@ -1,49 +1,59 @@
 extends ../main.pug
 
 block content
-    #video-container(data-video-id=videoDB.id)
-        video(src=`/${videoDB.videoUrl}`)
-        #video-controls.video-controls
-            .video-controls__top
-                input#timeline.video-controls__timeline(
-                    value="0",
-                    type="range",
-                    step="1",
-                    min="0",
-                    autocomplete="off"
-                )
-            .video-controls__bottom
-                .video-controls__bottom-left
-                    #play.video-controls__play-btn
-                        i.fas.fa-play
-                    #mute.video-controls__mute-btn
-                        i.fas.fa-volume-up
-                    input#volume.video-controls__volume(
-                        value="0.5",
+    .watch-video
+        #video-container(data-video-id=videoDB.id)
+            video(src=`/${videoDB.videoUrl}`)
+            #video-controls.video-controls
+                .video-controls__top
+                    input#timeline.video-controls__timeline(
+                        value="0",
                         type="range",
-                        step="0.1",
+                        step="1",
                         min="0",
-                        max="1",
                         autocomplete="off"
                     )
-                    .video-controls__time
-                        span#currentTime 0:00
-                        span &nbsp;/&nbsp;
-                        span#totalTime 0:00
-                .video-controls__bottom-right
-                    #full-screen.video-controls__full-screen
-                        i.fas.fa-expand
-    //- div
-    //-     small= videoDB.createdAt
-    //- div
-    //-     small Uploaded by&nbsp;
-    //-         a(href=`/users/${videoDB.owner._id}`)= videoDB.owner.userName
-    //- div
-    //-     p= videoDB.description
-    //- if String(videoDB.owner._id) === String(loggedInUser._id)
-    //-     a(href=`${videoDB.id}/edit`) Edit Video &rarr;
-    //-     br
-    //-     a(href=`${videoDB.id}/delete`) Delete Video &rarr;
+                .video-controls__bottom
+                    .video-controls__bottom-left
+                        #play.video-controls__play-btn
+                            i.fas.fa-play
+                        #mute.video-controls__mute-btn
+                            i.fas.fa-volume-up
+                        input#volume.video-controls__volume(
+                            value="0.5",
+                            type="range",
+                            step="0.1",
+                            min="0",
+                            max="1",
+                            autocomplete="off"
+                        )
+                        .video-controls__time
+                            span#currentTime 0:00
+                            span &nbsp;/&nbsp;
+                            span#totalTime 0:00
+                    .video-controls__bottom-right
+                        #full-screen.video-controls__full-screen
+                            i.fas.fa-expand
+        .watch-video__data
+            .watch-video__data-top
+                each hashtag in videoDB.hashtags
+                    a.watch-video__hashtags= hashtag
+                    span &nbsp;
+                h1.watch-video__title= videoDB.title
+                .watch-video__etc
+                    small.watch-video__views #{ videoDB.meta.views }회&nbsp;•&nbsp;
+                    small.watch-video__createdAt= new Date(videoDB.createdAt).toLocaleDateString('ko-kr', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })
+            .watch-video__data-bottom
+                //- small.watch-video__owner-name Uploaded by&nbsp;
+                .watch-video__owner
+                    a.watch-video__owner-name(
+                        href=`/users/${videoDB.owner._id}`
+                    )= videoDB.owner.userName
+                p.watch-video__description= videoDB.description
+                if String(videoDB.owner._id) === String(loggedInUser._id)
+                    a(href=`${videoDB.id}/edit`) Edit Video &rarr;
+                    br
+                    a(href=`${videoDB.id}/delete`) Delete Video &rarr;
 
 block scripts
     script(src="/static/js/videoPlayer.js")

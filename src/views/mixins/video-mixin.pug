@@ -1,15 +1,15 @@
-mixin videoMixin(info)
-    a.video-mixin(href=`/videos/${info.id}`)
+mixin videoMixin(itemData)
+    a.video-mixin(href=`/videos/${itemData.id}`)
         .video-mixin__thumb
-        //- each hashtag in info.hashtags
+        //- each hashtag in itemData.hashtags
         //-     span= hashtag
         .video-mixin__info
-            span.video-mixin__title= info.title
+            span.video-mixin__title= itemData.title
             .video-mixin__meta
-                span #{ info.owner.userName }&nbsp;•&nbsp;
-                span #{ info.meta.views } 회
-        //- small= info.createdAt
-        //- p= info.description
+                span #{ itemData.owner.userName }&nbsp;•&nbsp;
+                span #{ itemData.meta.views }회
+        //- small= itemData.createdAt
+        //- p= itemData.description
         //- hr
 
 //- text ===> #{}
