@@ -6,7 +6,7 @@ block content
         img.shared__avatar(src=`/${userDB.avatarUrl}`)
         span= userDB.userName
     .shared__video-grid
-        each item in userDB.videos
+        each item in userDB.userVideos
             +videoMixin(item)
         else
             span.shared__empty-message No videos found.

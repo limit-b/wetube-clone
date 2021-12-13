@@ -9,7 +9,8 @@ const userSchema = new mongoose.Schema({
     userID: { type: String, required: true, unique: true, trim: true },
     password: { type: String, trim: true },
     country: String,
-    videos: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Video' }],
+    userVideos: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Video' }],
+    userComments: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Comment' }],
 });
 
 // bug fix

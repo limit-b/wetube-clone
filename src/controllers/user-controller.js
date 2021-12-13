@@ -288,8 +288,8 @@ export const seeUserController = async (req, res) => {
         params: { id },
     } = req;
     const userDB = await UserModel.findById(id).populate({
-        path: 'videos',
-        populate: { path: 'owner', model: 'User' },
+        path: 'userVideos',
+        populate: { path: 'videoOwner', model: 'User' },
     });
     if (!userDB) {
         return res.status(404).render('404', { pageTitle: 'User Not Found' });

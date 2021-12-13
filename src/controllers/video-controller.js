@@ -4,8 +4,8 @@ import UserModel from '../models/User';
 export const homeController = async (req, res) => {
     try {
         const videosDB = await VideoModel.find({})
-            .sort({ createdAt: 'desc' })
-            .populate('owner');
+            .sort({ videoCreatedAt: 'desc' })
+            .populate('videoOwner');
         // console.log(videosDB);
         return res.render('home', { pageTitle: 'Home', videosDB });
     } catch (error) {
@@ -21,8 +21,8 @@ export const searchController = async (req, res) => {
         searchVideosDB = await VideoModel.find({
             title: { $regex: new RegExp(keyword, 'i') },
         })
-            .sort({ createdAt: 'desc' })
-            .populate('owner');
+            .sort({ videoCreatedAt: 'desc' })
+            .populate('videoOwner');
     }
     return res.render('search', { pageTitle: 'Search', searchVideosDB });
 };
@@ -45,10 +45,10 @@ export const postUploadVideoController = async (req, res) => {
             videoUrl,
             hashtags: VideoModel.formatHashtags(hashtags),
             title,
-            owner: _id,
+            videoOwner: _id,
             description,
         });
-        await userDB.videos.push(newVideo._id);
+        await userDB.userVideos.push(newVideo._id);
         await userDB.save();
         req.flash('success', 'Video uploaded.');
         return res.redirect('/');
@@ -61,11 +61,11 @@ export const postUploadVideoController = async (req, res) => {
 
 export const watchVideoController = async (req, res) => {
     const { id } = req.params;
-    const videoDB = await VideoModel.findById(id).populate('owner');
+    const videoDB = await VideoModel.findById(id).populate('videoOwner');
     if (!videoDB) {
         return res.status(404).render('404', { pageTitle: 'Video not found.' });
     } else {
-        // const videoOwner = await UserModel.findById(video.owner);
+        // const videoOwner = await UserModel.findById(video.videoOwner);
         return res.render('videos/watch-video', {
             pageTitle: videoDB.title,
             videoDB,
@@ -84,7 +84,7 @@ export const getEditVideoController = async (req, res) => {
     const videoDB = await VideoModel.findById(id);
     if (!videoDB) {
         return res.status(404).render('404', { pageTitle: 'Video not found.' });
-    } else if (String(videoDB.owner) !== String(_id)) {
+    } else if (String(videoDB.videoOwner) !== String(_id)) {
         req.flash('error', 'You are not the owner of the video.');
         return res.status(403).redirect('/');
     } else {
@@ -106,7 +106,7 @@ export const postEditVideoController = async (req, res) => {
     const videoDB = await VideoModel.findById(id);
     if (!videoDB) {
         return res.status(404).render('404', { pageTitle: 'Video not found.' });
-    } else if (String(videoDB.owner) !== String(_id)) {
+    } else if (String(videoDB.videoOwner) !== String(_id)) {
         req.flash('error', 'You are not the owner of the video.');
         return res.status(403).redirect('/');
     } else {
@@ -152,23 +152,26 @@ export const deleteVideoController = async (req, res) => {
             user: { _id },
         },
     } = req;
-    const videoDB = await VideoModel.findById(id).populate('owner');
+    const videoDB = await VideoModel.findById(id).populate('videoOwner');
     if (!videoDB) {
         return res.status(404).render('404', { pageTitle: 'Video not found.' });
-    } else if (String(videoDB.owner) !== String(_id)) {
+    } else if (String(videoDB.videoOwner._id) !== String(_id)) {
         req.flash('error', 'You are not the owner of the video.');
         return res.status(403).redirect('/');
     } else {
         try {
             const ownerUserDB = await UserModel.findById(_id);
             await VideoModel.findByIdAndDelete(id);
-            await ownerUserDB.videos.splice(ownerUserDB.videos.indexOf(id), 1);
+            await ownerUserDB.userVideos.splice(
+                ownerUserDB.userVideos.indexOf(id),
+                1
+            );
             await ownerUserDB.save();
             req.flash('info', 'Video deleted.');
             return res.redirect('/');
         } catch (error) {
             console.warn(error);
-            // const videoOwner = await UserModel.findById(video.owner);
+            // const videoOwner = await UserModel.findById(video.videoOwner);
             req.flash('warn', 'Video not deleted.');
             return res.render('videos/watch-video', {
                 pageTitle: videoDB.title,

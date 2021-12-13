@@ -42,21 +42,30 @@ block content
                 h1.watch-video__title= videoDB.title
                 .watch-video__etc
                     small.watch-video__views #{ videoDB.meta.views }회&nbsp;•&nbsp;
-                    small.watch-video__createdAt= new Date(videoDB.createdAt).toLocaleDateString('ko-kr', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })
+                    small.watch-video__createdAt= new Date(videoDB.videoCreatedAt).toLocaleDateString('ko-kr', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })
             .watch-video__data-bottom
                 //- small.watch-video__owner-name Uploaded by&nbsp;
                 .watch-video__owner
                     a.watch-video__owner-name(
-                        href=`/users/${videoDB.owner._id}`
-                    )= videoDB.owner.userName
+                        href=`/users/${videoDB.videoOwner._id}`
+                    )= videoDB.videoOwner.userName
                 p.watch-video__description= videoDB.description
-                if String(videoDB.owner._id) === String(loggedInUser._id)
+                if String(videoDB.videoOwner._id) === String(loggedInUser._id)
                     a(href=`${videoDB.id}/edit`) Edit Video &rarr;
                     br
                     a(href=`${videoDB.id}/delete`) Delete Video &rarr;
+        .watch-video__comment
+            form#comment-form.watch-video__comment-form
+                textarea(
+                    cols="30",
+                    rows="10",
+                    placeholder="Write a comment..."
+                )
+                button Add Comment
 
 block scripts
     script(src="/static/js/videoPlayer.js")
+    script(src="/static/js/commentSection.js")
 
 //-     /watchVideoController\             main.pug
 //-     ---------------------------            ^

@@ -6,9 +6,9 @@ mixin videoMixin(itemData)
         .video-mixin__info
             span.video-mixin__title= itemData.title
             .video-mixin__meta
-                span #{ itemData.owner.userName }&nbsp;•&nbsp;
+                span #{ itemData.videoOwner.userName }&nbsp;•&nbsp;
                 span #{ itemData.meta.views }회
-        //- small= itemData.createdAt
+        //- small= itemData.videoCreatedAt
         //- p= itemData.description
         //- hr
 
