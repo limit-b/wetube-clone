@@ -12,7 +12,7 @@ const commentSchema = new mongoose.Schema({
         required: true,
     },
     commentCreatedAt: { type: Date, default: Date.now, required: true },
-    contentText: {
+    commentText: {
         type: String,
         maxLength: 140,
         minLenght: 1,

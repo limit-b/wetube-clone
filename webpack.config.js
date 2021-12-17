@@ -9,6 +9,7 @@ const config = {
     entry: {
         main: CLIENT_BASE_JS + 'main.js',
         videoPlayer: CLIENT_BASE_JS + 'video-player.js',
+        loggedOutComment: CLIENT_BASE_JS + 'logged-out-comment.js',
         commentSection: CLIENT_BASE_JS + 'comment-section.js',
         recorder: CLIENT_BASE_JS + 'recorder.js',
     },

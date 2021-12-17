@@ -12,6 +12,7 @@ const currentTime = document.getElementById('currentTime');
 const fullScreenBtn = document.getElementById('full-screen');
 const fullScreenIcon = fullScreenBtn.querySelector('i');
 
+const lengthNumber = 19;
 const videoDuration = Math.floor(video.duration);
 const timeupdateDuration = Math.floor(videoDuration * 3.5);
 
@@ -24,20 +25,16 @@ video.volume = tempVolume;
 
 const setFormatTime = (time) => {
     let fromNumber;
-    let lengthNumber;
     if (time < 600) {
         fromNumber = 15;
-        lengthNumber = 4;
     } else if (time >= 600 && time < 3600) {
         fromNumber = 14;
-        lengthNumber = 5;
     } else if (time >= 3600) {
         fromNumber = 12;
-        lengthNumber = 7;
     }
     const formatTime = new Date(time * 1000)
         .toISOString()
-        .substr(fromNumber, lengthNumber);
+        .substring(fromNumber, lengthNumber);
     return formatTime;
 };
 
@@ -86,11 +83,10 @@ const handleMouseLeave = () => {
 const handlePlay = () => {
     if (video.paused) {
         video.play();
-        moveTimeoutID = setTimeout(hideVideoControls, 3000);
     } else {
         video.pause();
-        showVideoControls();
     }
+    handleMouseMove();
     playIcon.classList = video.paused ? 'fas fa-play' : 'fas fa-pause';
 };
 // const handlePlayText = () => {
@@ -106,6 +102,7 @@ const handleMute = () => {
     } else {
         video.muted = true;
     }
+    handleMouseMove();
     video.volume = video.muted ? 0 : tempVolume;
     muteIcon.classList = video.muted
         ? 'fas fa-volume-mute'
@@ -146,6 +143,7 @@ const handleFullScreen = () => {
     } else {
         videoContainer.requestFullscreen();
     }
+    handleMouseMove();
     fullScreenIcon.classList = fullscreenElement
         ? 'fas fa-expand'
         : 'fas fa-compress';
@@ -159,23 +157,33 @@ const preventScroll = (event) => {
 
 const handleKeydown = (event) => {
     const { key } = event;
-    if (key === ' ') {
-        handlePlay();
-    } else if (key === 'm' || key === 'M') {
-        handleMute();
-    } else if (key === 'f' || key === 'F') {
-        handleFullScreen();
+    switch (key) {
+        case ' ':
+            handlePlay();
+            break;
+        case 'm' || 'M':
+            handleMute();
+            break;
+        case 'f' || 'F':
+            handleFullScreen();
+            break;
+        default:
+            break;
     }
+};
+
+const fetchRegisterView = () => {
+    const { videoId } = videoContainer.dataset;
+    fetch(`/api/videos/${videoId}/view`, { method: 'post' });
 };
 
 const handleRegisterView = () => {
     timeupdateCount += 1;
-    const { videoId } = videoContainer.dataset;
     if (videoDuration <= 30 && timeupdateCount >= timeupdateDuration) {
-        fetch(`/api/videos/${videoId}/view`, { method: 'post' });
+        fetchRegisterView();
         video.removeEventListener('timeupdate', handleRegisterView);
     } else if (timeupdateCount === 100) {
-        fetch(`/api/videos/${videoId}/view`, { method: 'post' });
+        fetchRegisterView();
         video.removeEventListener('timeupdate', handleRegisterView);
     }
     // else if (timeupdateCount === 110) {

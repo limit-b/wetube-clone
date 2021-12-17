@@ -56,16 +56,21 @@ block content
                     a(href=`${videoDB.id}/delete`) Delete Video &rarr;
         .watch-video__comment
             form#comment-form.watch-video__comment-form
-                textarea(
+                textarea#comment-textarea(
                     cols="30",
                     rows="10",
-                    placeholder="Write a comment..."
+                    name="commentText",
+                    placeholder="Write a comment...",
+                    required
                 )
                 button Add Comment
 
 block scripts
     script(src="/static/js/videoPlayer.js")
-    script(src="/static/js/commentSection.js")
+    if loggedIn
+        script(src="/static/js/commentSection.js")
+    else
+        script(src="/static/js/loggedOutComment.js")
 
 //-     /watchVideoController\             main.pug
 //-     ---------------------------            ^
