@@ -1,5 +1,6 @@
 import VideoModel from '../models/Video';
 import UserModel from '../models/User';
+import CommentModel from '../models/Comment';
 
 export const homeController = async (req, res) => {
     try {
@@ -90,7 +91,7 @@ export const registerViewController = async (req, res) => {
     }
 };
 
-export const createCommentController = (req, res) => {
+export const createCommentController = async (req, res) => {
     const {
         params: { id },
         session: {
@@ -98,9 +99,32 @@ export const createCommentController = (req, res) => {
         },
         body: { commentText },
     } = req;
-    console.log(req.body);
-    console.log(id, _id, commentText);
-    return res.end();
+    const videoDB = await VideoModel.findById(id);
+    if (!videoDB) {
+        return res.status(404).render('404', { pageTitle: 'Video not found.' });
+    } else {
+        console.log(req.body);
+        console.log(id, _id, commentText);
+        return res.end();
+        // try {
+        //     const userDB = await UserModel.findById(_id);
+        //     const newComment = await CommentModel.create({
+        //         commentVideo: id,
+        //         commentOwner: _id,
+        //         commentText,
+        //     });
+        //     await videoDB.videoComments.push(newComment.id);
+        //     await videoDB.save();
+        //     await userDB.userComments.push(newComment._id);
+        //     await userDB.save();
+        //     req.flash('success', 'Comment uploaded.');
+        //     return res.redirect('/');
+        // } catch (error) {
+        //     console.error(error);
+        //     req.flash('error', 'Comment not uploaded.');
+        //     return res.redirect('/');
+        // }
+    }
 };
 
 export const getEditVideoController = async (req, res) => {

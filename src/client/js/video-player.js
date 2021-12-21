@@ -192,9 +192,7 @@ const handleEnded = () => {
 if (video.readyState) {
     handleVideoData();
 } else {
-    // eslint-disable-next-line no-multi-assign
-    console.warn = console.error = () => {};
-    window.location.reload();
+    setTimeout(() => window.location.reload(), 1000);
 }
 
 window.addEventListener('keydown', preventScroll);

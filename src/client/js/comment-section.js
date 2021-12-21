@@ -6,11 +6,20 @@ const handleSubmit = (event) => {
     event.preventDefault();
     const { videoId } = videoContainer.dataset;
     const commentText = textarea.value;
-    console.log(commentText);
-    fetch(`/api/videos/${videoId}/comment`, {
-        method: 'post',
-        body: { commentText },
-    });
+    if (
+        commentText === null ||
+        commentText === undefined ||
+        commentText === '' ||
+        commentText.trim() === ''
+    ) {
+        return;
+    } else {
+        fetch(`/api/videos/${videoId}/comment`, {
+            method: 'post',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ commentText }),
+        });
+    }
     if (textarea.value) {
         textarea.value = null;
     }
