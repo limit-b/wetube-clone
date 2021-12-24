@@ -1,4 +1,6 @@
 extends ../main.pug
+include ../mixins/avatar-mixin.pug
+include ../mixins/comment-mixin.pug
 
 block content
     .watch-video
@@ -48,7 +50,15 @@ block content
                 .watch-video__owner
                     a.watch-video__owner-name(
                         href=`/users/${videoDB.videoOwner._id}`
-                    )= videoDB.videoOwner.userName
+                    )
+                        +avatarMixin(videoDB.videoOwner.avatarUrl, "video")
+                        //- if (!videoDB.videoOwner.avatarUrl || videoDB.videoOwner.avatarUrl === "")
+                        //-     i.fas.fa-user.shared__user-font--video
+                        //- else
+                        //-     img.shared__avatar.shared__avatar--video(
+                        //-         src=`/${videoDB.videoOwner.avatarUrl}`
+                        //-     )
+                        span= videoDB.videoOwner.userName
                 p.watch-video__description= videoDB.description
                 if String(videoDB.videoOwner._id) === String(loggedInUser._id)
                     a(href=`${videoDB.id}/edit`) Edit Video &rarr;
@@ -64,6 +74,11 @@ block content
                     required
                 )
                 button Add Comment
+            .watch-video__comment-list
+                each item in videoDB.videoComments
+                    +commentMixin(item)
+                else
+                    span No comments
 
 block scripts
     script(src="/static/js/videoPlayer.js")

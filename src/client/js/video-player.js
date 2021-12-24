@@ -24,7 +24,10 @@ let timeupdateCount = 0;
 video.volume = tempVolume;
 
 const preventScroll = (event) => {
-    if (event.key === ' ' && event.target === document.body) {
+    if (
+        event.key === ' ' &&
+        (event.target === document.body || event.target === video)
+    ) {
         event.preventDefault();
     }
 };
@@ -147,7 +150,7 @@ const handleFullScreen = () => {
         : 'fas fa-compress';
 };
 
-const handleKeydown = (event) => {
+const handleShortcutKey = (event) => {
     const { activeElement } = document;
     const { selectionStart, isContentEditable } = activeElement;
     const { key } = event;
@@ -216,7 +219,7 @@ volumeRange.addEventListener('input', handleInputVolume);
 
 fullScreenBtn.addEventListener('click', handleFullScreen);
 
-document.addEventListener('keydown', handleKeydown);
+document.addEventListener('keydown', handleShortcutKey);
 
 video.addEventListener('timeupdate', handleRegisterView);
 video.addEventListener('ended', handleEnded);

@@ -1,9 +1,14 @@
 extends ../main.pug
+include ../mixins/avatar-mixin.pug
 include ../mixins/video-mixin.pug
 
 block content
     .user-profile__data
-        img.shared__avatar(src=`/${userDB.avatarUrl}`)
+        +avatarMixin(userDB.avatarUrl, "profile")
+        //- if (!userDB.avatarUrl || userDB.avatarUrl === "")
+        //-     i.fas.fa-user.shared__user-font
+        //- else
+        //-     img.shared__avatar(src=`/${userDB.avatarUrl}`)
         span= userDB.userName
     .shared__video-grid
         each item in userDB.userVideos

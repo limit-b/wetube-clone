@@ -1,3 +1,5 @@
+include ../mixins/avatar-mixin.pug
+
 <header>
     a.header__logo(href="/")
         i.fab.fa-youtube
@@ -15,12 +17,13 @@
                     a(href="/users/logout") Logout
                 li
                     a(href=`/users/${loggedInUser._id}`)
-                        if (!loggedInUser.avatarUrl || loggedInUser.avatarUrl === "")
-                            i.fas.fa-user.header__user-font
-                        else
-                            img.shared__avatar.shared__avatar--header(
-                                src=`/${loggedInUser.avatarUrl}`
-                            )
+                        +avatarMixin(loggedInUser.avatarUrl, "header")
+                        //- if (!loggedInUser.avatarUrl || loggedInUser.avatarUrl === "")
+                        //-     i.fas.fa-user.shared__user-font--header
+                        //- else
+                        //-     img.shared__avatar.shared__avatar--header(
+                        //-         src=`/${loggedInUser.avatarUrl}`
+                        //-     )
             else
                 li
                     a(href="/login") Login

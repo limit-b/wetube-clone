@@ -1,4 +1,4 @@
-include ./mixins/message.pug
+include ./mixins/message-mixin.pug
 
 doctype html
 <html lang="ko">
@@ -13,13 +13,13 @@ doctype html
     </head>
     <body>
         if messages.error
-            +message("error", messages.error)
+            +messageMixin("error", messages.error)
         if messages.warn
-            +message("warn", messages.warn)
+            +messageMixin("warn", messages.warn)
         if messages.success
-            +message("success", messages.success)
+            +messageMixin("success", messages.success)
         if messages.info
-            +message("info", messages.info)
+            +messageMixin("info", messages.info)
         include ./partials/header.pug
         <main>
             block content

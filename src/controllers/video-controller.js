@@ -52,7 +52,7 @@ export const postUploadVideoController = async (req, res) => {
         await userDB.userVideos.push(newVideo._id);
         await userDB.save();
         req.flash('success', 'Video uploaded.');
-        return res.redirect('/');
+        return res.status(201).redirect('/');
     } catch (error) {
         console.error(error);
         req.flash('error', 'Video not uploaded.');
@@ -62,11 +62,14 @@ export const postUploadVideoController = async (req, res) => {
 
 export const watchVideoController = async (req, res) => {
     const { id } = req.params;
-    const videoDB = await VideoModel.findById(id).populate('videoOwner');
+    const videoDB = await VideoModel.findById(id)
+        .populate('videoOwner')
+        .populate('videoComments');
     if (!videoDB) {
         return res.status(404).render('404', { pageTitle: 'Video not found.' });
     } else {
         // const videoOwner = await UserModel.findById(video.videoOwner);
+        console.log(videoDB);
         return res.render('videos/watch-video', {
             pageTitle: videoDB.title,
             videoDB,
@@ -103,27 +106,24 @@ export const createCommentController = async (req, res) => {
     if (!videoDB) {
         return res.status(404).render('404', { pageTitle: 'Video not found.' });
     } else {
-        console.log(req.body);
-        console.log(id, _id, commentText);
-        return res.end();
-        // try {
-        //     const userDB = await UserModel.findById(_id);
-        //     const newComment = await CommentModel.create({
-        //         commentVideo: id,
-        //         commentOwner: _id,
-        //         commentText,
-        //     });
-        //     await videoDB.videoComments.push(newComment.id);
-        //     await videoDB.save();
-        //     await userDB.userComments.push(newComment._id);
-        //     await userDB.save();
-        //     req.flash('success', 'Comment uploaded.');
-        //     return res.redirect('/');
-        // } catch (error) {
-        //     console.error(error);
-        //     req.flash('error', 'Comment not uploaded.');
-        //     return res.redirect('/');
-        // }
+        try {
+            // const userDB = await UserModel.findById(_id);
+            const newComment = await CommentModel.create({
+                commentVideo: id,
+                commentOwner: _id,
+                commentText,
+            });
+            await videoDB.videoComments.push(newComment._id);
+            await videoDB.save();
+            // await userDB.userComments.push(newComment._id);
+            // await userDB.save();
+            req.flash('success', 'Comment uploaded.');
+            return res.sendStatus(201);
+        } catch (error) {
+            console.error(error);
+            req.flash('error', 'Comment not uploaded.');
+            return res.redirect('/');
+        }
     }
 };
 
