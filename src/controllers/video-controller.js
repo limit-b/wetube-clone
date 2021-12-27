@@ -69,7 +69,7 @@ export const watchVideoController = async (req, res) => {
         return res.status(404).render('404', { pageTitle: 'Video not found.' });
     } else {
         // const videoOwner = await UserModel.findById(video.videoOwner);
-        console.log(videoDB);
+        // console.log(videoDB);
         return res.render('videos/watch-video', {
             pageTitle: videoDB.title,
             videoDB,
@@ -117,7 +117,6 @@ export const createCommentController = async (req, res) => {
             await videoDB.save();
             // await userDB.userComments.push(newComment._id);
             // await userDB.save();
-            req.flash('success', 'Comment uploaded.');
             return res.sendStatus(201);
         } catch (error) {
             console.error(error);

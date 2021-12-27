@@ -52,12 +52,6 @@ block content
                         href=`/users/${videoDB.videoOwner._id}`
                     )
                         +avatarMixin(videoDB.videoOwner.avatarUrl, "video")
-                        //- if (!videoDB.videoOwner.avatarUrl || videoDB.videoOwner.avatarUrl === "")
-                        //-     i.fas.fa-user.shared__user-font--video
-                        //- else
-                        //-     img.shared__avatar.shared__avatar--video(
-                        //-         src=`/${videoDB.videoOwner.avatarUrl}`
-                        //-     )
                         span= videoDB.videoOwner.userName
                 p.watch-video__description= videoDB.description
                 if String(videoDB.videoOwner._id) === String(loggedInUser._id)
@@ -75,10 +69,11 @@ block content
                 )
                 button Add Comment
             .watch-video__comment-list
-                each item in videoDB.videoComments
-                    +commentMixin(item)
-                else
-                    span No comments
+                ul
+                    each item in videoDB.videoComments.reverse()
+                        +commentMixin(item)
+                    else
+                        span No comments
 
 block scripts
     script(src="/static/js/videoPlayer.js")

@@ -1,20 +1,16 @@
 const videoContainer = document.getElementById('video-container');
-const video = document.querySelector('video');
+const video = videoContainer.querySelector('video');
 const videoControls = document.getElementById('video-controls');
 const timeline = document.getElementById('timeline');
 const playBtn = document.getElementById('play');
 const playIcon = playBtn.querySelector('i');
 const muteBtn = document.getElementById('mute');
-const muteIcon = muteBtn.querySelector('i');
 const volumeRange = document.getElementById('volume');
 const totalTime = document.getElementById('totalTime');
 const currentTime = document.getElementById('currentTime');
 const fullScreenBtn = document.getElementById('full-screen');
-const fullScreenIcon = fullScreenBtn.querySelector('i');
 
 const endNumber = 19;
-const videoDuration = Math.floor(video.duration);
-const timeupdateDuration = Math.floor(videoDuration * 3.5);
 
 let timeoutID = null;
 // let leaveTimeoutID = null;
@@ -24,10 +20,7 @@ let timeupdateCount = 0;
 video.volume = tempVolume;
 
 const preventScroll = (event) => {
-    if (
-        event.key === ' ' &&
-        (event.target === document.body || event.target === video)
-    ) {
+    if (event.key === ' ' && event.target === document.body) {
         event.preventDefault();
     }
 };
@@ -48,6 +41,7 @@ const setFormatTime = (time) => {
 };
 
 const handleVideoData = () => {
+    const videoDuration = Math.floor(video.duration);
     totalTime.textContent = setFormatTime(videoDuration);
     timeline.max = videoDuration;
 };
@@ -97,6 +91,13 @@ const handlePlay = () => {
 //     playBtn.textContent = 'Play';
 // };
 
+const changeMuteIcon = () => {
+    const muteIcon = muteBtn.querySelector('i');
+    muteIcon.classList = video.muted
+        ? 'fas fa-volume-mute'
+        : 'fas fa-volume-up';
+};
+
 const handleMute = () => {
     if (video.muted) {
         video.muted = false;
@@ -105,9 +106,10 @@ const handleMute = () => {
     }
     handleVideoControls();
     video.volume = video.muted ? 0 : tempVolume;
-    muteIcon.classList = video.muted
-        ? 'fas fa-volume-mute'
-        : 'fas fa-volume-up';
+    changeMuteIcon();
+    // muteIcon.classList = video.muted
+    //     ? 'fas fa-volume-mute'
+    //     : 'fas fa-volume-up';
     volumeRange.value = video.muted ? 0 : tempVolume;
 };
 
@@ -132,12 +134,14 @@ const handleInputVolume = (event) => {
     } else {
         video.muted = false;
     }
-    muteIcon.classList = video.muted
-        ? 'fas fa-volume-mute'
-        : 'fas fa-volume-up';
+    changeMuteIcon();
+    // muteIcon.classList = video.muted
+    //     ? 'fas fa-volume-mute'
+    //     : 'fas fa-volume-up';
 };
 
 const handleFullScreen = () => {
+    const fullScreenIcon = fullScreenBtn.querySelector('i');
     const { fullscreenElement } = document;
     if (fullscreenElement) {
         document.exitFullscreen();
@@ -173,6 +177,8 @@ const handleShortcutKey = (event) => {
 };
 
 const handleRegisterView = () => {
+    const videoDuration = Math.floor(video.duration);
+    const timeupdateDuration = Math.floor(videoDuration * 3.5);
     timeupdateCount += 1;
     if (
         (videoDuration <= 30 && timeupdateCount >= timeupdateDuration) ||
@@ -194,9 +200,10 @@ const handleEnded = () => {
 
 if (video.readyState) {
     handleVideoData();
-} else {
-    setTimeout(() => window.location.reload(), 1000);
 }
+// else {
+//     setTimeout(() => window.location.reload(), 500);
+// }
 
 window.addEventListener('keydown', preventScroll);
 

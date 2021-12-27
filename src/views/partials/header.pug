@@ -18,12 +18,6 @@ include ../mixins/avatar-mixin.pug
                 li
                     a(href=`/users/${loggedInUser._id}`)
                         +avatarMixin(loggedInUser.avatarUrl, "header")
-                        //- if (!loggedInUser.avatarUrl || loggedInUser.avatarUrl === "")
-                        //-     i.fas.fa-user.shared__user-font--header
-                        //- else
-                        //-     img.shared__avatar.shared__avatar--header(
-                        //-         src=`/${loggedInUser.avatarUrl}`
-                        //-     )
             else
                 li
                     a(href="/login") Login

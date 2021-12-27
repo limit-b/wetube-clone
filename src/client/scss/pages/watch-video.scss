@@ -18,10 +18,24 @@
             color: #aaaaaa;
         }
     }
-    .watch-video__bottom {
+    .watch-video__data-bottom {
         .watch-video__owner {
             height: 67px;
             padding-top: 16px;
         }
+    }
+}
+
+.watch-video__comment-list {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    margin: 0 auto;
+    margin-top: 20px;
+    .comment-mixin__text {
+        padding: 10px;
+        margin-bottom: 10px;
+        color: black;
+        background-color: white;
     }
 }

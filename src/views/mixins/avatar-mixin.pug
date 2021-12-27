@@ -1,11 +1,11 @@
 mixin avatarMixin(itemUrl, kind)
     if (!itemUrl || itemUrl === "")
         if kind === "profile"
-            i.fas.fa-user.shared__user-font
+            i.fas.fa-user.avatar-mixin__user-font
         else
-            i.fas.fa-user(class=`shared__user-font--${kind}`)
+            i.fas.fa-user(class=`avatar-mixin__user-font--${kind}`)
     else
         if kind === "profile"
-            img.shared__avatar(src=`/${itemUrl}`)
+            img.avatar-mixin__img(src=`/${itemUrl}`)
         else
-            img.shared__avatar(src=`/${itemUrl}`, class=`shared__avatar--${kind}`)
+            img.avatar-mixin__img(src=`/${itemUrl}`, class=`avatar-mixin__img--${kind}`)

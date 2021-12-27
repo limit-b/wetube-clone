@@ -1,0 +1,27 @@
+.avatar-mixin__user-font {
+    font-size: 144px;
+}
+
+.avatar-mixin__user-font--header {
+    font-size: 38px;
+}
+
+.avatar-mixin__user-font--video {
+    font-size: 40px;
+}
+
+.avatar-mixin__img {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+}
+
+.avatar-mixin__img--header {
+    width: 40px;
+    height: 40px;
+}
+
+.avatar-mixin__img--video {
+    width: 42px;
+    height: 42px;
+}
