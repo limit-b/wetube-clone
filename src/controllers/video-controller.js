@@ -117,13 +117,32 @@ export const createCommentController = async (req, res) => {
             await videoDB.save();
             // await userDB.userComments.push(newComment._id);
             // await userDB.save();
-            return res.sendStatus(201);
+            return res.status(201).json({ newCommentId: newComment._id });
         } catch (error) {
             console.error(error);
             req.flash('error', 'Comment not uploaded.');
             return res.redirect('/');
         }
     }
+};
+
+export const deleteCommentController = async (req, res) => {
+    const {
+        // params: { id },
+        session: {
+            user: { _id },
+        },
+        body: { commentId },
+    } = req;
+    const commentDB = await CommentModel.findById(commentId);
+    if (String(commentDB.commentOwner) !== String(_id)) {
+        console.log('Not same id');
+    } else {
+        console.log(String(commentDB.commentOwner));
+        console.log(String(_id));
+        console.log('same id');
+    }
+    return res.status(200).end();
 };
 
 export const getEditVideoController = async (req, res) => {
@@ -195,6 +214,7 @@ export const deleteVideoController = async (req, res) => {
         req.flash('error', 'You are not the owner of the video.');
         return res.status(403).redirect('/');
     } else {
+        // TODO: video delete -> comment delete
         try {
             const ownerUserDB = await UserModel.findById(_id);
             await VideoModel.findByIdAndDelete(id);

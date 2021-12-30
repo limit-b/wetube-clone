@@ -1,3 +1,6 @@
 mixin commentMixin(itemData)
-    li.comment-mixin__text
+    li.comment-mixin__li(data-comment-id=itemData.id)
         span= itemData.commentText
+        if String(itemData.commentOwner) === String(loggedInUser._id)
+            span.comment-mixin__edit Edit Comment
+            span.comment-mixin__delete Delete Comment

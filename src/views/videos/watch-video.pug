@@ -68,12 +68,10 @@ block content
                     required
                 )
                 button Add Comment
-            .watch-video__comment-list
+            .watch-video__comments
                 ul
                     each item in videoDB.videoComments.reverse()
                         +commentMixin(item)
-                    else
-                        span No comments
 
 block scripts
     script(src="/static/js/videoPlayer.js")

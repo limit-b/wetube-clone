@@ -26,13 +26,13 @@
     }
 }
 
-.watch-video__comment-list {
+.watch-video__comments {
     display: flex;
     flex-direction: column;
     width: 100%;
     margin: 0 auto;
     margin-top: 20px;
-    .comment-mixin__text {
+    .comment-mixin__li {
         padding: 10px;
         margin-bottom: 10px;
         color: black;
