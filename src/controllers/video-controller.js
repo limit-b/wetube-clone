@@ -69,7 +69,7 @@ export const watchVideoController = async (req, res) => {
         return res.status(404).render('404', { pageTitle: 'Video not found.' });
     } else {
         // const videoOwner = await UserModel.findById(video.videoOwner);
-        // console.log(videoDB);
+        console.log(videoDB.videoComments);
         return res.render('videos/watch-video', {
             pageTitle: videoDB.title,
             videoDB,
@@ -128,21 +128,39 @@ export const createCommentController = async (req, res) => {
 
 export const deleteCommentController = async (req, res) => {
     const {
-        // params: { id },
+        params: { id },
         session: {
             user: { _id },
         },
         body: { commentId },
     } = req;
-    const commentDB = await CommentModel.findById(commentId);
-    if (String(commentDB.commentOwner) !== String(_id)) {
-        console.log('Not same id');
+    const videoDB = await VideoModel.findById(id);
+    if (!videoDB) {
+        return res.status(404).render('404', { pageTitle: 'Video not found.' });
     } else {
-        console.log(String(commentDB.commentOwner));
-        console.log(String(_id));
-        console.log('same id');
+        const commentDB = await CommentModel.findById(commentId);
+        if (String(commentDB.commentOwner) !== String(_id)) {
+            req.flash('error', 'You are not the owner of the comment.');
+            return res.status(403).redirect('/');
+        } else {
+            try {
+                await CommentModel.findByIdAndDelete(commentId);
+                await videoDB.videoComments.splice(
+                    videoDB.videoComments.indexOf(commentId),
+                    1
+                );
+                await videoDB.save();
+                return res.sendStatus(200);
+            } catch (error) {
+                console.warn(error);
+                req.flash('warn', 'Comment not deleted.');
+                return res.render('videos/watch-video', {
+                    pageTitle: videoDB.title,
+                    videoDB,
+                });
+            }
+        }
     }
-    return res.status(200).end();
 };
 
 export const getEditVideoController = async (req, res) => {

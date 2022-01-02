@@ -5,13 +5,26 @@ const commentUl = document.querySelector('.watch-video__comments ul');
 
 const { videoId } = videoContainer.dataset;
 
+const deleteComment = async (event) => {
+    const commentLi = event.target.parentNode;
+    const { commentId } = commentLi.dataset;
+    const response = await fetch(`/api/videos/${videoId}/comment`, {
+        method: 'delete',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ commentId }),
+    });
+    if (response.status === 200) {
+        commentUl.removeChild(commentLi);
+    }
+};
+
 const addComment = (text, id) => {
     const newLi = document.createElement('li');
     const newText = document.createElement('span');
     const newEdit = document.createElement('span');
     const newDelete = document.createElement('span');
     newLi.className = 'comment-mixin__li';
-    newLi.dataset.id = id;
+    newLi.dataset.commentId = id;
     newText.textContent = `${text}`;
     newEdit.className = 'comment-mixin__edit';
     newEdit.textContent = 'Edit Comment';
@@ -21,6 +34,7 @@ const addComment = (text, id) => {
     newLi.appendChild(newEdit);
     newLi.appendChild(newDelete);
     commentUl.prepend(newLi);
+    newDelete.addEventListener('click', deleteComment);
 };
 
 const handleSubmit = async (event) => {
@@ -46,19 +60,6 @@ const handleSubmit = async (event) => {
     }
     if (textarea.value) {
         textarea.value = null;
-    }
-};
-
-const deleteComment = async (event) => {
-    const commentLi = event.target.parentNode;
-    const { commentId } = commentLi.dataset;
-    const response = await fetch(`/api/videos/${videoId}/comment`, {
-        method: 'delete',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ commentId }),
-    });
-    if (response.status === 200) {
-        commentUl.removeChild(commentLi);
     }
 };
 
