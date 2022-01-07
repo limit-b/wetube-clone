@@ -17,15 +17,13 @@ block content
             placeholder="New Description",
             name="description",
             minlength="20",
-            maxlength="140",
-            required
+            maxlength="140"
         )
         input(
             value=videoDB.hashtags.join(),
             type="text",
             placeholder="New Hashtags, separated by comma.",
-            name="hashtags",
-            required
+            name="hashtags"
         )
         input(value="Save", type="submit")
 

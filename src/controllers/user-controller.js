@@ -40,7 +40,8 @@ export const postJoinController = async (req, res) => {
             } catch (error) {
                 console.error(error);
                 req.flash('error', 'Join failed');
-                return res.render('join', { pageTitle });
+                return res.redirect('/');
+                // return res.render('join', { pageTitle });
             }
         }
     }
@@ -187,10 +188,12 @@ export const postEditUserController = async (req, res) => {
         _id: { $ne: _id },
         $or: [{ email }, { userID }],
     });
-    const pageTitle = 'Edit User';
+    // const pageTitle = 'Edit User';
     if (exists) {
         req.flash('info', 'This E-mail / ID is already taken.');
-        return res.status(400).render('users/edit-user', { pageTitle });
+        return res
+            .status(400)
+            .render('users/edit-user', { pageTitle: 'Edit User' });
     } else {
         try {
             const updatedUserDB = await UserModel.findByIdAndUpdate(
@@ -206,11 +209,12 @@ export const postEditUserController = async (req, res) => {
             );
             req.session.user = updatedUserDB;
             req.flash('info', 'User info updated.');
-            return res.redirect('/');
+            return res.status(200).redirect('/');
         } catch (error) {
             console.error(error);
             req.flash('error', 'User info not updated.');
-            return res.status(400).render('users/edit-user', { pageTitle });
+            return res.redirect('/');
+            // return res.render('users/edit-user', { pageTitle });
         }
     }
 };
@@ -270,11 +274,12 @@ export const postChangePasswordController = async (req, res) => {
                     userDB.password = await newPassword;
                     await userDB.save();
                     req.flash('success', 'Password updated.');
-                    return res.redirect('/users/logout');
+                    return res.status(200).redirect('/users/logout');
                 } catch (error) {
                     console.error(error);
                     req.flash('error', 'Can not change password.');
-                    return res.render('users/change-password', { pageTitle });
+                    return res.redirect('/');
+                    // return res.render('users/change-password', { pageTitle });
                 }
             }
         }
@@ -294,11 +299,9 @@ export const seeUserController = async (req, res) => {
     if (!userDB) {
         return res.status(404).render('404', { pageTitle: 'User Not Found' });
     } else {
-        // const videosDB = await VideoModel.find({ owner: userDB._id });
         return res.render('users/user-profile', {
             pageTitle: userDB.userName,
             userDB,
-            // videosDB,
         });
     }
 };

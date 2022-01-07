@@ -14,13 +14,7 @@ const videoSchema = new mongoose.Schema({
         ref: 'User',
         required: true,
     },
-    description: {
-        type: String,
-        maxLength: 140,
-        minLenght: 20,
-        required: true,
-        trim: true,
-    },
+    description: { type: String, maxLength: 140, minLenght: 20, trim: true },
     videoComments: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Comment' }],
 });
 

@@ -8,7 +8,7 @@ export const homeController = async (req, res) => {
             .sort({ videoCreatedAt: 'desc' })
             .populate('videoOwner');
         // console.log(videosDB);
-        return res.render('home', { pageTitle: 'Home', videosDB });
+        return res.status(200).render('home', { pageTitle: 'Home', videosDB });
     } catch (error) {
         console.error(error);
         return res.redirect('/');
@@ -40,23 +40,43 @@ export const postUploadVideoController = async (req, res) => {
         file: { path: videoUrl },
         body: { title, description, hashtags },
     } = req;
-    try {
-        const userDB = await UserModel.findById(_id);
-        const newVideo = await VideoModel.create({
-            videoUrl,
-            hashtags: VideoModel.formatHashtags(hashtags),
-            title,
-            videoOwner: _id,
-            description,
-        });
-        await userDB.userVideos.push(newVideo._id);
-        await userDB.save();
-        req.flash('success', 'Video uploaded.');
-        return res.status(201).redirect('/');
-    } catch (error) {
-        console.error(error);
-        req.flash('error', 'Video not uploaded.');
-        return res.render('videos/upload-video', { pageTitle: 'Upload Video' });
+    if (
+        title === null ||
+        title === undefined ||
+        title === '' ||
+        title.trim() === ''
+    ) {
+        req.flash('info', 'Title is empty.');
+        return res
+            .status(400)
+            .render('videos/upload-video', { pageTitle: 'Upload Video' });
+    } else {
+        try {
+            const userDB = await UserModel.findById(_id);
+            const newVideo = await VideoModel.create({
+                videoUrl,
+                hashtags: VideoModel.formatHashtags(hashtags),
+                title,
+                videoOwner: _id,
+                description,
+            });
+            await userDB.userVideos.push(newVideo._id);
+            await userDB.save();
+            const newUserDB = await UserModel.findById(_id).populate({
+                path: 'userVideos',
+                populate: { path: 'videoOwner', model: 'User' },
+            });
+            req.flash('success', 'Video uploaded.');
+            return res.status(201).render('users/user-profile', {
+                pageTitle: newUserDB.userName,
+                userDB: newUserDB,
+            });
+        } catch (error) {
+            console.error(error);
+            req.flash('error', 'Video not uploaded.');
+            return res.redirect('/');
+            // return res.render('videos/upload-video', { pageTitle: 'Upload Video' });
+        }
     }
 };
 
@@ -68,12 +88,10 @@ export const watchVideoController = async (req, res) => {
     if (!videoDB) {
         return res.status(404).render('404', { pageTitle: 'Video not found.' });
     } else {
-        // const videoOwner = await UserModel.findById(video.videoOwner);
-        console.log(videoDB.videoComments);
+        // console.log(videoDB);
         return res.render('videos/watch-video', {
             pageTitle: videoDB.title,
             videoDB,
-            // videoOwner,
         });
     }
 };
@@ -89,7 +107,8 @@ export const registerViewController = async (req, res) => {
             await videoDB.save();
             return res.sendStatus(200);
         } catch (error) {
-            return res.redirect('/');
+            console.error(error);
+            return res.sendStatus(500);
         }
     }
 };
@@ -103,7 +122,14 @@ export const createCommentController = async (req, res) => {
         body: { commentText },
     } = req;
     const videoDB = await VideoModel.findById(id);
-    if (!videoDB) {
+    if (
+        commentText === null ||
+        commentText === undefined ||
+        commentText === '' ||
+        commentText.trim() === ''
+    ) {
+        return res.sendStatus(400);
+    } else if (!videoDB) {
         return res.status(404).render('404', { pageTitle: 'Video not found.' });
     } else {
         try {
@@ -154,10 +180,11 @@ export const deleteCommentController = async (req, res) => {
             } catch (error) {
                 console.warn(error);
                 req.flash('warn', 'Comment not deleted.');
-                return res.render('videos/watch-video', {
-                    pageTitle: videoDB.title,
-                    videoDB,
-                });
+                return res.redirect('/');
+                // return res.render('videos/watch-video', {
+                //     pageTitle: videoDB.title,
+                //     videoDB,
+                // });
             }
         }
     }
@@ -193,7 +220,18 @@ export const postEditVideoController = async (req, res) => {
         body: { title, description, hashtags },
     } = req;
     const videoDB = await VideoModel.findById(id);
-    if (!videoDB) {
+    if (
+        title === null ||
+        title === undefined ||
+        title === '' ||
+        title.trim() === ''
+    ) {
+        req.flash('info', 'Title is empty.');
+        return res.status(400).render('videos/edit-video', {
+            pageTitle: `Edit ${videoDB.title}`,
+            videoDB,
+        });
+    } else if (!videoDB) {
         return res.status(404).render('404', { pageTitle: 'Video not found.' });
     } else if (String(videoDB.videoOwner) !== String(_id)) {
         req.flash('error', 'You are not the owner of the video.');
@@ -205,15 +243,24 @@ export const postEditVideoController = async (req, res) => {
                 title,
                 description,
             });
+            const newUserDB = await UserModel.findById(_id).populate({
+                path: 'userVideos',
+                populate: { path: 'videoOwner', model: 'User' },
+            });
             req.flash('success', 'Video updated.');
-            return res.redirect(`/videos/${id}`);
+            return res.status(200).render('users/user-profile', {
+                pageTitle: newUserDB.userName,
+                userDB: newUserDB,
+            });
+            // return res.status(200).redirect(`/videos/${id}`);
         } catch (error) {
             console.error(error);
             req.flash('error', 'Video not updated.');
-            return res.render('videos/edit-video', {
-                pageTitle: `Edit ${videoDB.title}`,
-                videoDB,
-            });
+            return res.redirect('/');
+            // return res.render('videos/edit-video', {
+            //     pageTitle: `Edit ${videoDB.title}`,
+            //     videoDB,
+            // });
         }
     }
 };
@@ -232,7 +279,6 @@ export const deleteVideoController = async (req, res) => {
         req.flash('error', 'You are not the owner of the video.');
         return res.status(403).redirect('/');
     } else {
-        // TODO: video delete -> comment delete
         try {
             const ownerUserDB = await UserModel.findById(_id);
             await VideoModel.findByIdAndDelete(id);
@@ -241,17 +287,28 @@ export const deleteVideoController = async (req, res) => {
                 1
             );
             await ownerUserDB.save();
+            await CommentModel.deleteMany({ commentVideo: id });
+            // videoDB.videoComments.forEach(async (comment) => {
+            //     await CommentModel.findByIdAndDelete(comment._id);
+            // });
+            const newUserDB = await UserModel.findById(_id).populate({
+                path: 'userVideos',
+                populate: { path: 'videoOwner', model: 'User' },
+            });
             req.flash('info', 'Video deleted.');
-            return res.redirect('/');
+            return res.status(200).render('users/user-profile', {
+                pageTitle: newUserDB.userName,
+                userDB: newUserDB,
+            });
+            // return res.status(200).redirect('/');
         } catch (error) {
             console.warn(error);
-            // const videoOwner = await UserModel.findById(video.videoOwner);
             req.flash('warn', 'Video not deleted.');
-            return res.render('videos/watch-video', {
-                pageTitle: videoDB.title,
-                videoDB,
-                // videoOwner,
-            });
+            return res.redirect('/');
+            // return res.render('videos/watch-video', {
+            //     pageTitle: videoDB.title,
+            //     videoDB,
+            // });
         }
     }
 };
