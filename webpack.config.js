@@ -31,7 +31,6 @@ const config = {
                     },
                 },
             },
-            // css-loader ver-4.3.0
             {
                 test: /\.scss$/,
                 use: [
