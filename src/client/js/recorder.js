@@ -1,11 +1,12 @@
 import { createFFmpeg, fetchFile } from '@ffmpeg/ffmpeg';
 
 const previewVideo = document.getElementById('preview-video');
-const recordBtn = document.getElementById('record-btn');
+const actionBtn = document.getElementById('action-btn');
 
 let videoUrl = null;
 let mp4Url = null;
 let thumbUrl = null;
+let stopTimeoutID = null;
 let recorder = null;
 let desktopStream = null;
 
@@ -13,74 +14,84 @@ URL.revokeObjectURL(videoUrl);
 URL.revokeObjectURL(mp4Url);
 URL.revokeObjectURL(thumbUrl);
 
-const handleTransVideo = async () => {
+const files = {
+    input: 'recording.webm',
+    output: 'output.mp4',
+    thumbnail: 'thumbnail.jpg',
+};
+
+const transVideo = async () => {
     const ffmpeg = createFFmpeg({
         corePath: 'https://unpkg.com/@ffmpeg/core@0.10.0/dist/ffmpeg-core.js',
         // corePath: '/static/ffmpeg-core.js',
         log: true,
     });
     await ffmpeg.load();
-    ffmpeg.FS('writeFile', 'recording.webm', await fetchFile(videoUrl));
-    await ffmpeg.run('-i', 'recording.webm', '-r', '60', 'output.mp4');
+    ffmpeg.FS('writeFile', files.input, await fetchFile(videoUrl));
+    await ffmpeg.run('-i', files.input, '-r', '60', files.output);
     await ffmpeg.run(
         '-i',
-        'recording.webm',
+        files.input,
         '-ss',
         '00:00:01',
         '-frames:v',
         '1',
-        'thumbnail.jpg'
+        files.thumbnail
     );
-    const mp4File = ffmpeg.FS('readFile', 'output.mp4');
-    const thumbFile = ffmpeg.FS('readFile', 'thumbnail.jpg');
+    const mp4File = ffmpeg.FS('readFile', files.output);
+    const thumbFile = ffmpeg.FS('readFile', files.thumbnail);
     const mp4Blob = new Blob([mp4File.buffer], { type: 'video/mp4' });
     const thumbBlob = new Blob([thumbFile.buffer], { type: 'image/jpg' });
     mp4Url = URL.createObjectURL(mp4Blob);
     thumbUrl = URL.createObjectURL(thumbBlob);
-    ffmpeg.FS('unlink', 'recording.webm');
-    ffmpeg.FS('unlink', 'output.mp4');
-    ffmpeg.FS('unlink', 'thumbnail.jpg');
+    ffmpeg.FS('unlink', files.input);
+    ffmpeg.FS('unlink', files.output);
+    ffmpeg.FS('unlink', files.thumbnail);
     // URL.revokeObjectURL(videoUrl);
     // URL.revokeObjectURL(mp4Url);
     // URL.revokeObjectURL(thumbUrl);
 };
 
-const handleDownload = () => {
+const downloadFile = (fileUrl, fileName) => {
+    const anchor = document.createElement('a');
+    anchor.href = fileUrl;
+    anchor.download = fileName;
+    document.body.appendChild(anchor);
+    anchor.click();
+    document.body.removeChild(anchor);
+};
+
+const handleDownload = async () => {
+    actionBtn.removeEventListener('click', handleDownload);
+    actionBtn.disabled = true;
+    actionBtn.textContent = 'Downloading...';
     if (mp4Url === null && thumbUrl === null) {
-        handleTransVideo();
+        await transVideo();
     }
-    const videoAnchor = document.createElement('a');
-    videoAnchor.href = mp4Url;
-    videoAnchor.download = 'MyRecording.mp4';
-    document.body.appendChild(videoAnchor);
-    videoAnchor.click();
-
-    const thumbAnchor = document.createElement('a');
-    thumbAnchor.href = thumbUrl;
-    thumbAnchor.download = 'MyThumbnail.jpg';
-    document.body.appendChild(thumbAnchor);
-    thumbAnchor.click();
-
-    // desktopStream.getTracks().forEach((track) => track.stop());
-    // desktopStream = null;
-    document.body.removeChild(videoAnchor);
-    document.body.removeChild(thumbAnchor);
+    downloadFile(mp4Url, 'MyRecording.mp4');
+    downloadFile(thumbUrl, 'MyThumbnail.jpg');
+    actionBtn.addEventListener('click', handleDownload);
+    actionBtn.textContent = 'Download Recording';
+    actionBtn.disabled = false;
 };
 
 const handleStopRecording = () => {
-    recordBtn.textContent = 'Download Recording';
-    recordBtn.removeEventListener('click', handleStopRecording);
-    recordBtn.addEventListener('click', handleDownload);
+    if (stopTimeoutID) {
+        clearTimeout(stopTimeoutID);
+        stopTimeoutID = null;
+    }
+    actionBtn.removeEventListener('click', handleStopRecording);
+    actionBtn.textContent = 'Download Recording';
     recorder.stop();
+    actionBtn.addEventListener('click', handleDownload);
     desktopStream.getTracks().forEach((track) => track.stop());
     desktopStream = null;
 };
 
 const handleStartRecording = () => {
-    recordBtn.textContent = 'Recording...';
-    recordBtn.disabled = true;
-    recordBtn.removeEventListener('click', handleStartRecording);
-    recordBtn.addEventListener('click', handleStopRecording);
+    actionBtn.removeEventListener('click', handleStartRecording);
+    actionBtn.disabled = true;
+    actionBtn.textContent = 'Recording...';
     recorder = new MediaRecorder(desktopStream, { mimeType: 'video/webm' });
     recorder.ondataavailable = (event) => {
         videoUrl = URL.createObjectURL(event.data);
@@ -91,12 +102,15 @@ const handleStartRecording = () => {
     };
     recorder.start();
     setTimeout(() => {
-        recordBtn.textContent = 'Stop Recording';
-        recordBtn.disabled = false;
+        actionBtn.addEventListener('click', handleStopRecording);
+        actionBtn.textContent = 'Stop Recording';
+        actionBtn.disabled = false;
     }, 3000);
+    stopTimeoutID = setTimeout(handleStopRecording, 10000);
 };
 
 const handleReadyRecording = async () => {
+    actionBtn.removeEventListener('click', handleReadyRecording);
     try {
         // const stream = await navigator.mediaDevices.getUserMedia({
         //     audio: false,
@@ -111,9 +125,8 @@ const handleReadyRecording = async () => {
         console.error('stream error :', error);
     }
     previewVideo.play();
-    recordBtn.textContent = 'Start Recording';
-    recordBtn.removeEventListener('click', handleReadyRecording);
-    recordBtn.addEventListener('click', handleStartRecording);
+    actionBtn.addEventListener('click', handleStartRecording);
+    actionBtn.textContent = 'Start Recording';
 };
 
-recordBtn.addEventListener('click', handleReadyRecording);
+actionBtn.addEventListener('click', handleReadyRecording);

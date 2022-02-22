@@ -4,13 +4,20 @@ block content
     .upload-video__container
         .upload-video__preview
             video#preview-video
-            button#record-btn.social-login__btn Ready Recording
+            button#action-btn.social-login__btn Ready Recording
         form(method="post", enctype="multipart/form-data")
             label(for="videoFile") Video File
             input#videoFile(
                 type="file",
                 name="videoFile",
                 accept="video/*",
+                required
+            )
+            label(for="thumbnailFile") Thumbnail File
+            input#thumbnailFile(
+                type="file",
+                name="thumbnailFile",
+                accept="image/*",
                 required
             )
             input(

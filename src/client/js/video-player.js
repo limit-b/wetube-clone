@@ -12,8 +12,7 @@ const fullScreenBtn = document.getElementById('full-screen');
 
 const endNumber = 19;
 
-let timeoutID = null;
-// let leaveTimeoutID = null;
+let hideTimeoutID = null;
 let tempVolume = 0.5;
 let timeupdateCount = 0;
 
@@ -63,13 +62,13 @@ const showVideoControls = () => videoControls.classList.remove('hide');
 const hideVideoControls = () => videoControls.classList.add('hide');
 
 const handleVideoControls = () => {
-    if (timeoutID) {
-        clearTimeout(timeoutID);
-        timeoutID = null;
+    if (hideTimeoutID) {
+        clearTimeout(hideTimeoutID);
+        hideTimeoutID = null;
     }
     showVideoControls();
     if (!video.paused) {
-        timeoutID = setTimeout(hideVideoControls, 3000);
+        hideTimeoutID = setTimeout(hideVideoControls, 3000);
     }
 };
 
