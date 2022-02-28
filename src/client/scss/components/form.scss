@@ -12,7 +12,8 @@ form {
     }
 }
 
-input:not([type="range"]) {
+input:not(input[type="range"]),
+input[type="submit"] {
     all: unset;
     width: 90%;
     height: 20px;
@@ -31,10 +32,19 @@ input:not([type="range"]) {
 input[type="submit"] {
     display: block;
     padding: 12px 20px;
-    color: rgba($color: $red, $alpha: 0.9);
-    text-align: center;
+    color: rgba($color: $red, $alpha: 0.9) !important;
+    text-align: center !important;
     cursor: pointer;
-    background-color: white;
+    background-color: white !important;
+    border: none;
+    border-radius: 5px;
+    &:focus {
+        outline: none;
+    }
+    &:disabled {
+        pointer-events: none;
+        opacity: 0.5;
+    }
 }
 
 /* .form-container {

@@ -1,5 +1,6 @@
 # this project
 assets
+build
 static
 uploads
 views/test/test.pug

@@ -3,11 +3,13 @@
   "version": "1.0.0",
   "description": "Cloning Youtube with Vanilla and NodeJS",
   "scripts": {
-    "dev:server": "nodemon --config nodemon.json",
+    "start": "node build/init.js --delay 2",
+    "build:server": "babel src -d build",
     "dev:assets": "webpack --config webpack.config.js",
-    "dev:server-old": "nodemon --exec babel-node init.js --delay 2",
+    "dev:server": "nodemon --config nodemon.json",
+    "build:assets-old": "cross-env WEBPACK_ENV=production webpack",
     "dev:assets-old": "cross-env WEBPACK_ENV=development webpack -w",
-    "build:assets-old": "cross-env WEBPACK_ENV=production webpack"
+    "dev:server-old": "nodemon --exec babel-node init.js --delay 2"
   },
   "repository": {
     "type": "git",
@@ -37,10 +39,10 @@
     "regenerator-runtime": "^0.13.9"
   },
   "devDependencies": {
-    "@babel/cli": "^7.15.7",
-    "@babel/core": "^7.15.5",
-    "@babel/node": "^7.15.4",
-    "@babel/preset-env": "^7.15.6",
+    "@babel/cli": "^7.17.6",
+    "@babel/core": "^7.17.5",
+    "@babel/node": "^7.16.8",
+    "@babel/preset-env": "^7.16.11",
     "@prettier/plugin-pug": "^1.16.5",
     "babel-loader": "^8.2.2",
     "cross-env": "^7.0.3",
