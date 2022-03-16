@@ -9,13 +9,13 @@
             max-width: 100%;
             margin-bottom: 10px;
         }
-        .upload-video__btn {
+        .upload-video__action-btn {
             display: block;
             padding: 12px 20px;
-            color: rgba($color: $red, $alpha: 0.9) !important;
-            text-align: center !important;
+            color: rgba($color: $red, $alpha: 0.9);
+            text-align: center;
             cursor: pointer;
-            background-color: white !important;
+            background-color: white;
             border: none;
             border-radius: 5px;
             &:focus {

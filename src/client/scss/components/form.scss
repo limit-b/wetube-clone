@@ -12,8 +12,7 @@ form {
     }
 }
 
-input:not(input[type="range"]),
-input[type="submit"] {
+input:not(input[type="range"]) {
     all: unset;
     width: 90%;
     height: 20px;
@@ -21,6 +20,7 @@ input[type="submit"] {
     margin-bottom: 6px;
     font-size: 16px;
     color: white;
+    cursor: pointer;
     background-color: black;
     border: 1px solid rgba(255, 255, 255, 0.2);
     border-radius: 5px;
@@ -30,64 +30,7 @@ input[type="submit"] {
 }
 
 input[type="submit"] {
-    display: block;
-    padding: 12px 20px;
     color: rgba($color: $red, $alpha: 0.9) !important;
     text-align: center !important;
-    cursor: pointer;
     background-color: white !important;
-    border: none;
-    border-radius: 5px;
-    &:focus {
-        outline: none;
-    }
-    &:disabled {
-        pointer-events: none;
-        opacity: 0.5;
-    }
 }
-
-/* .form-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    width: 100%;
-    form {
-        width: 100%;
-        max-width: 350px;
-        margin-bottom: 50px;
-        input:not([type="file"]),
-        .form-container__file-upload {
-            display: block;
-            padding-top: 10px;
-            padding-bottom: 10px;
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12),
-                0 1px 2px rgba(0, 0, 0, 0.24);
-            &:not(:last-child) {
-                margin-bottom: 25px;
-            }
-        }
-        textarea {
-            margin-bottom: 25px;
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12),
-                0 1px 2px rgba(0, 0, 0, 0.24);
-        }
-        input[type="submit"] {
-            color: white;
-            background-color: #3498db;
-        }
-    }
-    a {
-        width: 100%;
-        max-width: 350px;
-    }
-    .form-container__delete {
-        background-color: $dark-red;
-    }
-    .form-container__file-upload {
-        label {
-            margin-right: 10px;
-            font-weight: 300;
-        }
-    }
-} */

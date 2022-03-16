@@ -48,9 +48,8 @@ block content
             .watch-video__data-bottom
                 //- small.watch-video__owner-name Uploaded by&nbsp;
                 .watch-video__owner
-                    a.watch-video__owner-name(
-                        href=`/users/${videoDB.videoOwner._id}`
-                    )
+                    // TODO: a > img, a > span
+                    a(href=`/users/${videoDB.videoOwner._id}`)
                         +avatarMixin(videoDB.videoOwner.avatarUrl, "video")
                         span= videoDB.videoOwner.userName
                 p.watch-video__description= videoDB.description
@@ -60,14 +59,18 @@ block content
                     a(href=`${videoDB.id}/delete`) Delete Video &rarr;
         .watch-video__comment
             form#comment-form.watch-video__comment-form
-                textarea#comment-textarea(
-                    cols="30",
-                    rows="10",
-                    name="commentText",
-                    placeholder="Write a comment...",
-                    required
-                )
-                button Add Comment
+                .watch-video__comment-left
+                    a(href=`/users/${loggedInUser._id}`)
+                        +avatarMixin(loggedInUser.avatarUrl, "comment")
+                .watch-video__comment-right
+                    textarea#comment-textarea(
+                        cols="30",
+                        rows="10",
+                        name="commentText",
+                        placeholder="Write a comment...",
+                        required
+                    )
+                    button Add Comment
             .watch-video__comments
                 ul
                     each item in videoDB.videoComments.reverse()

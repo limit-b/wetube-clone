@@ -1,5 +1,6 @@
 .watch-video__data {
     margin-top: 20px;
+    margin-bottom: 20px;
     & > div {
         border-bottom: 1px solid #303030;
     }
@@ -19,9 +20,47 @@
         }
     }
     .watch-video__data-bottom {
+        padding-bottom: 16px;
         .watch-video__owner {
             height: 67px;
             padding-top: 16px;
+            a {
+                display: flex;
+                align-items: center;
+                img {
+                    margin-right: 16px;
+                }
+            }
+        }
+    }
+}
+
+.watch-video__comment-form {
+    all: unset;
+    position: relative;
+    display: flex;
+    width: 100%;
+    background-color: $background-black;
+    border: none;
+    .watch-video__comment-left {
+        margin-right: 16px;
+    }
+    .watch-video__comment-right {
+        width: 94%;
+        textarea {
+            width: 100%;
+            max-width: 1140px;
+            height: 20px;
+            font-size: 14px;
+            color: #aaaaaa;
+            background-color: $background-black;
+            border: none;
+            border-bottom: 1px solid #303030;
+            resize: none;
+        }
+        button {
+            position: relative;
+            right: 0;
         }
     }
 }
