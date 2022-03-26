@@ -22,6 +22,7 @@ const videoSchema = new mongoose.Schema({
 videoSchema.static('formatHashtags', function (hashtags) {
     return hashtags
         .split(/\s*,\s*/)
+        .filter((word) => word !== '' && word !== '#')
         .map((word) => (word.startsWith('#') ? word : `#${word}`));
 });
 

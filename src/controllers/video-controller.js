@@ -64,16 +64,20 @@ export const postUploadVideoController = async (req, res) => {
                 videoOwner: _id,
                 description,
             });
+            // TODO: $push test
+            // await UserModel.findByIdAndUpdate(_id, {
+            //     $push: { userVideos: newVideo._id },
+            // });
             await userDB.userVideos.push(newVideo._id);
             await userDB.save();
-            const newUserDB = await UserModel.findById(_id).populate({
+            const updatedUserDB = await UserModel.findById(_id).populate({
                 path: 'userVideos',
                 populate: { path: 'videoOwner', model: 'User' },
             });
             req.flash('success', 'Video uploaded.');
             return res.status(201).render('users/user-profile', {
-                pageTitle: newUserDB.userName,
-                userDB: newUserDB,
+                pageTitle: updatedUserDB.userName,
+                userDB: updatedUserDB,
             });
         } catch (error) {
             console.error(error);
@@ -224,7 +228,9 @@ export const postEditVideoController = async (req, res) => {
         body: { title, description, hashtags },
     } = req;
     const videoDB = await VideoModel.findById(id);
-    if (
+    if (!videoDB) {
+        return res.status(404).render('404', { pageTitle: 'Video not found.' });
+    } else if (
         title === null ||
         title === undefined ||
         title === '' ||
@@ -235,8 +241,6 @@ export const postEditVideoController = async (req, res) => {
             pageTitle: `Edit ${videoDB.title}`,
             videoDB,
         });
-    } else if (!videoDB) {
-        return res.status(404).render('404', { pageTitle: 'Video not found.' });
     } else if (String(videoDB.videoOwner) !== String(_id)) {
         req.flash('error', 'You are not the owner of the video.');
         return res.status(403).redirect('/');
@@ -247,14 +251,14 @@ export const postEditVideoController = async (req, res) => {
                 title,
                 description,
             });
-            const newUserDB = await UserModel.findById(_id).populate({
+            const updatedUserDB = await UserModel.findById(_id).populate({
                 path: 'userVideos',
                 populate: { path: 'videoOwner', model: 'User' },
             });
             req.flash('success', 'Video updated.');
             return res.status(200).render('users/user-profile', {
-                pageTitle: newUserDB.userName,
-                userDB: newUserDB,
+                pageTitle: updatedUserDB.userName,
+                userDB: updatedUserDB,
             });
             // return res.status(200).redirect(`/videos/${id}`);
         } catch (error) {
@@ -295,14 +299,14 @@ export const deleteVideoController = async (req, res) => {
             // videoDB.videoComments.forEach(async (comment) => {
             //     await CommentModel.findByIdAndDelete(comment._id);
             // });
-            const newUserDB = await UserModel.findById(_id).populate({
+            const updatedUserDB = await UserModel.findById(_id).populate({
                 path: 'userVideos',
                 populate: { path: 'videoOwner', model: 'User' },
             });
             req.flash('info', 'Video deleted.');
             return res.status(200).render('users/user-profile', {
-                pageTitle: newUserDB.userName,
-                userDB: newUserDB,
+                pageTitle: updatedUserDB.userName,
+                userDB: updatedUserDB,
             });
             // return res.status(200).redirect('/');
         } catch (error) {

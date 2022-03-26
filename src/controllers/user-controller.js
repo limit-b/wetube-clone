@@ -15,9 +15,9 @@ export const postJoinController = async (req, res) => {
         return res.status(400).render('join', { pageTitle });
     } else if (
         password === undefined ||
-        password === '' ||
+        password.trim() === '' ||
         confirmPassword === undefined ||
-        confirmPassword === ''
+        confirmPassword.trim() === ''
     ) {
         req.flash('info', 'Password cannot be empty.');
         return res.status(400).render('join', { pageTitle });
@@ -36,7 +36,7 @@ export const postJoinController = async (req, res) => {
                     country,
                 });
                 req.flash('success', 'Join success.');
-                return res.redirect('/login');
+                return res.status(201).redirect('/login');
             } catch (error) {
                 console.error(error);
                 req.flash('error', 'Join failed');
@@ -144,7 +144,7 @@ export const finishGithubLogin = async (req, res) => {
                     req.session.loggedIn = true;
                     req.session.user = githubUser;
                     req.flash('success', 'GitHub login success.');
-                    return res.redirect('/');
+                    return res.status(201).redirect('/');
                 } catch (error) {
                     console.error(error);
                     req.flash('error', 'GitHub login failed.');
@@ -239,14 +239,17 @@ export const postChangePasswordController = async (req, res) => {
         body: { oldPassword, newPassword, confirmNewPassword },
     } = req;
     const pageTitle = 'Change Password';
-    if (newPassword !== confirmNewPassword) {
+    if (oldPassword === newPassword) {
+        req.flash('info', 'The old password equals new password.');
+        return res.status(400).render('users/change-password', { pageTitle });
+    } else if (newPassword !== confirmNewPassword) {
         req.flash('info', 'The password does not match the confirmation.');
         return res.status(400).render('users/change-password', { pageTitle });
     } else if (
         newPassword === undefined ||
-        newPassword === '' ||
+        newPassword.trim() === '' ||
         confirmNewPassword === undefined ||
-        confirmNewPassword === ''
+        confirmNewPassword.trim() === ''
     ) {
         req.flash('info', 'Password cannot be empty.');
         return res.status(400).render('users/change-password', { pageTitle });
@@ -273,8 +276,13 @@ export const postChangePasswordController = async (req, res) => {
                 try {
                     userDB.password = await newPassword;
                     await userDB.save();
+                    // req.session.destroy();
+                    req.session.loggedIn = false;
+                    req.session.user = null;
+                    res.locals.loggedInUser = req.session.user || {};
                     req.flash('success', 'Password updated.');
-                    return res.status(200).redirect('/users/logout');
+                    return res.status(200).redirect('/');
+                    // return res.status(200).redirect('/users/logout');
                 } catch (error) {
                     console.error(error);
                     req.flash('error', 'Can not change password.');
