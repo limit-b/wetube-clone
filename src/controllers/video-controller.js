@@ -55,7 +55,6 @@ export const postUploadVideoController = async (req, res) => {
             .render('videos/upload-video', { pageTitle: 'Upload Video' });
     } else {
         try {
-            const userDB = await UserModel.findById(_id);
             const newVideo = await VideoModel.create({
                 videoUrl,
                 thumbnailUrl,
@@ -64,12 +63,12 @@ export const postUploadVideoController = async (req, res) => {
                 videoOwner: _id,
                 description,
             });
-            // TODO: $push test
-            // await UserModel.findByIdAndUpdate(_id, {
-            //     $push: { userVideos: newVideo._id },
-            // });
-            await userDB.userVideos.push(newVideo._id);
-            await userDB.save();
+            await UserModel.findByIdAndUpdate(_id, {
+                $push: { userVideos: newVideo._id },
+            });
+            // const userDB = await UserModel.findById(_id);
+            // await userDB.userVideos.push(newVideo._id);
+            // await userDB.save();
             const updatedUserDB = await UserModel.findById(_id).populate({
                 path: 'userVideos',
                 populate: { path: 'videoOwner', model: 'User' },
@@ -106,13 +105,17 @@ export const watchVideoController = async (req, res) => {
 
 export const registerViewController = async (req, res) => {
     const { id } = req.params;
-    const videoDB = await VideoModel.findById(id);
-    if (!videoDB) {
+    const exists = await VideoModel.exists({ _id: id });
+    // const videoDB = await VideoModel.findById(id);
+    if (!exists) {
         return res.sendStatus(404);
     } else {
         try {
-            videoDB.meta.views += 1;
-            await videoDB.save();
+            await VideoModel.findByIdAndUpdate(id, {
+                $inc: { 'meta.views': 1 },
+            });
+            // videoDB.meta.views += 1;
+            // await videoDB.save();
             return res.sendStatus(200);
         } catch (error) {
             console.error(error);
@@ -141,16 +144,19 @@ export const createCommentController = async (req, res) => {
         return res.status(404).render('404', { pageTitle: 'Video not found.' });
     } else {
         try {
-            // const userDB = await UserModel.findById(_id);
             const newComment = await CommentModel.create({
                 commentVideo: id,
                 commentOwner: _id,
                 commentText,
             });
-            await videoDB.videoComments.push(newComment._id);
-            await videoDB.save();
-            // await userDB.userComments.push(newComment._id);
-            // await userDB.save();
+            await VideoModel.findByIdAndUpdate(id, {
+                $push: { videoComments: newComment._id },
+            });
+            // await videoDB.videoComments.push(newComment._id);
+            // await videoDB.save();
+            // await UserModel.findByIdAndUpdate(_id, {
+            //     $push: { userComments: newComment._id },
+            // });
             return res.status(201).json({ newCommentId: newComment._id });
         } catch (error) {
             console.error(error);

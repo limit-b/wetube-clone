@@ -90,7 +90,7 @@ const handlePlay = () => {
 //     playBtn.textContent = 'Play';
 // };
 
-const changeMuteIcon = () => {
+const toggleMuteIcon = () => {
     const muteIcon = muteBtn.querySelector('i');
     muteIcon.classList = video.muted
         ? 'fas fa-volume-mute'
@@ -105,7 +105,7 @@ const handleMute = () => {
     }
     handleVideoControls();
     video.volume = video.muted ? 0 : tempVolume;
-    changeMuteIcon();
+    toggleMuteIcon();
     // muteIcon.classList = video.muted
     //     ? 'fas fa-volume-mute'
     //     : 'fas fa-volume-up';
@@ -133,7 +133,7 @@ const handleInputVolume = (event) => {
     } else {
         video.muted = false;
     }
-    changeMuteIcon();
+    toggleMuteIcon();
     // muteIcon.classList = video.muted
     //     ? 'fas fa-volume-mute'
     //     : 'fas fa-volume-up';
