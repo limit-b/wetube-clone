@@ -1,9 +1,0 @@
-mixin videoBlock(videoObject={})
-    .video-block
-        a(href=routes.videoDetail(videoObject.videoIdMold))
-            video.video-block__thumbnail(src=videoObject.videoFileUrlMold, controls=false)
-            span.video-block__title=videoObject.titleMold
-            if videoObject.viewsMold === 1
-                span.video-block__views 1 view
-            else
-                span.video-block__views #{videoObject.viewsMold} views
