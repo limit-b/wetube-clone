@@ -4,32 +4,24 @@ Cloning Youtube with Vanilla and NodeJS
 
 ## Pages
 
-- [ ] / => Home
-- [ ] /join => Join
-- [ ] /login => Login
-- [ ] /search => Search
+-   [x] / => Home
+-   [x] /join => Join
+-   [x] /login => Login
+-   [x] /search => Search
 
-- [ ] /users/logout => Logout
-- [ ] /users/edit => Edit User Profile
-- [ ] /users/remove => Remove User Profile
-- [ ] /users/:id => See User
+<!-- -   [ ] /users/logout => Logout -->
 
-- [ ] /videos/upload => Upload Video
-- [ ] /videos/:id => Watch Video
-- [ ] /videos/:id/edit => Edit Video
-- [ ] /videos/:id/delete => Delete Video
-<!-- - [ ] /videos/comments => Comment on a Video
-- [ ] /videos/comments/delete => Delete a Comment of a Video -->
+-   [x] /users/edit => Edit User Profile
+-   [x] /users/change-password => Change User Password
+-   [x] /users/:id => See User
 
-## Pages (Old list, To be deleted)
+<!-- -   [ ] /users/remove => Remove User Profile -->
 
-- [ ] Home
-- [x] Join
-- [x] Login
-- [x] Search
-- [ ] User Detail
-- [x] Edit Profile
-- [x] Change Password
-- [x] Upload
-- [ ] Video Detail
-- [x] Edit Video
+-   [x] /videos/upload => Upload Video
+-   [x] /videos/:id => Watch Video
+-   [x] /videos/:id/edit => Edit Video
+
+<!-- -   [ ] /videos/:id/delete => Delete Video -->
+
+<!-- -   [ ] /videos/comments => Comment on a Video -->
+<!-- -   [ ] /videos/comments/delete => Delete a Comment of a Video -->
