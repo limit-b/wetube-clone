@@ -4,12 +4,11 @@
   "description": "Cloning Youtube with Vanilla and NodeJS",
   "scripts": {
     "start": "node build/init.js --delay 2",
-    "build:server": "babel src -d build",
-    "dev:assets": "webpack --config webpack.config.js",
-    "dev:server": "nodemon --config nodemon.json",
-    "build:assets-old": "cross-env WEBPACK_ENV=production webpack",
-    "dev:assets-old": "cross-env WEBPACK_ENV=development webpack -w",
-    "dev:server-old": "nodemon --exec babel-node init.js --delay 2"
+    "build": "npm run build:assets && npm run build:server",
+    "build:assets": "webpack --mode=production --config webpack.config.js",
+    "build:server": "npx babel src --ignore src/client --out-dir build",
+    "dev:assets": "webpack --mode=development --config webpack.config.js --watch",
+    "dev:server": "nodemon --config nodemon.json"
   },
   "repository": {
     "type": "git",

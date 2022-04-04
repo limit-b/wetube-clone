@@ -43,8 +43,6 @@ const config = {
         ],
     },
     plugins: [new MiniCssExtractPlugin({ filename: 'css/styles.css' })],
-    mode: 'development',
-    watch: true,
 };
 
 module.exports = config;
