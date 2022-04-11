@@ -48,9 +48,9 @@ block content
             .watch-video__data-bottom
                 //- small.watch-video__owner-name Uploaded by&nbsp;
                 .watch-video__owner
-                    // TODO: a > img, a > span
                     a(href=`/users/${videoDB.videoOwner._id}`)
                         +avatarMixin(videoDB.videoOwner.avatarUrl, "video")
+                    a(href=`/users/${videoDB.videoOwner._id}`)
                         span= videoDB.videoOwner.userName
                 p.watch-video__description= videoDB.description
                 if String(videoDB.videoOwner._id) === String(loggedInUser._id)

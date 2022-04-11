@@ -10,7 +10,7 @@ let stopTimeoutID = null;
 let recorder = null;
 let desktopStream = null;
 
-URL.revokeObjectURL(videoUrl);
+// URL.revokeObjectURL(videoUrl);
 URL.revokeObjectURL(mp4Url);
 URL.revokeObjectURL(thumbUrl);
 
@@ -26,18 +26,22 @@ const transVideo = async () => {
         // corePath: '/static/ffmpeg-core.js',
         log: true,
     });
-    await ffmpeg.load();
-    ffmpeg.FS('writeFile', files.input, await fetchFile(videoUrl));
-    await ffmpeg.run('-i', files.input, '-r', '60', files.output);
-    await ffmpeg.run(
-        '-i',
-        files.input,
-        '-ss',
-        '00:00:01',
-        '-frames:v',
-        '1',
-        files.thumbnail
-    );
+    try {
+        await ffmpeg.load();
+        ffmpeg.FS('writeFile', files.input, await fetchFile(videoUrl));
+        await ffmpeg.run('-i', files.input, '-r', '60', files.output);
+        await ffmpeg.run(
+            '-i',
+            files.input,
+            '-ss',
+            '00:00:01',
+            '-frames:v',
+            '1',
+            files.thumbnail
+        );
+    } catch (error) {
+        console.error('ffmpeg error :', error);
+    }
     const mp4File = ffmpeg.FS('readFile', files.output);
     const thumbFile = ffmpeg.FS('readFile', files.thumbnail);
     const mp4Blob = new Blob([mp4File.buffer], { type: 'video/mp4' });
@@ -47,9 +51,10 @@ const transVideo = async () => {
     ffmpeg.FS('unlink', files.input);
     ffmpeg.FS('unlink', files.output);
     ffmpeg.FS('unlink', files.thumbnail);
-    // URL.revokeObjectURL(videoUrl);
+    URL.revokeObjectURL(videoUrl);
     // URL.revokeObjectURL(mp4Url);
     // URL.revokeObjectURL(thumbUrl);
+    videoUrl = null;
 };
 
 const downloadFile = (fileUrl, fileName) => {
@@ -86,6 +91,7 @@ const handleStopRecording = () => {
     actionBtn.addEventListener('click', handleDownload);
     desktopStream.getTracks().forEach((track) => track.stop());
     desktopStream = null;
+    recorder = null;
 };
 
 const handleStartRecording = () => {
