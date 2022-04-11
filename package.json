@@ -2,6 +2,16 @@
   "name": "wetube-clone",
   "version": "1.0.0",
   "description": "Cloning Youtube with Vanilla and NodeJS",
+  "homepage": "https://github.com/limit-b/wetube-clone#readme",
+  "bugs": {
+    "url": "https://github.com/limit-b/wetube-clone/issues"
+  },
+  "license": "MIT",
+  "author": "limit-a",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/limit-b/wetube-clone"
+  },
   "scripts": {
     "start": "node build/init.js --delay 2",
     "build": "npm run build:assets && npm run build:server",
@@ -10,16 +20,6 @@
     "dev:assets": "webpack --mode=development --config webpack.config.js --watch",
     "dev:server": "nodemon --config nodemon.json"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/limit-b/wetube-clone"
-  },
-  "author": "limit-a",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/limit-b/wetube-clone/issues"
-  },
-  "homepage": "https://github.com/limit-b/wetube-clone#readme",
   "dependencies": {
     "@ffmpeg/core": "^0.10.0",
     "@ffmpeg/ffmpeg": "^0.10.1",
@@ -60,5 +60,9 @@
     "style-loader": "^3.3.0",
     "webpack": "^5.55.1",
     "webpack-cli": "^4.8.0"
+  },
+  "engines": {
+    "node": "^13.14.0",
+    "npm": "^6.14.4"
   }
 }
