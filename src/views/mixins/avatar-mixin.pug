@@ -5,7 +5,16 @@ mixin avatarMixin(itemUrl, kind)
         else
             i.fas.fa-user(class=`avatar-mixin__user-font--${kind}`)
     else
-        if kind === "profile"
-            img.avatar-mixin__img(src=`/${itemUrl}`)
+        if loggedInUser.socialLoginOnly
+            if kind === "profile"
+                img.avatar-mixin__img(src=itemUrl)
+            else
+                img.avatar-mixin__img(src=itemUrl, class=`avatar-mixin__img--${kind}`)
         else
-            img.avatar-mixin__img(src=`/${itemUrl}`, class=`avatar-mixin__img--${kind}`)
+            if kind === "profile"
+                img.avatar-mixin__img(src=`/${itemUrl}`)
+            else
+                img.avatar-mixin__img(
+                    src=`/${itemUrl}`,
+                    class=`avatar-mixin__img--${kind}`
+                )
