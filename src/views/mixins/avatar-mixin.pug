@@ -5,7 +5,7 @@ mixin avatarMixin(itemUrl, kind)
         else
             i.fas.fa-user(class=`avatar-mixin__user-font--${kind}`)
     else
-        if loggedInUser.socialLoginOnly
+        if itemUrl.includes("github")
             if kind === "profile"
                 img.avatar-mixin__img(src=itemUrl)
             else
