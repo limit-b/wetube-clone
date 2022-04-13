@@ -37,10 +37,7 @@ export const postUploadVideoController = async (req, res) => {
         session: {
             user: { _id },
         },
-        files: {
-            videoFile: [{ path: videoUrl }],
-            thumbnailFile: [{ path: thumbnailUrl }],
-        },
+        files: { videoFile, thumbnailFile },
         body: { title, description, hashtags },
     } = req;
     if (
@@ -56,8 +53,9 @@ export const postUploadVideoController = async (req, res) => {
     } else {
         try {
             const newVideo = await VideoModel.create({
-                videoUrl,
-                thumbnailUrl,
+                videoUrl: videoFile[0].location || videoFile[0].path,
+                thumbnailUrl:
+                    thumbnailFile[0].location || thumbnailFile[0].path,
                 hashtags: VideoModel.formatHashtags(hashtags),
                 title,
                 videoOwner: _id,

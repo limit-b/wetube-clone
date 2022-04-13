@@ -2,7 +2,10 @@ mixin videoMixin(itemData)
     a.video-mixin(href=`/videos/${itemData.id}`)
         .video-mixin__thumb
             if itemData.thumbnailUrl
-                img(src=`/${itemData.thumbnailUrl}`)
+                if itemData.thumbnailUrl.includes("amazonaws")
+                    img(src=itemData.thumbnailUrl, crossorigin)
+                else
+                    img(src=`/${itemData.thumbnailUrl}`)
         //- each hashtag in itemData.hashtags
         //-     span= hashtag
         .video-mixin__info

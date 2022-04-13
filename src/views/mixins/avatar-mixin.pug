@@ -5,11 +5,15 @@ mixin avatarMixin(itemUrl, kind)
         else
             i.fas.fa-user(class=`avatar-mixin__user-font--${kind}`)
     else
-        if itemUrl.includes("github")
+        if itemUrl.includes("amazonaws") || itemUrl.includes("github")
             if kind === "profile"
-                img.avatar-mixin__img(src=itemUrl)
+                img.avatar-mixin__img(src=itemUrl, crossorigin)
             else
-                img.avatar-mixin__img(src=itemUrl, class=`avatar-mixin__img--${kind}`)
+                img.avatar-mixin__img(
+                    src=itemUrl,
+                    crossorigin,
+                    class=`avatar-mixin__img--${kind}`
+                )
         else
             if kind === "profile"
                 img.avatar-mixin__img(src=`/${itemUrl}`)

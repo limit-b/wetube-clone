@@ -111,8 +111,8 @@ const handleStartRecording = () => {
         actionBtn.addEventListener('click', handleStopRecording);
         actionBtn.textContent = 'Stop Recording';
         actionBtn.disabled = false;
-    }, 3000);
-    stopTimeoutID = setTimeout(handleStopRecording, 10000);
+    }, 1000);
+    stopTimeoutID = setTimeout(handleStopRecording, 5000);
 };
 
 const handleReadyRecording = async () => {

@@ -199,7 +199,7 @@ export const postEditUserController = async (req, res) => {
             const updatedUserDB = await UserModel.findByIdAndUpdate(
                 _id,
                 {
-                    avatarUrl: file ? file.path : avatarUrl,
+                    avatarUrl: file ? file.location || file.path : avatarUrl,
                     userName,
                     email,
                     userID,
@@ -211,7 +211,7 @@ export const postEditUserController = async (req, res) => {
             req.flash('info', 'User info updated.');
             return res.status(200).redirect('/');
         } catch (error) {
-            console.error(error);
+            console.error('edit error :', error);
             req.flash('error', 'User info not updated.');
             return res.redirect('/');
             // return res.render('users/edit-user', { pageTitle });

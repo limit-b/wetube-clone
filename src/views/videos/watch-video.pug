@@ -5,7 +5,10 @@ include ../mixins/comment-mixin.pug
 block content
     .watch-video
         #video-container(data-video-id=videoDB.id)
-            video(src=`/${videoDB.videoUrl}`)
+            if videoDB.videoUrl.includes("amazonaws")
+                video(src=videoDB.videoUrl, crossorigin)
+            else
+                video(src=`/${videoDB.videoUrl}`)
             #video-controls.video-controls
                 .video-controls__top
                     input#timeline.video-controls__timeline(
