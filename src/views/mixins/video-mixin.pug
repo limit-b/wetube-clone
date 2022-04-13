@@ -2,7 +2,7 @@ mixin videoMixin(itemData)
     a.video-mixin(href=`/videos/${itemData.id}`)
         .video-mixin__thumb
             if itemData.thumbnailUrl
-                if itemData.thumbnailUrl.includes("amazonaws")
+                if isHeroku
                     img(src=itemData.thumbnailUrl, crossorigin)
                 else
                     img(src=`/${itemData.thumbnailUrl}`)

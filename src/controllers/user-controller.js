@@ -1,6 +1,7 @@
 import bcrypt from 'bcrypt';
 import fetch from 'node-fetch';
 import UserModel from '../models/User';
+import { isHeroku } from '../custom-modules';
 
 export const getJoinController = (req, res) => {
     return res.render('join', { pageTitle: 'Join' });
@@ -189,17 +190,21 @@ export const postEditUserController = async (req, res) => {
         $or: [{ email }, { userID }],
     });
     // const pageTitle = 'Edit User';
+    let newAvatarUrl = null;
     if (exists) {
         req.flash('info', 'This E-mail / ID is already taken.');
         return res
             .status(400)
             .render('users/edit-user', { pageTitle: 'Edit User' });
     } else {
+        if (file) {
+            newAvatarUrl = isHeroku ? file.location : file.path;
+        }
         try {
             const updatedUserDB = await UserModel.findByIdAndUpdate(
                 _id,
                 {
-                    avatarUrl: file ? file.location || file.path : avatarUrl,
+                    avatarUrl: newAvatarUrl || avatarUrl,
                     userName,
                     email,
                     userID,

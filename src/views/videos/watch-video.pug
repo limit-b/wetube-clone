@@ -5,7 +5,7 @@ include ../mixins/comment-mixin.pug
 block content
     .watch-video
         #video-container(data-video-id=videoDB.id)
-            if videoDB.videoUrl.includes("amazonaws")
+            if isHeroku
                 video(src=videoDB.videoUrl, crossorigin)
             else
                 video(src=`/${videoDB.videoUrl}`)

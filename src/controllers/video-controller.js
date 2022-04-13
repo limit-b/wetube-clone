@@ -1,6 +1,7 @@
 import VideoModel from '../models/Video';
 import UserModel from '../models/User';
 import CommentModel from '../models/Comment';
+import { isHeroku } from '../custom-modules';
 
 export const homeController = async (req, res) => {
     try {
@@ -53,9 +54,10 @@ export const postUploadVideoController = async (req, res) => {
     } else {
         try {
             const newVideo = await VideoModel.create({
-                videoUrl: videoFile[0].location || videoFile[0].path,
-                thumbnailUrl:
-                    thumbnailFile[0].location || thumbnailFile[0].path,
+                videoUrl: isHeroku ? videoFile[0].location : videoFile[0].path,
+                thumbnailUrl: isHeroku
+                    ? thumbnailFile[0].location
+                    : thumbnailFile[0].path,
                 hashtags: VideoModel.formatHashtags(hashtags),
                 title,
                 videoOwner: _id,
