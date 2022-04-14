@@ -1,0 +1,41 @@
+@keyframes goAwayMessage {
+    from {
+        opacity: 1;
+        transform: none;
+    }
+    to {
+        opacity: 0;
+        transform: translateY(-50px);
+    }
+}
+
+.message {
+    position: absolute;
+    top: 10px;
+    right: 0;
+    left: 0;
+    max-width: 200px;
+    padding: 10px 20px;
+    margin: 0 auto;
+    text-align: center;
+    border-radius: 10000px;
+    animation: goAwayMessage 0.5s ease-in-out forwards;
+    animation-delay: 3s;
+    &.error {
+        color: white;
+        background-color: #ff4136;
+    }
+    &.warn {
+        color: white;
+        background-color: #ff851b;
+    }
+    &.success {
+        color: white;
+        background-color: #2ecc40;
+    }
+    &.info {
+        color: white;
+        background-color: #151515;
+        border: 1px solid white;
+    }
+}
