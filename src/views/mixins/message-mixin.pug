@@ -1,3 +1,4 @@
 mixin messageMixin(kind, text)
     .message(class=kind)
-        span= text
+        each item in text
+            span= item

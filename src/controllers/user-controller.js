@@ -57,10 +57,10 @@ export const postLoginController = async (req, res) => {
     const userDB = await UserModel.findOne({ socialLoginOnly: false, userID });
     const pageTitle = 'Login';
     if (!userDB) {
-        req.flash(
-            'info',
-            'An account with this ID does not exist, or Please log in with a social account.'
-        );
+        req.flash('info', [
+            'An account with this ID does not exist,',
+            'or Please log in with a social account.',
+        ]);
         return res.status(400).render('login', { pageTitle });
     } else {
         const comparePassword = await bcrypt.compare(password, userDB.password);
