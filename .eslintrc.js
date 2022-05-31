@@ -11,10 +11,10 @@ module.exports = {
     },
     rules: {
         'prettier/prettier': 'off',
-        'no-console': 'off',
-        'spaced-comment': 'off',
+        // 'no-console': 'off',
+        // 'spaced-comment': 'off',
         'no-else-return': 'off',
         'no-underscore-dangle': 'off',
-        'func-names': 'off',
+        // 'func-names': 'off',
     },
 };
